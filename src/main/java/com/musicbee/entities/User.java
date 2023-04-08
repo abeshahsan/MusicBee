@@ -88,6 +88,7 @@ public class User{
     public void setImage(Image image) {
         this.image = image;
     }
+    //get image 
     public Image getImage() {
         return this.image;
     }
