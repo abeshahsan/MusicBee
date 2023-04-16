@@ -16,18 +16,30 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class Database {
-    static Connection con;
-    static String dbUsername = "root";
-    static String dbPassword = "dbms";
+    private static Connection con;
+    private static final String DB_USERNAME;
+    private static final String DB_PASSWORD;
+
     private static User currentUser;
 
-    private static ArrayList<Song> allSongs = new ArrayList<>();
-    private static final ArrayList<Playlist> allPlaylists = new ArrayList<>();
-    private static final ArrayList<Song> currentPlaylistSongs=new ArrayList<>();
+    private static final ArrayList<Song> ALL_SONGS;
+    private static final ArrayList<Playlist> ALL_PLAYLISTS;
+    private static final ArrayList<Song> CURRENT_PLAYLIST_SONGS;
+
+
+    //static initialization.
+    static {
+        DB_USERNAME = "root";
+        DB_PASSWORD = "dbms";
+
+        ALL_SONGS = new ArrayList<>();
+        ALL_PLAYLISTS = new ArrayList<>();
+        CURRENT_PLAYLIST_SONGS = new ArrayList<>();
+    }
 
     public static void prepareDatabase() throws Exception {
         con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/phoenix", dbUsername, dbPassword);
+        "jdbc:mysql://localhost:3306/phoenix", DB_USERNAME, DB_PASSWORD);
         currentUser = null;
     }
 
@@ -39,25 +51,33 @@ public class Database {
         ResultSet resultSet = pstmt.executeQuery();
 
         if(resultSet.next()) {
-            currentUser = new User(resultSet.getString(1), resultSet.getLong(2));
-            currentUser.setFirstName(resultSet.getString(3));
-            currentUser.setLastName(resultSet.getString(4));
-            currentUser.setJoinDate(resultSet.getDate(5));
-            currentUser.setEmail(resultSet.getString(6));
-            
-            Image image = null;
-            try {
-                InputStream inputStream = resultSet.getBinaryStream(7);
-                if(!resultSet.wasNull()) {
-                    image = new Image(inputStream);
-                    currentUser.setImage(image);
-                }
-            } catch (SQLException ignored) {
-            }
-
+            currentUser = createUserFromResultSet(resultSet);
             return currentUser;
         }
+
         return null;
+    }
+
+    private static User createUserFromResultSet(ResultSet resultSet) throws SQLException {
+        User user = new User(resultSet.getString(1), resultSet.getLong(2));
+        user.setFirstName(resultSet.getString(3));
+        user.setLastName(resultSet.getString(4));
+        user.setJoinDate(resultSet.getDate(5));
+        user.setEmail(resultSet.getString(6));
+        setImageIfAvailable(user, resultSet);
+        return user;
+    }
+
+    private static void setImageIfAvailable(User user, ResultSet resultSet) throws SQLException {
+        Image image = null;
+        try {
+            InputStream inputStream = resultSet.getBinaryStream(7);
+            if(!resultSet.wasNull()) {
+                image = new Image(inputStream);
+                user.setImage(image);
+            }
+        } catch (SQLException ignored) {
+        }
     }
     public static void signUp(User user) throws Exception {
         String sqlString = "insert into user (username, password, first_name, last_name, EMAIL) values (?, ?, ?, ?, ?)";
@@ -122,7 +142,6 @@ public class Database {
                 """;
 
         PreparedStatement preparedStatement = con.prepareStatement(sqlString);
-        allSongs=  new ArrayList<>();
 
         ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -132,7 +151,7 @@ public class Database {
             song.setAlbumName(resultSet.getString(5));
             song.setArtistFirstName(resultSet.getString(7));
             song.setArtistLastName(resultSet.getString(8));
-            allSongs.add(song);
+            ALL_SONGS.add(song);
             Media media = new Media( (new File(song.getPath())).toURI().toString() );
             MediaPlayer player = new MediaPlayer( media );
 
@@ -145,13 +164,13 @@ public class Database {
         }
     }
     public static ArrayList<Song> getAllSongs() {
-       return allSongs;
+       return ALL_SONGS;
     }
     public static void logOutCurrentUser() throws SQLException {
         Database.saveLastState();
         currentUser = null;
-        allPlaylists.clear();
-        currentPlaylistSongs.clear();
+        ALL_PLAYLISTS.clear();
+        CURRENT_PLAYLIST_SONGS.clear();
         State.clearState();
     }
 
@@ -181,7 +200,7 @@ public class Database {
         return resultSet.next();
     }
     public static void loadAllPlaylists() throws SQLException {
-        allPlaylists.clear();
+        ALL_PLAYLISTS.clear();
         String sqlString =
                 """
                 select t.playlist_id,t.name,t.username 
@@ -194,7 +213,7 @@ public class Database {
         while(resultSet.next()) {
             Playlist playlist = new Playlist(resultSet.getInt(1),
                     resultSet.getString(2), resultSet.getString(3));
-            allPlaylists.add(playlist);
+            ALL_PLAYLISTS.add(playlist);
         }
     }
     public static boolean checkForEmail(String mail, String username) throws Exception {
@@ -208,20 +227,10 @@ public class Database {
     }
     public static ArrayList<Playlist> getAllPlaylists()
     {
-        return allPlaylists;
+        return ALL_PLAYLISTS;
     }
     public static void loadPlaylistSongs(int playlistID) throws SQLException {
-        currentPlaylistSongs.clear();
-//        String sqlString =
-//                """
-//                 select T2.*, artist.first_name, artist.last_name from
-//                    (select T1.*, song_artist.ARTIST_ID from
-//                      (select s.*, album.NAME as ALBUM from
-//                         (select song.* from song,songs_in_playlist t where t.playlist_id=? and t.song_id=song.song_id) s
-//                      left join album on s.ALBUM_ID = album.ALBUM_ID) T1
-//                    left join song_artist on T1.SONG_ID = song_artist.SONG_ID) T2 left join artist on T2.ARTIST_ID = artist.ARTIST_ID
-//                    order by NAME;
-//                """;
+        CURRENT_PLAYLIST_SONGS.clear();
                 String sqlString =
                 """
                  select SONG_ID from songs_in_playlist where PLAYLIST_ID = ?;
@@ -237,16 +246,16 @@ public class Database {
 
             songIDs.add(songID);
 
-            for (Song s : allSongs) {
+            for (Song s : ALL_SONGS) {
                 if (s.getID() == songID) {
                     System.out.println(s.getLength());
-                    currentPlaylistSongs.add(s);
+                    CURRENT_PLAYLIST_SONGS.add(s);
                 }
             }
         }
     }
     public static ArrayList<Song> getCurrentPlaylistSongs(){
-        return currentPlaylistSongs;
+        return CURRENT_PLAYLIST_SONGS;
     }
 
     public static void saveLastState() throws SQLException {
@@ -294,9 +303,9 @@ public class Database {
         PreparedStatement preparedStatement = con.prepareStatement(sqlString);
         preparedStatement.setInt(1,pLID);
         preparedStatement.executeUpdate();
-        for(int i=0;i<allPlaylists.size();i++){
-            if(allPlaylists.get(i).getID()==pLID){
-                allPlaylists.remove(i);
+        for(int i = 0; i< ALL_PLAYLISTS.size(); i++){
+            if(ALL_PLAYLISTS.get(i).getID()==pLID){
+                ALL_PLAYLISTS.remove(i);
                 break;
             }
         }
@@ -322,9 +331,9 @@ public class Database {
         preparedStatement.setInt(1,songID);
         preparedStatement.setInt(2, pLID);
         preparedStatement.executeUpdate();
-        for(int i=0;i<currentPlaylistSongs.size();i++){
-            if(currentPlaylistSongs.get(i).getID() == songID){
-                currentPlaylistSongs.remove(i);
+        for(int i = 0; i< CURRENT_PLAYLIST_SONGS.size(); i++){
+            if(CURRENT_PLAYLIST_SONGS.get(i).getID() == songID){
+                CURRENT_PLAYLIST_SONGS.remove(i);
                 break;
             }
         }
@@ -350,7 +359,7 @@ public class Database {
         ResultSet resultSet2 = preparedStatement2.executeQuery();
         if(resultSet2.next()) {
             Playlist pL=new Playlist(resultSet2.getInt(1),pLName,currentUser.getUsername());
-            allPlaylists.add(pL);
+            ALL_PLAYLISTS.add(pL);
             return pL;
         }
         return null;//if error will return null
