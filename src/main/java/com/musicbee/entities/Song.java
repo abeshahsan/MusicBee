@@ -9,8 +9,6 @@ import javafx.util.Duration;
 import java.io.File;
 
 public class Song{
-    private static Media media;
-    private static MediaPlayer mediaPlayer;
     private int ID;
     private String name;
     private String path;
@@ -18,17 +16,12 @@ public class Song{
     private double length;
     private String lengthInString;
 
-
     private String artistFirstName;
     private String artistLastName;
     boolean isChanged;
     private String artistName;
     private String albumName;
 
-    static {
-        media = null;
-        mediaPlayer = null;
-    }
 
     public Song(){
         this.ID = 0;
@@ -101,36 +94,8 @@ public class Song{
     public String getName(){
         return this.name;
     }
-    public void play()
-    {
-        //Instantiating Media class
-        media = new Media(new File(path).toURI().toString());
 
-        if(mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.dispose();
-        }
 
-        //Instantiating MediaPlayer class
-        mediaPlayer = new MediaPlayer(media);
-
-        mediaPlayer.play();
-    }
-
-    public static MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
-    }
-    public static Media getMedia() {
-        return media;
-    }
-
-    public static void cleanMediaPlayer() {
-        if(mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.dispose();
-            mediaPlayer = null;
-        }
-    }
     public void setLength(double length) {
         this.length = length;
         lengthInString = Tools.timeToString(length);
