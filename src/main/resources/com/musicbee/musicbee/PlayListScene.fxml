@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="bpList" fx:id="borderPane" maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.PlaylistSceneController">
+    <top>
+        <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="54.0" prefWidth="936.0" BorderPane.alignment="TOP_CENTER">
+            <children>
+                <JFXHamburger fx:id="myHamburger" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="66.0" stylesheets="@StyleSheet2.css" translateY="-5.0" HBox.hgrow="ALWAYS" />
+                <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" prefWidth="445.0" HBox.hgrow="ALWAYS">
+                    <children>
+                  <VBox minHeight="-Infinity" prefHeight="82.0" prefWidth="739.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" prefWidth="645.0">
+                           <children>
+                                    <TextField fx:id="searchBar" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyTyped="#onTypedSearchBar" prefHeight="25.0" prefWidth="427.0" promptText="Search audio by name" />
+                                    <ImageView fitHeight="26.0" fitWidth="24.0" opacity="0.29" pickOnBounds="true" preserveRatio="true">
+                                        <image>
+                                            <Image url="@images/search1.png" />
+                                        </image>
+                                    </ImageView>
+                           </children>
+                        </HBox>
+                        <Label id="shadaLabl" fx:id="name" stylesheets="@Stylesheet.css" text="Label" translateX="30.0" translateY="30.0">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                        <ImageView fx:id="profileIcon" fitHeight="31.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                            <image>
+                                <Image url="@images/user.jpg" />
+                            </image>
+                        </ImageView>
+                        <MenuButton fx:id="menuButton" mnemonicParsing="false" onAction="#onClickLogOut" text="MenuButton">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#onClickProfile" text="Profile" />
+                                <MenuItem mnemonicParsing="false" onAction="#onClickLogOut" text="Log out" />
+                            </items>
+                        </MenuButton>
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="758.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
+            <columns>
+                <TableColumn id="TableCol" fx:id="Title" minWidth="180.0" prefWidth="180.0" text="Title" />
+                <TableColumn id="TableCol" fx:id="Album" minWidth="150.0" prefWidth="150.0" text="Album" />
+                <TableColumn id="TableCol" fx:id="Artist" minWidth="150.0" prefWidth="150.0" text="Artist" />
+                <TableColumn id="TableCol" fx:id="Length" minWidth="150.0" prefWidth="150.0" text="Length" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+        </TableView>
+    </center>
+    <left>
+        <JFXDrawer fx:id="drawer" defaultDrawerSize="191.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="13.0" resizableOnDrag="true" BorderPane.alignment="CENTER" />
+    </left>
+    <bottom>
+      <VBox fx:id="bottom" maxHeight="90.0" minHeight="90.0" prefHeight="90.0" prefWidth="936.0" BorderPane.alignment="CENTER" />
+    </bottom>
+</BorderPane>
