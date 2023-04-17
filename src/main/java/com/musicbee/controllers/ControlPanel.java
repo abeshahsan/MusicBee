@@ -62,23 +62,7 @@ public class ControlPanel implements Initializable {
 
     @FXML
     private void onClickNext(ActionEvent event) {
-        MediaPlayer player = Jukebox.getMediaPlayer();
-        if(player != null && (State.getCurrentSongIndex() + 1 < State.getSongsInTable().size()) ) {
-            State.incrementCurrentSongIndex();
-            State.setLastSongID(State.getSongsInTable().get(State.getCurrentSongIndex()).getID());
-            player.stop();
-            player.dispose();
-            Song song = State.getSongsInTable().get(State.getCurrentSongIndex());
-            Jukebox.prepareJukebox(song);
-            Jukebox.play();
-            State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
-            State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
-            updateNames(State.getCurrentSongName(),
-                    State.getCurrentSongArtist());
-            setTimeSlider();
-            Jukebox.getMediaPlayer().setVolume(State.getVolume());
-            playPause.setText("Pause");
-        }
+        playNext();
     }
 
     @FXML
@@ -133,6 +117,7 @@ public class ControlPanel implements Initializable {
                 double timeSliderValue = (currentTime / totalTime) * 100;
                 if(!State.mouseDetected) timeSlider.setValue(timeSliderValue);
             });
+            Jukebox.getMediaPlayer().setOnEndOfMedia(this::playNext);
         }
         timeSlider.setOnMouseDragged(event -> {
             State.mouseDetected = true;
@@ -171,5 +156,21 @@ public class ControlPanel implements Initializable {
 
     public Button getPlayPause() {
         return playPause;
+    }
+    public void playNext() {
+        if(Jukebox.getMediaPlayer() != null && (State.getCurrentSongIndex() + 1 < State.getSongsInTable().size()) ) {
+            State.incrementCurrentSongIndex();
+            State.setLastSongID(State.getSongsInTable().get(State.getCurrentSongIndex()).getID());
+            Song song = State.getSongsInTable().get(State.getCurrentSongIndex());
+            Jukebox.prepareJukebox(song);
+            Jukebox.play();
+            State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
+            State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
+            updateNames(State.getCurrentSongName(),
+                    State.getCurrentSongArtist());
+            setTimeSlider();
+            Jukebox.getMediaPlayer().setVolume(State.getVolume());
+            playPause.setText("Pause");
+        }
     }
 }

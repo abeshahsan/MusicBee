@@ -62,17 +62,13 @@ public class HomeController implements Initializable {
     ContextMenu contextMenu=new ContextMenu();
     Menu child=new Menu("Add song to playlist");
 
-    private Label name;
-    private Label artistName;
-    private Button playPause;
-
     @FXML
     private VBox bottom;
 
     @FXML
     private ImageView profileIcon;
 
-    private Slider timeSlider;
+    private ControlPanel controlPanel;
 
     private final ArrayList<Song> allSongs = new ArrayList<>();
     private final ArrayList<Song> filteredSongs = new ArrayList<>();
@@ -93,12 +89,7 @@ public class HomeController implements Initializable {
         prepareTableview();
         loadSideBar();
         setHamburger();
-        ControlPanel controlPanel = loadControlPanel();
-
-        timeSlider = controlPanel.getTimeSlider();
-        name = controlPanel.getSongName();
-        artistName = controlPanel.getArtistName();
-        playPause = controlPanel.getPlayPause();
+        controlPanel = loadControlPanel();
     }
 
     private void prepareTableview() {
@@ -201,7 +192,7 @@ public class HomeController implements Initializable {
                     Jukebox.prepareJukebox(song);
                     Jukebox.play();
 
-                    playPause.setText("Pause");
+                    controlPanel.getPlayPause().setText("Pause");
 //                    System.out.println(State.getVolume());
                     State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
                     State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
@@ -220,8 +211,11 @@ public class HomeController implements Initializable {
                             double currentTime = player.getCurrentTime().toMillis();
                             State.setLastTimeStamp(currentTime);
                             double timeSliderValue = (currentTime / totalTime) * 100;
-                            if(!State.mouseDetected) timeSlider.setValue(timeSliderValue);
+                            if(!State.mouseDetected) controlPanel.getTimeSlider().setValue(timeSliderValue);
                         }
+                    });
+                    Jukebox.getMediaPlayer().setOnEndOfMedia(() -> {
+                        controlPanel.playNext();
                     });
                 }
             } catch (Exception e) {
@@ -320,7 +314,7 @@ public class HomeController implements Initializable {
         myStage.show();
     }
     private void updateNames(String name, String artist) {
-        this.name.setText(name);
-        this.artistName.setText(artist);
+        controlPanel.getSongName().setText(name);
+        controlPanel.getArtistName().setText(artist);
     }
 }

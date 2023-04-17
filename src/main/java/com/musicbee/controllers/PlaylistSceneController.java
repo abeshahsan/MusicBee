@@ -61,16 +61,13 @@ public class PlaylistSceneController implements Initializable {
     @FXML
     private TextField searchBar;
 
-    private Label songName;
-    private Label artistName;
+    private ControlPanel controlPanel;
 
     @FXML
     private MenuButton menuButton;
     @FXML
     private VBox bottom;
 
-    private Slider timeSlider;
-    private Button playPause;
 
     private final ArrayList<Song> allSongs = new ArrayList<>();
     private final ArrayList<Song> filteredSongs = new ArrayList<>();
@@ -95,12 +92,7 @@ public class PlaylistSceneController implements Initializable {
         prepareTableview();
         loadSideBar();
         setHamburger();
-        ControlPanel controlPanel = loadControlPanel();
-
-        timeSlider = controlPanel.getTimeSlider();
-        songName = controlPanel.getSongName();
-        artistName = controlPanel.getArtistName();
-        playPause = controlPanel.getPlayPause();
+        controlPanel = loadControlPanel();
     }
 
     private ControlPanel loadControlPanel() {
@@ -204,7 +196,7 @@ public class PlaylistSceneController implements Initializable {
                     Jukebox.prepareJukebox(song);
                     Jukebox.play();
 
-                    playPause.setText("Pause");
+                    controlPanel.getPlayPause().setText("Pause");
 //                    System.out.println(State.getVolume());
                     State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
                     State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
@@ -223,8 +215,11 @@ public class PlaylistSceneController implements Initializable {
                             double currentTime = player.getCurrentTime().toMillis();
                             State.setLastTimeStamp(currentTime);
                             double timeSliderValue = (currentTime / totalTime) * 100;
-                            if(!State.mouseDetected) timeSlider.setValue(timeSliderValue);
+                            if(!State.mouseDetected) controlPanel.getTimeSlider().setValue(timeSliderValue);
                         }
+                    });
+                    Jukebox.getMediaPlayer().setOnEndOfMedia(() -> {
+                        controlPanel.playNext();
                     });
                 }
             } catch (Exception e) {
@@ -310,7 +305,7 @@ public class PlaylistSceneController implements Initializable {
         myStage.show();
     }
     private void updateNames(String songName, String artist) {
-        this.songName.setText(songName);
-        this.artistName.setText(artist);
+        controlPanel.getSongName().setText(songName);
+        controlPanel.getArtistName().setText(artist);
     }
 }
