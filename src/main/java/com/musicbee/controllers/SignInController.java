@@ -63,26 +63,7 @@ public class SignInController {
         State.setLastSongID((Integer)state.get(0));
         State.setLastTimeStamp((Double)state.get(1));
 
-        Song song = null;
-        for(Song s : Database.getAllSongs()) {
-            if(s.getID() == State.getLastSongID()) {
-                song = s;
-                break;
-            }
-        }
-        if(song != null) {
-            State.setCurrentSongName(song.getName());
-            State.setCurrentSongArtist(song.getArtistName());
-            Jukebox.prepareJukebox(song);
-            Jukebox.play();
-            Jukebox.getMediaPlayer().setVolume(State.getVolume());
-            Jukebox.getMediaPlayer().setOnReady(()-> {
-                double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
-                State.setTotalTime(totalTime);
-                Jukebox.getMediaPlayer().seek(Duration.millis(State.getLastTimeStamp()));
-                Jukebox.getMediaPlayer().pause();
-            });
-        }
+        resumePlayback();
 
         Node callingBtn=(Node)event.getSource();
         Stage myStage=(Stage)callingBtn.getScene().getWindow();
@@ -105,6 +86,29 @@ public class SignInController {
         scene.getStylesheets().add(css2);
         myStage.setScene(scene);
         myStage.show();
+    }
+
+    private static void resumePlayback() {
+        Song song = null;
+        for(Song s : Database.getAllSongs()) {
+            if(s.getID() == State.getLastSongID()) {
+                song = s;
+                break;
+            }
+        }
+        if(song != null) {
+            State.setCurrentSongName(song.getName());
+            State.setCurrentSongArtist(song.getArtistName());
+            Jukebox.prepareJukebox(song);
+            Jukebox.play();
+            Jukebox.getMediaPlayer().setVolume(State.getVolume());
+            Jukebox.getMediaPlayer().setOnReady(()-> {
+                double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
+                State.setTotalTime(totalTime);
+                Jukebox.getMediaPlayer().seek(Duration.millis(State.getLastTimeStamp()));
+                Jukebox.getMediaPlayer().pause();
+            });
+        }
     }
 
     @FXML

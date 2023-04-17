@@ -87,12 +87,84 @@ public class PlaylistSceneController implements Initializable {
         MenuItem item1=new MenuItem("Remove song from playlist");
         item1.setId("1");
         contextMenu.getItems().add(item1);
-
-        if(Database.getCurrentUser() != null) {
-            menuButton.setText(Database.getCurrentUser().getUsername());
+        menuButton.setText(Database.getCurrentUser().getUsername());
+        if(Database.getCurrentUser().getImage() != null) {
+            profileIcon.setImage(Database.getCurrentUser().getImage());
         }
-        else menuButton.setText("------");
 
+        prepareTableview();
+        loadSideBar();
+        setHamburger();
+        ControlPanel controlPanel = loadControlPanel();
+
+        timeSlider = controlPanel.getTimeSlider();
+        songName = controlPanel.getSongName();
+        artistName = controlPanel.getArtistName();
+        playPause = controlPanel.getPlayPause();
+    }
+
+    private ControlPanel loadControlPanel() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
+        try {
+            VBox vBox = fxmlLoader.load();
+//            ControlPanel bottomController = fxmlLoader.getController();
+            bottom.getChildren().clear();
+            bottom.getChildren().addAll(vBox.getChildren());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+
+        ControlPanel controlPanel = fxmlLoader.getController();
+        return controlPanel;
+    }
+
+    private void setHamburger() {
+        HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
+
+        if(State.getBurgerState()==-1)
+        {
+            transition.setRate(-1);
+            drawer.toggle();
+        }
+        else
+        {
+            transition.setRate(1);
+            drawer.toggle();
+        }
+        transition.play();
+        addHamburgerEventHandler(transition);
+    }
+
+    private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
+        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
+            transition.setRate(transition.getRate()*-1);
+            if(transition.getRate()==-1)
+            {
+                State.setBurgerState(-1);
+            }
+            else {
+                State.setBurgerState(1);
+            }
+            transition.play();
+            if(drawer.isOpened() || drawer.isOpening())
+            {
+                drawer.close();
+            }
+            else drawer.open();
+        });
+    }
+
+    private void loadSideBar() {
+        try
+        {
+            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
+            drawer.setSidePane(vbox);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void prepareTableview() {
         EventHandler<MouseEvent> onClick = this::clickItem;
         table.setRowFactory(param -> {
             TableRow<Song> row = new TableRow<>();
@@ -116,62 +188,6 @@ public class PlaylistSceneController implements Initializable {
         table.getColumns().add(0, indexColumn);
 
         table.setItems(tableList);
-
-        try
-        {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
-            drawer.setSidePane(vbox);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
-
-        if(State.getBurgerState()==-1)
-        {
-            transition.setRate(-1);
-            drawer.toggle();
-        }
-        else
-        {
-            transition.setRate(1);
-            drawer.toggle();
-        }
-        transition.play();
-        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
-            transition.setRate(transition.getRate()*-1);
-            if(transition.getRate()==-1)
-            {
-                State.setBurgerState(-1);
-            }
-            else {
-                State.setBurgerState(1);
-            }
-            transition.play();
-            if(drawer.isOpened() || drawer.isOpening())
-            {
-                drawer.close();
-            }
-            else drawer.open();
-        });
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
-        try {
-            VBox vBox = fxmlLoader.load();
-//            ControlPanel bottomController = fxmlLoader.getController();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-
-        ControlPanel controlPanel = fxmlLoader.getController();
-
-        timeSlider = controlPanel.getTimeSlider();
-        songName = controlPanel.getSongName();
-        artistName = controlPanel.getArtistName();
-        playPause = controlPanel.getPlayPause();
-
-        if(Database.getCurrentUser().getImage() != null) profileIcon.setImage(Database.getCurrentUser().getImage());
     }
 
     @FXML

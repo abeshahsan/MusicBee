@@ -67,7 +67,7 @@
                   <Label id="pwdStr" fx:id="pwdStrength" layoutX="52.0" layoutY="288.0" prefHeight="7.0" prefWidth="206.0" stylesheets="@Stylesheet.css" />
                   <PasswordField fx:id="ConfirmPwd" layoutX="52.0" layoutY="330.0" onKeyTyped="#typingPwd" prefHeight="25.0" prefWidth="206.0" AnchorPane.rightAnchor="51.0" />
                   <TextField fx:id="ShownConfirmPwd" layoutX="52.0" layoutY="330.0" prefHeight="25.0" prefWidth="206.0" stylesheets="@Stylesheet.css" visible="false" AnchorPane.rightAnchor="51.0" />
-                  <ToggleButton layoutX="198.0" layoutY="330.0" mnemonicParsing="false" onAction="#togglePasswordCharsCon" prefHeight="26.0" prefWidth="60.0" text="Show" AnchorPane.rightAnchor="51.0" />
+                  <ToggleButton layoutX="198.0" layoutY="330.0" mnemonicParsing="false" onAction="#toggleConfirmPasswordChars" prefHeight="26.0" prefWidth="60.0" text="Show" AnchorPane.rightAnchor="51.0" />
                   <Label layoutX="52.0" layoutY="309.0" text="Confirm Password:">
                      <font>
                         <Font size="14.0" />

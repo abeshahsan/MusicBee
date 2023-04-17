@@ -30,28 +30,21 @@ public class SignUpController {
     private TextField username;
     @FXML
     private TextField shownPassword;
-
     @FXML
     private PasswordField password;
     @FXML
     private TextField firstName;
     @FXML
     private TextField lastName;
-
     @FXML
     private TextField emailID;
     public User user;
-
     @FXML
     private TextField ShownConfirmPwd;
-
     @FXML
     private PasswordField ConfirmPwd;
-
     @FXML
     private Label warning;
-
-    final int minPassLen = 8;
 
     @FXML
     protected void OnClickSubmit(ActionEvent event) throws IOException {
@@ -153,21 +146,9 @@ public class SignUpController {
             e.printStackTrace();
         }
     }
-    @FXML
-    void onLoginFromSignup(ActionEvent event) throws IOException {
-        Node callingBtn=(Node)event.getSource();
-        Stage myStage=(Stage)callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
-
-    }
 
     @FXML
-    protected void togglePasswordCharsCon(ActionEvent event) {
+    protected void toggleConfirmPasswordChars(ActionEvent event) {
         try {
             ToggleButton toggleButton = (ToggleButton) event.getSource();
             if(ConfirmPwd.isVisible()) {
@@ -185,6 +166,18 @@ public class SignUpController {
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    void onLoginFromSignup(ActionEvent event) throws IOException {
+        Node callingBtn=(Node)event.getSource();
+        Stage myStage=(Stage)callingBtn.getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        scene.getStylesheets().add(css);
+        myStage.setScene(scene);
+        myStage.show();
+
     }
     @FXML
     private void typingPwd(KeyEvent keyEvent) {

@@ -81,15 +81,27 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        child.getItems().add(item1);
         contextMenu.getItems().clear();
         contextMenu.getItems().add(child);
         loadContextMenuPlaylists();
-        if(Database.getCurrentUser() != null) {
-            menuButton.setText(Database.getCurrentUser().getUsername());
-        }
-        else menuButton.setText("------");
 
+        menuButton.setText(Database.getCurrentUser().getUsername());
+        if(Database.getCurrentUser().getImage() != null ) {
+            profileIcon.setImage(Database.getCurrentUser().getImage());
+        }
+
+        prepareTableview();
+        loadSideBar();
+        setHamburger();
+        ControlPanel controlPanel = loadControlPanel();
+
+        timeSlider = controlPanel.getTimeSlider();
+        name = controlPanel.getSongName();
+        artistName = controlPanel.getArtistName();
+        playPause = controlPanel.getPlayPause();
+    }
+
+    private void prepareTableview() {
         EventHandler<MouseEvent> onClick = this::clickItem;
         table.setRowFactory(param -> {
             TableRow<Song> row = new TableRow<>();
@@ -104,10 +116,6 @@ public class HomeController implements Initializable {
         Album.setCellValueFactory(new PropertyValueFactory<>("albumName"));
         Length.setCellValueFactory(new PropertyValueFactory<>("lengthInString"));
 
-        if(Database.getCurrentUser().getImage() != null ) {
-            profileIcon.setImage(Database.getCurrentUser().getImage());
-        }
-
         TableColumn<Song, Integer> indexColumn = new TableColumn<>("#");
         indexColumn.setSortable(false);
         indexColumn.setResizable(false);
@@ -117,17 +125,24 @@ public class HomeController implements Initializable {
         table.getColumns().add(0, indexColumn);
 
         table.setItems(tableList);
+    }
 
-//        table.getSelectionModel().select(0);
-
-        try
-        {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
-            drawer.setSidePane(vbox);
-        } catch (Exception e) {
-            System.out.println(e);;
+    private ControlPanel loadControlPanel() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
+        try {
+            VBox vBox = fxmlLoader.load();
+//            ControlPanel bottomController = fxmlLoader.getController();
+            bottom.getChildren().clear();
+            bottom.getChildren().addAll(vBox.getChildren());
+        } catch (IOException e) {
+            System.out.println(e);
         }
 
+        ControlPanel controlPanel = fxmlLoader.getController();
+        return controlPanel;
+    }
+
+    private void setHamburger() {
         HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
         if(State.getBurgerState()==-1)
         {
@@ -139,6 +154,10 @@ public class HomeController implements Initializable {
             transition.setRate(1);
             drawer.open();
         }
+        addHamburgerEventHandler(transition);
+    }
+
+    private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
         myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
             transition.setRate(transition.getRate()*-1);
             if(transition.getRate()==-1)
@@ -155,27 +174,20 @@ public class HomeController implements Initializable {
             }
             else drawer.open();
         });
+    }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
-        try {
-            VBox vBox = fxmlLoader.load();
-//            ControlPanel bottomController = fxmlLoader.getController();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
-        } catch (IOException e) {
-            System.out.println(e);
+    private void loadSideBar() {
+        try
+        {
+            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
+            drawer.setSidePane(vbox);
+        } catch (Exception e) {
+            System.out.println(e);;
         }
-
-        ControlPanel controlPanel = fxmlLoader.getController();
-
-        timeSlider = controlPanel.getTimeSlider();
-        name = controlPanel.getSongName();
-        artistName = controlPanel.getArtistName();
-        playPause = controlPanel.getPlayPause();
     }
 
     @FXML
-    public void clickItem(MouseEvent event)
+    private void clickItem(MouseEvent event)
     {
         contextMenu.hide();
         TableRow<Song> row = (TableRow<Song>) event.getSource();
@@ -223,14 +235,14 @@ public class HomeController implements Initializable {
                     try {
                         Database.addSongToPlaylist(row.getItem().getID(), Integer.parseInt(menuItem.getId()));
                         } catch (SQLException ex) {
-                         System.out.println(ex);
+                            System.out.println(ex);
                         }
                     }
                 );
             });
         }
     }
-    public void loadContextMenuPlaylists(){
+    private void loadContextMenuPlaylists(){
         ArrayList<Playlist> a=Database.getAllPlaylists();
         for(int i=0;i<a.size();i++){
             MenuItem item=new MenuItem(a.get(i).getName());
@@ -305,8 +317,6 @@ public class HomeController implements Initializable {
         String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //myStage.setMinWidth(Settings.getMinWidth());
-        //myStage.setMinHeight(Settings.getMinHeight());
         myStage.show();
     }
     private void updateNames(String name, String artist) {
