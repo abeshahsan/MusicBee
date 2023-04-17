@@ -39,7 +39,7 @@
         <JFXDrawer fx:id="drawer" defaultDrawerSize="191.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="13.0" resizableOnDrag="true" BorderPane.alignment="CENTER" />
     </left>
     <bottom>
-      <VBox fx:id="bottom" maxHeight="90.0" minHeight="90.0" prefHeight="90.0" BorderPane.alignment="CENTER" />
+      <VBox fx:id="controlPanel" maxHeight="90.0" minHeight="90.0" prefHeight="90.0" BorderPane.alignment="CENTER" />
     </bottom>
     <center>
         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="344.0" BorderPane.alignment="CENTER">

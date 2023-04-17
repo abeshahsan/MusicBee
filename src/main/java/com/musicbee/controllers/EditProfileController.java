@@ -1,7 +1,6 @@
 package com.musicbee.controllers;
 
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
-import com.musicbee.entities.Song;
 import com.musicbee.utility.Database;
 import com.musicbee.utility.Jukebox;
 import com.musicbee.utility.Settings;
@@ -26,13 +25,10 @@ import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class EditProfileController implements Initializable {
 
@@ -40,13 +36,10 @@ public class EditProfileController implements Initializable {
     private TextField firstName;
     @FXML
     private TextField lastName;
-
     @FXML
     private JFXDrawer drawer;
-
     @FXML
     private TextField email;
-
     @FXML
     private ImageView pfp;
 
@@ -61,68 +54,59 @@ public class EditProfileController implements Initializable {
     private JFXHamburger myHamburger;
 
     @FXML
-    private TextField searchBar;
-
-    @FXML
     private Button deletePhoto;
-
-    private Slider timeSlider;
 
     boolean pfpDeleted = false;
 
     @FXML
-    private VBox bottom;
+    private VBox controlPanel;
 
     private File selectedFile;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        if(Database.getCurrentUser() != null) {
-            menuButton.setText(Database.getCurrentUser().getUsername());
-        }
-        else menuButton.setText("------");
-
+        menuButton.setText(Database.getCurrentUser().getUsername());
         defaultImage = pfp.getImage();
+        pfpDeleted = false;
 
-        try
-        {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
-            drawer.setSidePane(vbox);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        initInfo();
+        loadSideBar();
+        setHamburger();
+        loadControlPanel();
+    }
+
+    private void setHamburger() {
         HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
-        if(State.getBurgerState()==-1)
-        {
+        if(State.getBurgerState()==-1) {
             transition.setRate(-1);
             drawer.close();
-        }
-        else
-        {
+        } else {
             transition.setRate(1);
             drawer.open();
         }
         transition.play();
+        addHamburgerEventHandler(transition);
+    }
+
+    private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
         myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
             transition.setRate(transition.getRate()*-1);
-            if(transition.getRate()==-1)
-            {
+            if(transition.getRate()==-1) {
                 State.setBurgerState(-1);
-            }
-            else {
+            } else {
                 State.setBurgerState(1);
             }
             transition.play();
-            if(drawer.isOpened() || drawer.isOpening())
-            {
+            if(drawer.isOpened() || drawer.isOpening()) {
                 drawer.close();
+            } else {
+                drawer.open();
             }
-            else drawer.open();
         });
+    }
 
-        pfpDeleted = false;
-
+    private void initInfo() {
         firstName.setText(Database.getCurrentUser().getFirstName());
         lastName.setText(Database.getCurrentUser().getLastName());
         email.setText(Database.getCurrentUser().getEmail());
@@ -131,56 +115,28 @@ public class EditProfileController implements Initializable {
             pfp.setImage(Database.getCurrentUser().getImage());
             profileIcon.setImage(Database.getCurrentUser().getImage());
         }
+    }
 
+    private void loadSideBar() {
+        try
+        {
+            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
+            drawer.setSidePane(vbox);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    private void loadControlPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
         try {
             VBox vBox = fxmlLoader.load();
-//            ControlPanel bottomController = fxmlLoader.getController();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
+            controlPanel.getChildren().clear();
+            controlPanel.getChildren().addAll(vBox.getChildren());
         } catch (IOException e) {
             System.out.println(e);
         }
-        HBox hBox = (HBox) bottom.getChildren().get(0);
-        AnchorPane anchorPane = (AnchorPane) hBox.getChildren().get(0);
-        timeSlider = (Slider) anchorPane.getChildren().get(0);
-
-        if(Jukebox.getMediaPlayer() != null) {
-            Jukebox.getMediaPlayer().currentTimeProperty().addListener((observableValue, duration, t1) -> {
-                MediaPlayer player = Jukebox.getMediaPlayer();
-                if (player != null) {
-                    double totalTime = player.getTotalDuration().toMillis();
-                    State.setTotalTime(totalTime);
-                    double currentTime = player.getCurrentTime().toMillis();
-                    double timeSliderValue = (currentTime / totalTime) * 100;
-                    if(!State.mouseDetected) timeSlider.setValue(timeSliderValue);
-                }
-            });
-        }
-
-        timeSlider.setOnMouseDragged(event -> {
-            State.mouseDetected = true;
-        });
-        timeSlider.setOnMousePressed(event -> {
-            State.mouseDetected = true;
-        });
-        timeSlider.setOnMouseReleased(event -> {
-            if(Jukebox.getMediaPlayer() == null) {
-                timeSlider.setValue(0);
-            }
-            else {
-                double seekTime = (timeSlider.getValue() / 100) * State.getTotalTime();
-                Jukebox.getMediaPlayer().seek(Duration.millis(seekTime));
-            }
-            State.mouseDetected = false;
-        });
     }
-
-    @FXML
-    private void onTypedSearchBar() {
-
-    }
-
 
     @FXML
     private void onClickProfile(ActionEvent event) throws IOException {
@@ -216,22 +172,14 @@ public class EditProfileController implements Initializable {
         String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //myStage.setMinWidth(Settings.getMinWidth());
-       //myStage.setMinHeight(Settings.getMinHeight());
         myStage.show();
     }
 
     @FXML
     private void onCLickSave(ActionEvent event) {
-        Database.getCurrentUser().setFirstName(firstName.getText());
-        Database.getCurrentUser().setLastName(lastName.getText());
-        Database.getCurrentUser().setEmail(email.getText());
         try {
-            Database.updateCurrentUserInfo(Database.getCurrentUser());
-            if(selectedFile != null) Database.updateUserPhoto(selectedFile);
-            if(pfpDeleted) {
-                Database.deleteUserPhoto();
-            }
+            updateDatabase();
+
             Node node = (Node) event.getSource();
             Stage myStage = (Stage) node.getScene().getWindow();
 
@@ -250,8 +198,34 @@ public class EditProfileController implements Initializable {
         }
     }
 
+    private void updateDatabase() throws Exception {
+        Database.getCurrentUser().setFirstName(firstName.getText());
+        Database.getCurrentUser().setLastName(lastName.getText());
+        Database.getCurrentUser().setEmail(email.getText());
+        Database.updateCurrentUserInfo(Database.getCurrentUser());
+        if(selectedFile != null) Database.updateUserPhoto(selectedFile);
+        if(pfpDeleted) {
+            Database.deleteUserPhoto();
+        }
+    }
+
     @FXML
     private void choosePhoto()  {
+        if (!selectFile()) return; //could not select the file.
+        convertPhoto();
+    }
+
+    private void convertPhoto() {
+        Image image = null;
+        try {
+            image = new Image(new FileInputStream(selectedFile));
+        } catch (Exception e) {
+            System.out.println("Could not load the image");;
+        }
+        pfp.setImage(image);
+    }
+
+    private boolean selectFile() {
         FileChooser fileChooser = new FileChooser();
         Stage stage = new Stage();
 
@@ -261,18 +235,11 @@ public class EditProfileController implements Initializable {
             selectedFile = tmpSelectedFile;
         }
 
-        if(selectedFile == null) return;
-
-        Image image = null;
-        try {
-            image = new Image(new FileInputStream(selectedFile));
-        } catch (Exception e) {
-            System.out.println("Could not load the image");;
-        }
-        pfp.setImage(image);
+        return selectedFile != null;
     }
+
     @FXML
-    private void onClickDeletePhoto(ActionEvent event) {
+    private void onClickDeletePhoto() {
         pfpDeleted = true;
         selectedFile = null;
         pfp.setImage(defaultImage);
@@ -289,8 +256,6 @@ public class EditProfileController implements Initializable {
         String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //myStage.setMinWidth(Settings.getMinWidth());
-        //.setMinHeight(Settings.getMinHeight());
         myStage.show();
     }
 }

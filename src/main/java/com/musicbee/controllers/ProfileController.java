@@ -57,30 +57,46 @@ public class ProfileController implements Initializable {
     private JFXHamburger myHamburger;
 
     @FXML
-    private TextField searchBar;
-
-    @FXML
     private Label username;
 
-    private Slider timeSlider;
     @FXML
     private VBox bottom;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        if(Database.getCurrentUser() != null) {
-            menuButton.setText(Database.getCurrentUser().getUsername());
-        }
-        else menuButton.setText("------");
+        menuButton.setText(Database.getCurrentUser().getUsername());
 
-        try
-        {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
-            drawer.setSidePane(vbox);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        initInfo();
+        loadSideBar();
+        setHamburger();
+        loadControlPanel();
+    }
+
+    private void initInfo() {
+        username.setText(Database.getCurrentUser().getUsername());
+        name.setText(Database.getCurrentUser().getName());
+        email.setText(Database.getCurrentUser().getEmail());
+        dateJoined.setText(Database.getCurrentUser().getJoinDate().toString());
+
+        if(Database.getCurrentUser().getImage() != null ) {
+            pfp.setImage(Database.getCurrentUser().getImage());
+            profileIcon.setImage(Database.getCurrentUser().getImage());
         }
+    }
+
+    private void loadControlPanel() {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
+        try {
+            VBox vBox = fxmlLoader.load();
+            bottom.getChildren().clear();
+            bottom.getChildren().addAll(vBox.getChildren());
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    private void setHamburger() {
         HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
         if(State.getBurgerState()==-1)
         {
@@ -93,6 +109,10 @@ public class ProfileController implements Initializable {
             drawer.open();
         }
         transition.play();
+        addHamburgerEventHandler(transition);
+    }
+
+    private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
         myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
             transition.setRate(transition.getRate()*-1);
             if(transition.getRate()==-1)
@@ -109,64 +129,16 @@ public class ProfileController implements Initializable {
             }
             else drawer.open();
         });
-
-        username.setText(Database.getCurrentUser().getUsername());
-        name.setText(Database.getCurrentUser().getName());
-        email.setText(Database.getCurrentUser().getEmail());
-        dateJoined.setText(Database.getCurrentUser().getJoinDate().toString());
-
-        if(Database.getCurrentUser().getImage() != null ) {
-            pfp.setImage(Database.getCurrentUser().getImage());
-            profileIcon.setImage(Database.getCurrentUser().getImage());
-        }
-
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
-        try {
-            VBox vBox = fxmlLoader.load();
-//            ControlPanel bottomController = fxmlLoader.getController();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-        HBox hBox = (HBox) bottom.getChildren().get(0);
-        AnchorPane anchorPane = (AnchorPane) hBox.getChildren().get(0);
-        timeSlider = (Slider) anchorPane.getChildren().get(0);
-
-        if(Jukebox.getMediaPlayer() != null) {
-            Jukebox.getMediaPlayer().currentTimeProperty().addListener((observableValue, duration, t1) -> {
-                MediaPlayer player = Jukebox.getMediaPlayer();
-                if (player != null) {
-                    double totalTime = player.getTotalDuration().toMillis();
-                    State.setTotalTime(totalTime);
-                    double currentTime = player.getCurrentTime().toMillis();
-                    double timeSliderValue = (currentTime / totalTime) * 100;
-                    if(!State.mouseDetected) timeSlider.setValue(timeSliderValue);
-                }
-            });
-        }
-
-        timeSlider.setOnMouseDragged(event -> {
-            State.mouseDetected = true;
-        });
-        timeSlider.setOnMousePressed(event -> {
-            State.mouseDetected = true;
-        });
-        timeSlider.setOnMouseReleased(event -> {
-            if(Jukebox.getMediaPlayer() == null) {
-                timeSlider.setValue(0);
-            }
-            else {
-                double seekTime = (timeSlider.getValue() / 100) * State.getTotalTime();
-                Jukebox.getMediaPlayer().seek(Duration.millis(seekTime));
-            }
-            State.mouseDetected = false;
-        });
     }
 
-    @FXML
-    private void onTypedSearchBar() {
-
+    private void loadSideBar() {
+        try
+        {
+            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
+            drawer.setSidePane(vbox);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -180,15 +152,12 @@ public class ProfileController implements Initializable {
         String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //Settings.updateWidthHeight(myStage);
         myStage.show();
     }
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-        MediaPlayer player = Jukebox.getMediaPlayer();
-
-        if(player != null) {
+        if(Jukebox.getMediaPlayer() != null) {
             Jukebox.dispose();
         }
 
@@ -202,7 +171,6 @@ public class ProfileController implements Initializable {
         String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //Settings.updateWidthHeight(myStage);
         myStage.show();
     }
 
@@ -220,7 +188,6 @@ public class ProfileController implements Initializable {
         String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //Settings.updateWidthHeight(myStage);
         myStage.show();
     }
 }
