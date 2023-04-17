@@ -14,7 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class Database {
-    private static Connection con;
+    private static Connection connection;
     private static final String DB_USERNAME;
     private static final String DB_PASSWORD;
 
@@ -23,7 +23,6 @@ public class Database {
     private static final ArrayList<Song> ALL_SONGS;
     private static final ArrayList<Playlist> ALL_PLAYLISTS;
     private static final ArrayList<Song> CURRENT_PLAYLIST_SONGS;
-
 
     //static initialization.
     static {
@@ -36,17 +35,17 @@ public class Database {
     }
 
     public static void prepareDatabase() throws Exception {
-        con = DriverManager.getConnection(
+        connection = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/phoenix", DB_USERNAME, DB_PASSWORD);
         currentUser = null;
     }
 
     public static User signIn(String username, long password) throws Exception {
         String sqlString = "select * from USER where USERNAME = ? and PASSWORD = ?";
-        PreparedStatement pstmt = con.prepareStatement(sqlString);
-        pstmt.setString(1, username);
-        pstmt.setLong(2, password);
-        ResultSet resultSet = pstmt.executeQuery();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setString(1, username);
+        preparedStatement.setLong(2, password);
+        ResultSet resultSet = preparedStatement.executeQuery();
 
         if(resultSet.next()) {
             currentUser = new User(resultSet.getString(1), resultSet.getLong(2));
@@ -71,18 +70,18 @@ public class Database {
     }
     public static void signUp(User user) throws Exception {
         String sqlString = "insert into user (username, password, first_name, last_name, EMAIL) values (?, ?, ?, ?, ?)";
-        PreparedStatement pstmt = con.prepareStatement(sqlString);
-        pstmt.setString(1, user.getUsername());
-        pstmt.setLong(2, user.getPassword());
-        pstmt.setString(3, user.getFirstName());
-        pstmt.setString(4, user.getLastName());
-        pstmt.setString(5, user.getEmail());
-        pstmt.executeUpdate();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setString(1, user.getUsername());
+        preparedStatement.setLong(2, user.getPassword());
+        preparedStatement.setString(3, user.getFirstName());
+        preparedStatement.setString(4, user.getLastName());
+        preparedStatement.setString(5, user.getEmail());
+        preparedStatement.executeUpdate();
 
         sqlString = "select sysdate()";
 
-        pstmt = con.prepareStatement(sqlString);
-        ResultSet rs = pstmt.executeQuery();
+        preparedStatement = connection.prepareStatement(sqlString);
+        ResultSet rs = preparedStatement.executeQuery();
 
         currentUser = user;
 
@@ -93,26 +92,26 @@ public class Database {
     }
     public static void updateCurrentUserInfo(User user) throws Exception {
         String sqlString = "update user set PASSWORD = ?, FIRST_NAME = ?, LAST_NAME = ?, EMAIL = ? where USERNAME = ?";
-        PreparedStatement pstmt = con.prepareStatement(sqlString);
-        pstmt.setLong(1, user.getPassword());
-        pstmt.setString(2, user.getFirstName());
-        pstmt.setString(3, user.getLastName());
-        pstmt.setString(4, user.getEmail());
-        pstmt.setString(5, user.getUsername());
-        pstmt.executeUpdate();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setLong(1, user.getPassword());
+        preparedStatement.setString(2, user.getFirstName());
+        preparedStatement.setString(3, user.getLastName());
+        preparedStatement.setString(4, user.getEmail());
+        preparedStatement.setString(5, user.getUsername());
+        preparedStatement.executeUpdate();
 
         currentUser = user;
     }
 
     public static void updateUserPhoto(File file) throws Exception {
         String sqlString = "update user set PHOTO = ? where USERNAME = ?";
-        PreparedStatement pstmt = con.prepareStatement(sqlString);
-        pstmt.setString(2, getCurrentUser().getUsername());
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setString(2, getCurrentUser().getUsername());
 
         InputStream photo = new FileInputStream(file);
-        pstmt.setBlob(1, photo);
+        preparedStatement.setBlob(1, photo);
 
-        pstmt.executeUpdate();
+        preparedStatement.executeUpdate();
 
         getCurrentUser().setImage(new Image(new FileInputStream(file)));
     }
@@ -131,7 +130,7 @@ public class Database {
                         order by NAME;
                 """;
 
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
 
         ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -142,17 +141,22 @@ public class Database {
             song.setArtistFirstName(resultSet.getString(7));
             song.setArtistLastName(resultSet.getString(8));
             ALL_SONGS.add(song);
-            Media media = new Media( (new File(song.getPath())).toURI().toString() );
-            MediaPlayer player = new MediaPlayer( media );
-
-            player.setOnReady(()-> {
-                double totalTime = player.getTotalDuration().toMillis();
-                song.setLength(totalTime);
-//                System.out.println(totalTime);
-                player.pause();
-            });
+            getLengthOfSong(song);
         }
     }
+
+    private static void getLengthOfSong(Song song) {
+        Media media = new Media( (new File(song.getPath())).toURI().toString() );
+        MediaPlayer player = new MediaPlayer( media );
+
+        player.setOnReady(()-> {
+            double totalTime = player.getTotalDuration().toMillis();
+            song.setLength(totalTime);
+//                System.out.println(totalTime);
+            player.pause();
+        });
+    }
+
     public static ArrayList<Song> getAllSongs() {
        return ALL_SONGS;
     }
@@ -166,10 +170,9 @@ public class Database {
 
     public static User verifyEmail(String email) throws Exception {
         String sqlString = "select * from USER where EMAIL = ?";
-        PreparedStatement pstmt = con.prepareStatement(sqlString);
-        pstmt.setString(1, email);
-        ResultSet resultSet = pstmt.executeQuery();
-
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setString(1, email);
+        ResultSet resultSet = preparedStatement.executeQuery();
 
         if(resultSet.next()) {
             currentUser = new User(resultSet.getString(1), resultSet.getLong(2));
@@ -183,9 +186,9 @@ public class Database {
     }
     public static boolean checkForUserName(String username) throws Exception {
         String sqlString = "select * from USER where USERNAME = ?";
-        PreparedStatement pstmt = con.prepareStatement(sqlString);
-        pstmt.setString(1, username);
-        ResultSet resultSet = pstmt.executeQuery();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setString(1, username);
+        ResultSet resultSet = preparedStatement.executeQuery();
 
         return resultSet.next();
     }
@@ -197,7 +200,7 @@ public class Database {
                 from playlist t
                 where t.username=?;
                 """;
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setString(1, currentUser.getUsername());
         ResultSet resultSet = preparedStatement.executeQuery();
         while(resultSet.next()) {
@@ -208,10 +211,10 @@ public class Database {
     }
     public static boolean checkForEmail(String mail, String username) throws Exception {
         String sqlString = "select * from USER where USERNAME = ? and EMAIL = ?";
-        PreparedStatement pstmt = con.prepareStatement(sqlString);
-        pstmt.setString(1, username);
-        pstmt.setString(2, mail);
-        ResultSet resultSet = pstmt.executeQuery();
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setString(1, username);
+        preparedStatement.setString(2, mail);
+        ResultSet resultSet = preparedStatement.executeQuery();
 
         return resultSet.next();
     }
@@ -225,13 +228,12 @@ public class Database {
                 """
                  select SONG_ID from songs_in_playlist where PLAYLIST_ID = ?;
                 """;
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setInt(1, playlistID);
         ResultSet resultSet = preparedStatement.executeQuery();
 
         while(resultSet.next()) {
             int songID = resultSet.getInt(1);
-
             for (Song s : ALL_SONGS) {
                 if (s.getID() == songID) {
                     System.out.println(s.getLength());
@@ -254,23 +256,23 @@ public class Database {
 
         String sqlString = "update last_state set song_id = ?, time = ? where username = ?";
 
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setInt(1, songID);
         preparedStatement.setDouble(2, time);
         preparedStatement.setString(3, username);
         preparedStatement.executeUpdate();
     }
     public static ArrayList<Object> getLastState() throws SQLException {
-        String sqlString = "select song_id, time from last_state where username = ?";
-
         ArrayList<Object> state = new ArrayList<>();
-
         state.add(-1);
         state.add(0.0);
 
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        String sqlString = "select song_id, time from last_state where username = ?";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setString(1, getCurrentUser().getUsername());
         ResultSet resultSet = preparedStatement.executeQuery();
+
         if(resultSet.next()) {
             int songID = resultSet.getInt(1);
             if(!resultSet.wasNull()) {
@@ -281,41 +283,40 @@ public class Database {
         }
         return state;
     }
-    public static void deletePlaylist(int pLID) throws SQLException {
+    public static void deletePlaylist(int playlistID) throws SQLException {
         String sqlString =
                 """
                 delete from playlist where playlist_id=?;
                 """;
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
-        preparedStatement.setInt(1,pLID);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setInt(1,playlistID);
         preparedStatement.executeUpdate();
         for(int i = 0; i< ALL_PLAYLISTS.size(); i++){
-            if(ALL_PLAYLISTS.get(i).getID()==pLID){
+            if(ALL_PLAYLISTS.get(i).getID()==playlistID){
                 ALL_PLAYLISTS.remove(i);
                 break;
             }
         }
     }
-    public static void addSongToPlaylist(int songID, int pLID) throws SQLException {
+    public static void addSongToPlaylist(int songID, int playlistID) throws SQLException {
         String sqlString =
                 """
                insert into songs_in_playlist(song_id, playlist_id) values (?, ?);
                 """;
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setInt(1,songID);
-        preparedStatement.setInt(2,pLID);
+        preparedStatement.setInt(2,playlistID);
         preparedStatement.executeUpdate();
     }
-    public static void deleteSongFromPlaylist(int songID, int pLID) throws SQLException {
-
-        System.out.println(songID + " " + pLID);
+    public static void deleteSongFromPlaylist(int songID, int playlistID) throws SQLException {
+//        System.out.println(songID + " " + playlistID);
         String sqlString =
                 """
                delete from songs_in_playlist where song_id=? and playlist_id=?;
                 """;
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
-        preparedStatement.setInt(1,songID);
-        preparedStatement.setInt(2, pLID);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+        preparedStatement.setInt(1, songID);
+        preparedStatement.setInt(2, playlistID);
         preparedStatement.executeUpdate();
         for(int i = 0; i< CURRENT_PLAYLIST_SONGS.size(); i++){
             if(CURRENT_PLAYLIST_SONGS.get(i).getID() == songID){
@@ -325,28 +326,21 @@ public class Database {
         }
     }
     public static Playlist createPlaylist(String pLName) throws SQLException {
-
         String sqlString =
                 """
                 insert into playlist(Name,Username) values (?,?);
                 """;
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1,pLName);
         preparedStatement.setString(2,currentUser.getUsername());
         preparedStatement.executeUpdate();
 
-        String sqlString2 =
-                """
-                select playlist_id from playlist where Name=? and Username=?;
-                """;
-        PreparedStatement preparedStatement2 = con.prepareStatement(sqlString2);
-        preparedStatement2.setString(1,pLName);
-        preparedStatement2.setString(2,currentUser.getUsername());
-        ResultSet resultSet2 = preparedStatement2.executeQuery();
-        if(resultSet2.next()) {
-            Playlist pL=new Playlist(resultSet2.getInt(1),pLName,currentUser.getUsername());
-            ALL_PLAYLISTS.add(pL);
-            return pL;
+        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+        if(resultSet.next()) {
+            int playlistID = resultSet.getInt(1);
+            Playlist newPlaylist = new Playlist(playlistID, pLName, currentUser.getUsername());
+            ALL_PLAYLISTS.add(newPlaylist);
+            return newPlaylist;
         }
         return null;//if error will return null
     }
@@ -356,7 +350,7 @@ public class Database {
                 update user set PHOTO = null where USERNAME = ?;
                 """;
 
-        PreparedStatement preparedStatement = con.prepareStatement(sqlString);
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
         preparedStatement.setString(1, Database.getCurrentUser().getUsername());
         preparedStatement.executeUpdate();
         getCurrentUser().setImage(null);
