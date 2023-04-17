@@ -129,8 +129,7 @@ public class HomeController implements Initializable {
             System.out.println(e);
         }
 
-        ControlPanel controlPanel = fxmlLoader.getController();
-        return controlPanel;
+        return fxmlLoader.getController();
     }
 
     private void setHamburger() {
@@ -192,7 +191,7 @@ public class HomeController implements Initializable {
                     Jukebox.prepareJukebox(song);
                     Jukebox.play();
 
-                    controlPanel.getPlayPause().setText("Pause");
+                    controlPanel.setPause();
 //                    System.out.println(State.getVolume());
                     State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
                     State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());

@@ -20,7 +20,7 @@ public class State {
 
     public static boolean mouseDetected = false;
 
-    private static ArrayList<Song> songsInTable = new ArrayList<>();
+    private static final ArrayList<Song> songsInTable = new ArrayList<>();
     private static String currentPlaylistName=new String();
     private static int burgerState=-1;
     public static void setVolume(double volume){
@@ -46,8 +46,6 @@ public class State {
         return currentSongIndex;
     }
     public static void setSongsInTable(ArrayList<Song> list) {
-
-        if(songsInTable == null) return;
 
         if(!songsInTable.isEmpty()) {
             songsInTable.clear();

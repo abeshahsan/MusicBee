@@ -29,9 +29,9 @@
          <children>
             <AnchorPane prefHeight="49.0" prefWidth="318.0">
                <children>
-                  <Button fx:id="playPause" layoutX="143.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickPlayPause" prefHeight="35.0" prefWidth="48.0" stylesheets="@Stylesheet.css" text="PLay" />
-                  <Button layoutX="212.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickNext" prefHeight="35.0" prefWidth="48.0" text="Next" />
-                  <Button layoutX="62.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickPrev" prefHeight="35.0" prefWidth="48.0" text="Prev" />
+                  <Button fx:id="playPause" alignment="BASELINE_CENTER" layoutX="143.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickPlayPause" prefHeight="40.0" prefWidth="40.0" stylesheets="@Stylesheet.css" />
+                  <Button fx:id="next" alignment="BASELINE_CENTER" layoutX="212.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickNext" prefHeight="40.0" prefWidth="40.0" />
+                  <Button fx:id="prev" alignment="BASELINE_CENTER" layoutX="62.0" layoutY="-3.0" mnemonicParsing="false" onAction="#onClickPrev" prefHeight="40.0" prefWidth="40.0" />
                </children>
             </AnchorPane>
          </children>

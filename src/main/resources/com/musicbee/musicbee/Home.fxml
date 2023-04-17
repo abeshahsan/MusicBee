@@ -44,7 +44,7 @@
         </HBox>
    </top>
    <center>
-        <TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="758.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
+        <TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="363.0" prefWidth="758.0" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
             <columns>
                 <TableColumn id="TableCol" fx:id="Title" minWidth="180.0" prefWidth="180.0" text="Title" />
                 <TableColumn id="TableCol" fx:id="Album" minWidth="140.0" prefWidth="140.0" text="Album" />

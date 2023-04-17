@@ -12,13 +12,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ControlPanel implements Initializable {
+
+    @FXML
+    private Button next;
+    @FXML
+    private Button prev;
     @FXML
     private JFXSlider timeSlider;
     @FXML
@@ -56,8 +63,11 @@ public class ControlPanel implements Initializable {
         });
 
         if(Jukebox.getMediaPlayer() != null && Jukebox.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-            playPause.setText("Pause");
+            setPause();
         }
+        else setPlay();
+        setPrev();
+        setNext();
     }
 
     @FXML
@@ -67,19 +77,15 @@ public class ControlPanel implements Initializable {
 
     @FXML
     private void onClickPlayPause(ActionEvent event) {
-        Node node = (Node) event.getSource();
-
-        Button button = (Button) node;
-
         MediaPlayer mediaPlayer = Jukebox.getMediaPlayer();
         if(mediaPlayer != null) {
             if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
                 mediaPlayer.pause();
-                button.setText("Play");
+                setPlay();
             }
             else if(mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED){
                 mediaPlayer.play();
-                button.setText("Pause");
+               setPause();
             }
         }
     }
@@ -101,7 +107,7 @@ public class ControlPanel implements Initializable {
             State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
             updateNames(State.getCurrentSongName(),
                     State.getCurrentSongArtist());
-            playPause.setText("Pause");
+            setPlay();
         }
     }
 
@@ -170,7 +176,52 @@ public class ControlPanel implements Initializable {
                     State.getCurrentSongArtist());
             setTimeSlider();
             Jukebox.getMediaPlayer().setVolume(State.getVolume());
+            setPause();
+        }
+    }
+    public void setPlay() {
+        try {
+            File file = new File("src/main/resources/com/musicbee/musicbee/images/play-solid.png");
+//        File file = new File("src/main/resources/com/musicbee/musicbee/images/redHeart.png");
+            ImageView imageView = new ImageView(file.getAbsolutePath());
+            imageView.setFitWidth(15);
+            imageView.setFitHeight(20);
+            playPause.setGraphic(imageView);
+        } catch (Exception ignore) {
+            playPause.setText("Play");
+        }
+    }
+    public void setPause() {
+        try {
+            File file = new File("src/main/resources/com/musicbee/musicbee/images/pause-solid.png");
+            ImageView imageView = new ImageView(file.getAbsolutePath());
+            imageView.setFitWidth(15);
+            imageView.setFitHeight(20);
+            playPause.setGraphic(imageView);
+        } catch (Exception ignore) {
             playPause.setText("Pause");
+        }
+    }
+    private void setNext() {
+        try {
+            File file = new File("src/main/resources/com/musicbee/musicbee/images/forward-step-solid.png");
+            ImageView imageView = new ImageView(file.getAbsolutePath());
+            imageView.setFitWidth(15);
+            imageView.setFitHeight(20);
+            next.setGraphic(imageView);
+        } catch (Exception ignore) {
+            next.setText("Next");
+        }
+    }
+    private void setPrev() {
+        try {
+            File file = new File("src/main/resources/com/musicbee/musicbee/images/backward-step-solid.png");
+            ImageView imageView = new ImageView(file.getAbsolutePath());
+            imageView.setFitWidth(15);
+            imageView.setFitHeight(20);
+            prev.setGraphic(imageView);
+        } catch (Exception ignore) {
+            prev.setText("Prev");
         }
     }
 }
