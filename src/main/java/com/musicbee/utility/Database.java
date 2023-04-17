@@ -51,33 +51,25 @@ public class Database {
         ResultSet resultSet = pstmt.executeQuery();
 
         if(resultSet.next()) {
-            currentUser = createUserFromResultSet(resultSet);
+            currentUser = new User(resultSet.getString(1), resultSet.getLong(2));
+            currentUser.setFirstName(resultSet.getString(3));
+            currentUser.setLastName(resultSet.getString(4));
+            currentUser.setJoinDate(resultSet.getDate(5));
+            currentUser.setEmail(resultSet.getString(6));
+
+            Image image;
+            try {
+                InputStream inputStream = resultSet.getBinaryStream(7);
+                if(!resultSet.wasNull()) {
+                    image = new Image(inputStream);
+                    currentUser.setImage(image);
+                }
+            } catch (SQLException ignored) {
+            }
+
             return currentUser;
         }
-
         return null;
-    }
-
-    private static User createUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User user = new User(resultSet.getString(1), resultSet.getLong(2));
-        user.setFirstName(resultSet.getString(3));
-        user.setLastName(resultSet.getString(4));
-        user.setJoinDate(resultSet.getDate(5));
-        user.setEmail(resultSet.getString(6));
-        setImageIfAvailable(user, resultSet);
-        return user;
-    }
-
-    private static void setImageIfAvailable(User user, ResultSet resultSet) throws SQLException {
-        Image image = null;
-        try {
-            InputStream inputStream = resultSet.getBinaryStream(7);
-            if(!resultSet.wasNull()) {
-                image = new Image(inputStream);
-                user.setImage(image);
-            }
-        } catch (SQLException ignored) {
-        }
     }
     public static void signUp(User user) throws Exception {
         String sqlString = "insert into user (username, password, first_name, last_name, EMAIL) values (?, ?, ?, ?, ?)";
@@ -239,12 +231,8 @@ public class Database {
         preparedStatement.setInt(1, playlistID);
         ResultSet resultSet = preparedStatement.executeQuery();
 
-        Set<Integer> songIDs = new TreeSet<>();
-
         while(resultSet.next()) {
             int songID = resultSet.getInt(1);
-
-            songIDs.add(songID);
 
             for (Song s : ALL_SONGS) {
                 if (s.getID() == songID) {
