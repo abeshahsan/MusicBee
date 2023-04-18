@@ -61,7 +61,7 @@ public class SignInController {
         ArrayList<Object> state = Database.getLastState();
 
         State.setLastSongID((Integer)state.get(0));
-        State.setLastTimeStamp((Double)state.get(1));
+        State.setPlaybackPos((Double)state.get(1));
 
         resumePlayback();
 
@@ -104,8 +104,8 @@ public class SignInController {
             Jukebox.getMediaPlayer().setVolume(State.getVolume());
             Jukebox.getMediaPlayer().setOnReady(()-> {
                 double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
-                State.setTotalTime(totalTime);
-                Jukebox.getMediaPlayer().seek(Duration.millis(State.getLastTimeStamp()));
+                State.setTotalDuration(totalTime);
+                Jukebox.getMediaPlayer().seek(Duration.millis(State.getPlaybackPos()));
                 Jukebox.getMediaPlayer().pause();
             });
         }

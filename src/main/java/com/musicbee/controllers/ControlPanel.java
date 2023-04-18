@@ -4,12 +4,12 @@ import com.jfoenix.controls.JFXSlider;
 import com.musicbee.entities.Song;
 import com.musicbee.utility.Jukebox;
 import com.musicbee.utility.State;
+import com.musicbee.utility.Tools;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -36,31 +36,33 @@ public class ControlPanel implements Initializable {
     private Label artistName;
     @FXML
     private Label songName;
+    @FXML
+    private Label elapsed;
+    @FXML
+    private Label totalDuration;
+    @FXML
+    private Button volumeIcon;
+    private boolean isMuted;
+    private double volSliderValue;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         setTimeSlider();
 
-        volumeSlider.setValue(State.getVolume() * 100);
         System.out.println(State.getVolume());
 
-        if(State.getTotalTime() != 0) {
-            timeSlider.setValue(  (State.getLastTimeStamp() / State.getTotalTime()) * 100.0 );
+        if(State.getTotalDuration() != 0) {
+            timeSlider.setValue(  (State.getPlaybackPos() / State.getTotalDuration()) * 100.0 );
         }
 
         songName.setText(State.getCurrentSongName());
         artistName.setText(State.getCurrentSongArtist());
 
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                State.setVolume(volumeSlider.getValue() * .01);
-                if(Jukebox.getMediaPlayer() != null) {
-                    Jukebox.getMediaPlayer().setVolume(State.getVolume());
-                }
-            }
-        });
+        isMuted = false;
+
+        setVolumeSlider();
+        setVolumeIcon();
 
         if(Jukebox.getMediaPlayer() != null && Jukebox.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
             setPause();
@@ -68,6 +70,40 @@ public class ControlPanel implements Initializable {
         else setPlay();
         setPrev();
         setNext();
+        setTimeSliderEventHandlers();
+    }
+
+    private void setVolumeSlider() {
+        volumeSlider.setValue(State.getVolume() * 100);
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                State.setVolume(volumeSlider.getValue() * .01);
+                if(Jukebox.getMediaPlayer() != null) {
+                    Jukebox.getMediaPlayer().setVolume(State.getVolume());
+                }
+                setVolumeIcon();
+            }
+        });
+    }
+
+    private void setTimeSliderEventHandlers() {
+        timeSlider.setOnMouseDragged(event -> {
+            State.mouseDetected = true;
+        });
+        timeSlider.setOnMousePressed(event -> {
+            State.mouseDetected = true;
+        });
+        timeSlider.setOnMouseReleased(event -> {
+            if(Jukebox.getMediaPlayer() == null) {
+                timeSlider.setValue(0);
+            }
+            else {
+                double seekTime = (timeSlider.getValue() / 100) * State.getTotalDuration();
+                Jukebox.getMediaPlayer().seek(Duration.millis(seekTime));
+            }
+            State.mouseDetected = false;
+        });
     }
 
     @FXML
@@ -111,36 +147,22 @@ public class ControlPanel implements Initializable {
         }
     }
 
-    private void setTimeSlider() {
+    public void setTimeSlider() {
         timeSlider.setValue(0);
         if(Jukebox.getMediaPlayer() != null) {
             Jukebox.getMediaPlayer().currentTimeProperty().addListener((observableValue, duration, t1) -> {
                 if(Jukebox.getMediaPlayer() == null) return;
                 double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
-                State.setTotalTime(totalTime);
+                State.setTotalDuration(totalTime);
                 double currentTime = Jukebox.getMediaPlayer().getCurrentTime().toMillis();
-                State.setLastTimeStamp(currentTime);
+                State.setPlaybackPos(currentTime);
                 double timeSliderValue = (currentTime / totalTime) * 100;
                 if(!State.mouseDetected) timeSlider.setValue(timeSliderValue);
+                totalDuration.setText(Tools.timeToString(totalTime));
+                elapsed.setText(Tools.timeToString(currentTime));
             });
             Jukebox.getMediaPlayer().setOnEndOfMedia(this::playNext);
         }
-        timeSlider.setOnMouseDragged(event -> {
-            State.mouseDetected = true;
-        });
-        timeSlider.setOnMousePressed(event -> {
-            State.mouseDetected = true;
-        });
-        timeSlider.setOnMouseReleased(event -> {
-            if(Jukebox.getMediaPlayer() == null) {
-                timeSlider.setValue(0);
-            }
-            else {
-                double seekTime = (timeSlider.getValue() / 100) * State.getTotalTime();
-                Jukebox.getMediaPlayer().seek(Duration.millis(seekTime));
-            }
-            State.mouseDetected = false;
-        });
     }
 
     private void updateNames(String name, String artist) {
@@ -182,11 +204,12 @@ public class ControlPanel implements Initializable {
     public void setPlay() {
         try {
             File file = new File("src/main/resources/com/musicbee/musicbee/images/play-solid.png");
-//        File file = new File("src/main/resources/com/musicbee/musicbee/images/redHeart.png");
             ImageView imageView = new ImageView(file.getAbsolutePath());
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
             playPause.setGraphic(imageView);
+            playPause.getTooltip().setText("Play");
+            playPause.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             playPause.setText("Play");
         }
@@ -198,6 +221,8 @@ public class ControlPanel implements Initializable {
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
             playPause.setGraphic(imageView);
+            playPause.getTooltip().setText("Pause");
+            playPause.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             playPause.setText("Pause");
         }
@@ -209,6 +234,7 @@ public class ControlPanel implements Initializable {
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
             next.setGraphic(imageView);
+            playPause.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             next.setText("Next");
         }
@@ -220,8 +246,38 @@ public class ControlPanel implements Initializable {
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
             prev.setGraphic(imageView);
+            playPause.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             prev.setText("Prev");
         }
+    }
+    @FXML
+    private void toggleMute() {
+        if(isMuted) {
+            isMuted = false;
+            volumeSlider.setValue(volSliderValue);
+        } else {
+            isMuted = true;
+            volSliderValue = volumeSlider.getValue();
+            volumeSlider.setValue(0);
+        }
+    }
+    private void setVolumeIcon() {
+        String folder = "src/main/resources/com/musicbee/musicbee/images/";
+        String imageName = "";
+        if(0 <= volumeSlider.getValue() && volumeSlider.getValue() < 1) {
+            imageName =  "volume-mute.png";
+        } else if (1 <= volumeSlider.getValue() && volumeSlider.getValue() < volumeSlider.getMax() * 1 / 3){
+            imageName = "volume-low.png";
+        } else if (volumeSlider.getMax() * 1 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() < volumeSlider.getMax() * 2 / 3){
+            imageName = "volume-medium.png";
+        } else if (volumeSlider.getMax() * 2 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() <= volumeSlider.getMax()){
+            imageName = "volume-high.png";
+        }
+        File file = new File(folder + imageName);
+        ImageView imageView = new ImageView(file.getAbsolutePath());
+        imageView.setFitWidth(30);
+        imageView.setFitHeight(35);
+        volumeIcon.setGraphic(imageView);
     }
 }

@@ -250,7 +250,7 @@ public class Database {
 
         String username = getCurrentUser().getUsername();
         int songID = State.getLastSongID();
-        double time = State.getLastTimeStamp();
+        double time = State.getPlaybackPos();
 
         System.out.println(username + " " + songID + " " + time);
 

@@ -432,3 +432,8 @@
     -fx-background-repeat:no-repeat;
     -fx-background-size:stretch;
 }
+
+.tooltip {
+    -fx-background-radius: 0;
+    -fx-background-color: black;
+}

@@ -68,15 +68,13 @@ public class PlaylistSceneController implements Initializable {
     @FXML
     private VBox bottom;
 
-
     private final ArrayList<Song> allSongs = new ArrayList<>();
     private final ArrayList<Song> filteredSongs = new ArrayList<>();
-    ContextMenu contextMenu=new ContextMenu();
-
+    private final ContextMenu contextMenu = new ContextMenu();
 
     ObservableList <Song> tableList = FXCollections.observableArrayList();
     @FXML
-    Label name=new Label();
+    private Label name;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -146,8 +144,7 @@ public class PlaylistSceneController implements Initializable {
     }
 
     private void loadSideBar() {
-        try
-        {
+        try {
             VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
@@ -204,23 +201,7 @@ public class PlaylistSceneController implements Initializable {
                     Jukebox.getMediaPlayer().setVolume(State.getVolume());
                     State.setLastSongID(State.getSongsInTable().get(index).getID());
                 }
-
-                if(Jukebox.getMediaPlayer() != null) {
-                    Jukebox.getMediaPlayer().currentTimeProperty().addListener((observableValue, duration, t1) -> {
-                        MediaPlayer player = Jukebox.getMediaPlayer();
-                        if (player != null) {
-                            double totalTime = player.getTotalDuration().toMillis();
-                            State.setTotalTime(totalTime);
-                            double currentTime = player.getCurrentTime().toMillis();
-                            State.setLastTimeStamp(currentTime);
-                            double timeSliderValue = (currentTime / totalTime) * 100;
-                            if(!State.mouseDetected) controlPanel.getTimeSlider().setValue(timeSliderValue);
-                        }
-                    });
-                    Jukebox.getMediaPlayer().setOnEndOfMedia(() -> {
-                        controlPanel.playNext();
-                    });
-                }
+                controlPanel.setTimeSlider();
             } catch (Exception e) {
                 System.out.println(e);
             }

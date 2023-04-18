@@ -23,7 +23,7 @@ public class Tools {
         int seconds = millisecond / 1000;
         int minutes = seconds / 60;
         seconds %= 60;
-        return (String.format("%02d", minutes) + ":" + String.format("%2d", seconds));
+        return (String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
     }
     public static int calcStrength(String hello){
         //1 for weak, 2 medium, 3 for strong

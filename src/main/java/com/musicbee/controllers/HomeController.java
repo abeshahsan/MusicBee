@@ -201,22 +201,7 @@ public class HomeController implements Initializable {
                     State.setLastSongID(State.getSongsInTable().get(index).getID());
                 }
 
-                if(Jukebox.getMediaPlayer() != null) {
-                    Jukebox.getMediaPlayer().currentTimeProperty().addListener((observableValue, duration, t1) -> {
-                        MediaPlayer player = Jukebox.getMediaPlayer();
-                        if (player != null) {
-                            double totalTime = player.getTotalDuration().toMillis();
-                            State.setTotalTime(totalTime);
-                            double currentTime = player.getCurrentTime().toMillis();
-                            State.setLastTimeStamp(currentTime);
-                            double timeSliderValue = (currentTime / totalTime) * 100;
-                            if(!State.mouseDetected) controlPanel.getTimeSlider().setValue(timeSliderValue);
-                        }
-                    });
-                    Jukebox.getMediaPlayer().setOnEndOfMedia(() -> {
-                        controlPanel.playNext();
-                    });
-                }
+                controlPanel.setTimeSlider();
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -287,8 +272,6 @@ public class HomeController implements Initializable {
         String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //myStage.setMinWidth(Settings.getMinWidth());
-       // myStage.setMinHeight(Settings.getMinHeight());
         myStage.show();
     }
 
