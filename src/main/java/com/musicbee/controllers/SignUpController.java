@@ -1,6 +1,7 @@
 package com.musicbee.controllers;
 
 import com.musicbee.entities.User;
+import com.musicbee.utility.FilePaths;
 import com.musicbee.utility.Tools;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -111,7 +112,7 @@ public class SignUpController {
         }
         String val = sendEmail(emailID.getText());
         System.out.println(val);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/NewUserVerifyOTP.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.NEW_USER_VERIFY_OTP));
         Parent root = loader.load();
         NewUserVerifyOTP forgot = loader.getController();
         forgot.setVal(val);
@@ -120,7 +121,7 @@ public class SignUpController {
         //root = FXMLLoader.load(getClass().getResource("Scene2.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         stage.setScene(scene);
         stage.show();
@@ -171,9 +172,9 @@ public class SignUpController {
     void onLoginFromSignup(ActionEvent event) throws IOException {
         Node callingBtn=(Node)event.getSource();
         Stage myStage=(Stage)callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
         Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();
@@ -198,6 +199,5 @@ public class SignUpController {
         if(Tools.calcStrength(pass)==3) {
             pwdStrength.setText("Strong");
         }
-
     }
 }

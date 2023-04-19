@@ -1,5 +1,6 @@
 package com.musicbee.controllers.forgotpass;
 
+import com.musicbee.utility.FilePaths;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -43,11 +45,9 @@ public class ForgotPassVerifyOTP {
     void onBack100(ActionEvent event) throws IOException {
         Node callingBtn = (Node) event.getSource();
         Stage myStage = (Stage) callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
         Scene scene = new Scene(fxmlLoader.load());
-        //myStage.setMinWidth(Settings.getMinWidth());
-        //myStage.setMinHeight(Settings.getMinHeight());
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();
@@ -62,11 +62,11 @@ public class ForgotPassVerifyOTP {
         else {
             Node callingBtn = (Node) event.getSource();
             Stage myStage = (Stage) callingBtn.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ForgotPassChangePwd.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.FORGOT_PASS_CHANGE_PWD));
             Scene scene = new Scene(fxmlLoader.load());
             //myStage.setMinWidth(Settings.getMinWidth());
             //myStage.setMinHeight(Settings.getMinHeight());
-            String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+            String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
             scene.getStylesheets().add(css);
             myStage.setScene(scene);
             myStage.show();
@@ -78,7 +78,7 @@ public class ForgotPassVerifyOTP {
     void onResendforgot(ActionEvent event) throws IOException {
         String val=sendEmail(address);
         System.out.println(val);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ForgotPassVerifyOTP.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.FORGOT_PASS_VERIFY_OTP));
         Parent root = loader.load();
         ForgotPassVerifyOTP forgot = loader.getController();
         forgot.setVal(val);
@@ -86,7 +86,7 @@ public class ForgotPassVerifyOTP {
         //root = FXMLLoader.load(getClass().getResource("Scene2.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         stage.setScene(scene);
         stage.show();

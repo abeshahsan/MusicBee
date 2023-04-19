@@ -3,6 +3,7 @@ import com.musicbee.controllers.HomeController;
 import com.musicbee.entities.Song;
 import com.musicbee.entities.User;
 import com.musicbee.utility.Database;
+import com.musicbee.utility.FilePaths;
 import com.musicbee.utility.Tools;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -97,7 +98,7 @@ public class ForgotPassChangePwd {
         private void goToHomePage(ActionEvent event, String newPassword) {
                 Node callingBtn = (Node) event.getSource();
                 Stage myStage = (Stage) callingBtn.getScene().getWindow();
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/Home.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.HOME));
 
                 try {
                         ArrayList<Song> songs = Database.getAllSongs();
@@ -110,7 +111,7 @@ public class ForgotPassChangePwd {
                         Database.getCurrentUser().setPassword(Tools.hashPassword(newPassword));
                         Database.updateCurrentUserInfo(Database.getCurrentUser());
 
-                        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+                        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
                         Scene scene = new Scene(root);
                         scene.getStylesheets().add(css);
                         myStage.setScene(scene);

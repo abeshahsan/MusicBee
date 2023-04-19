@@ -4,7 +4,8 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import com.musicbee.utility.Database;
-import com.musicbee.utility.Jukebox;
+import com.musicbee.utility.FilePaths;
+import com.musicbee.utility.MediaPlayerControl;
 import com.musicbee.utility.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -82,7 +83,7 @@ public class ProfileController implements Initializable {
     }
 
     private void loadControlPanel() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
             VBox vBox = fxmlLoader.load();
             bottom.getChildren().clear();
@@ -130,7 +131,7 @@ public class ProfileController implements Initializable {
     private void loadSideBar() {
         try
         {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
+            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -142,10 +143,10 @@ public class ProfileController implements Initializable {
         MenuItem menuItem = (MenuItem) event.getSource();
         Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/Profile.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.PROFILE));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();
@@ -153,8 +154,8 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-        if(Jukebox.getMediaPlayer() != null) {
-            Jukebox.dispose();
+        if(MediaPlayerControl.getMediaPlayer() != null) {
+            MediaPlayerControl.dispose();
         }
 
         MenuItem menuItem = (MenuItem) event.getSource();
@@ -163,9 +164,9 @@ public class ProfileController implements Initializable {
         Database.savePlaybackPosition();
         Database.logOutCurrentUser();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
         Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();
@@ -175,14 +176,14 @@ public class ProfileController implements Initializable {
     private void onCLickEdit(ActionEvent event) {
         Node callingBtn=(Node)event.getSource();
         Stage myStage=(Stage)callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/EditProfile.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.EDIT_PROFILE));
         Scene scene;
         try {
             scene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();

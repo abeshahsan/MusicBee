@@ -45,21 +45,19 @@ public class NewUserVerifyOTP {
 
         }
 
-
         @FXML
         void onResendNew(ActionEvent event) throws IOException {
                 String val=sendEmail(address);
                 System.out.println(val);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/NewUserVerifyOTP.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.NEW_USER_VERIFY_OTP));
                 Parent root = loader.load();
                 NewUserVerifyOTP forgot = loader.getController();
                 forgot.setVal(val);
                 forgot.setAddress(address);
                 forgot.passUser(hello);
-                //root = FXMLLoader.load(getClass().getResource("Scene2.fxml"));
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 Scene scene = new Scene(root);
-                String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+                String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
                 scene.getStylesheets().add(css);
                 stage.setScene(scene);
                 stage.show();
@@ -67,19 +65,23 @@ public class NewUserVerifyOTP {
         @FXML
         void onSubmitOTP(ActionEvent event) throws Exception {
 
-        if(!newUserotp.getText().equals(otpVal)){ wrongOTPnew.setText("Wrong OTP!"); return;     }
+        if(!newUserotp.getText().equals(otpVal)) {
+                wrongOTPnew.setText("Wrong OTP!");
+                wrongOTPnew.setStyle("-fx-text-fill: red");
+                return;
+        }
         Database.signUp(hello);
                 Node callingBtn=(Node)event.getSource();
                 Stage myStage=(Stage)callingBtn.getScene().getWindow();
 
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/Home.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.HOME));
 
                 ArrayList<Song> songs = Database.getAllSongs();
                 Parent root = loader.load();
 
                 HomeController bl = loader.getController();
                 bl.makeObservableList(songs);
-                String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+                String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
                 Scene scene = new Scene(root);
                 scene.getStylesheets().add(css);
                 myStage.setScene(scene);

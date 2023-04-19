@@ -2,6 +2,7 @@ package com.musicbee.controllers;
 import com.musicbee.entities.Playlist;
 import com.musicbee.entities.Song;
 import com.musicbee.utility.Database;
+import com.musicbee.utility.FilePaths;
 import com.musicbee.utility.State;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -80,7 +81,7 @@ public class Sidebar implements Initializable {
         if (lc.getText()==null)return;
         if(event.getButton()== MouseButton.PRIMARY) {
             Node calling = (Node) event.getSource();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/PlayListScene.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.PLAYLIST_SCENE));
             State.setCurrentPlaylistID(lc.getItem().getID());
             State.setCurrentPlaylistName(lc.getItem().getName());
             Stage myStage = (Stage) calling.getScene().getWindow();
@@ -149,7 +150,7 @@ public class Sidebar implements Initializable {
         Node callingBtn=(Node)event.getSource();
         Stage myStage=(Stage)callingBtn.getScene().getWindow();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/Home.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.HOME));
 
         try {
 
@@ -160,7 +161,7 @@ public class Sidebar implements Initializable {
             HomeController bl = loader.getController();
             bl.makeObservableList(songs);
 
-            String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+            String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
             Scene scene = new Scene(root);
             scene.getStylesheets().add(css);
             myStage.setScene(scene);

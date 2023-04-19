@@ -2,10 +2,7 @@ package com.musicbee.controllers;
 
 import com.musicbee.entities.Song;
 import com.musicbee.entities.User;
-import com.musicbee.utility.Database;
-import com.musicbee.utility.Jukebox;
-import com.musicbee.utility.State;
-import com.musicbee.utility.Tools;
+import com.musicbee.utility.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -68,7 +65,7 @@ public class SignInController {
         Node callingBtn=(Node)event.getSource();
         Stage myStage=(Stage)callingBtn.getScene().getWindow();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/Home.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.HOME));
 
         ArrayList<Song> songs = Database.getAllSongs();
 
@@ -79,8 +76,8 @@ public class SignInController {
         HomeController bl = loader.getController();
         bl.makeObservableList(songs);
 
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
-        String css2 = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet3.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
+        String css2 = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET_3)).toExternalForm();
         Scene scene = new Scene(root);
         scene.getStylesheets().add(css);
         scene.getStylesheets().add(css2);
@@ -99,14 +96,14 @@ public class SignInController {
         if(song != null) {
             State.setCurrentSongName(song.getName());
             State.setCurrentSongArtist(song.getArtistName());
-            Jukebox.prepareJukebox(song);
-            Jukebox.play();
-            Jukebox.getMediaPlayer().setVolume(State.getVolume());
-            Jukebox.getMediaPlayer().setOnReady(()-> {
-                double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
+            MediaPlayerControl.prepareJukebox(song);
+            MediaPlayerControl.play();
+            MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
+            MediaPlayerControl.getMediaPlayer().setOnReady(()-> {
+                double totalTime = MediaPlayerControl.getMediaPlayer().getTotalDuration().toMillis();
                 State.setTotalDuration(totalTime);
-                Jukebox.getMediaPlayer().seek(Duration.millis(State.getPlaybackPos()));
-                Jukebox.getMediaPlayer().pause();
+                MediaPlayerControl.getMediaPlayer().seek(Duration.millis(State.getPlaybackPos()));
+                MediaPlayerControl.getMediaPlayer().pause();
             });
         }
     }
@@ -135,9 +132,9 @@ public class SignInController {
     void onForgotPass(ActionEvent event) throws IOException {
         Node callingBtn = (Node) event.getSource();
         Stage myStage = (Stage) callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ForgotPassEnterMail.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.FORGOT_PASS_ENTER_MAIL));
         Scene scene= new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();
@@ -147,9 +144,9 @@ public class SignInController {
     void onSignUpFromLogin(ActionEvent event) throws IOException {
         Node callingBtn = (Node) event.getSource();
         Stage myStage = (Stage) callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignUp.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_UP));
         Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();

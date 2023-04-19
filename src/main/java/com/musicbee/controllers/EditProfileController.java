@@ -1,10 +1,7 @@
 package com.musicbee.controllers;
 
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
-import com.musicbee.utility.Database;
-import com.musicbee.utility.Jukebox;
-import com.musicbee.utility.Settings;
-import com.musicbee.utility.State;
+import com.musicbee.utility.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -120,7 +117,7 @@ public class EditProfileController implements Initializable {
     private void loadSideBar() {
         try
         {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Sidebar.fxml")));
+            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
             System.out.println(e);
@@ -128,7 +125,7 @@ public class EditProfileController implements Initializable {
     }
 
     private void loadControlPanel() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ControlPanel.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
             VBox vBox = fxmlLoader.load();
             controlPanel.getChildren().clear();
@@ -143,10 +140,10 @@ public class EditProfileController implements Initializable {
         MenuItem menuItem = (MenuItem) event.getSource();
         Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/Profile.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.PROFILE));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.setMinWidth(Settings.getMinWidth());
@@ -156,10 +153,10 @@ public class EditProfileController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-        MediaPlayer player = Jukebox.getMediaPlayer();
+        MediaPlayer player = MediaPlayerControl.getMediaPlayer();
 
         if(player != null) {
-            Jukebox.dispose();
+            MediaPlayerControl.dispose();
         }
 
         MenuItem menuItem = (MenuItem) event.getSource();
@@ -168,9 +165,9 @@ public class EditProfileController implements Initializable {
         Database.savePlaybackPosition();
         Database.logOutCurrentUser();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
         Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();
@@ -184,15 +181,13 @@ public class EditProfileController implements Initializable {
             Node node = (Node) event.getSource();
             Stage myStage = (Stage) node.getScene().getWindow();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/Profile.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.PROFILE));
             Parent root = fxmlLoader.load();
 
             Scene scene = new Scene(root);
-            String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+            String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
             scene.getStylesheets().add(css);
             myStage.setScene(scene);
-            //myStage.setMinWidth(Settings.getMinWidth());
-            //.setMinHeight(Settings.getMinHeight());
             myStage.show();
         } catch (Exception e) {
             System.out.println(e);
@@ -250,11 +245,11 @@ public class EditProfileController implements Initializable {
         Node node = (Node) event.getSource();
         Stage myStage = (Stage) node.getScene().getWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/ChangePwd.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CHANGE_PWD));
         Parent root = fxmlLoader.load();
 
         Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
         myStage.show();

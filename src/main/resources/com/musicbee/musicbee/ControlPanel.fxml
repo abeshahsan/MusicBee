@@ -25,7 +25,7 @@
                   </HBox>
                   <HBox alignment="CENTER" layoutX="714.0" layoutY="20.0" spacing="2.0">
                      <children>
-                        <Button fx:id="volumeIcon" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleMute" prefHeight="20.0" prefWidth="20.0" text="b" />
+                        <Button fx:id="volumeIndicator" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleMute" prefHeight="20.0" prefWidth="20.0" text="b" />
                         <JFXSlider fx:id="volumeSlider" blockIncrement="1.0" prefHeight="14.0" prefWidth="103.0" />
                      </children>
                   </HBox>

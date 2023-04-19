@@ -2,6 +2,7 @@ package com.musicbee.controllers;
 
 import com.musicbee.entities.User;
 import com.musicbee.utility.Database;
+import com.musicbee.utility.FilePaths;
 import com.musicbee.utility.Tools;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -69,14 +70,12 @@ public class ChangePwdController {
     protected void onBackButton(ActionEvent event) throws IOException {
         Node callButton=(Node)event.getSource();
         Stage myStage= (Stage) callButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/EditProfile.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.EDIT_PROFILE));
         Scene scene = new Scene(fxmlLoader.load());
 
-        String css = Objects.requireNonNull(getClass().getResource("/com/musicbee/musicbee/Stylesheet.css")).toExternalForm();
+        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         myStage.setScene(scene);
-        //myStage.setMinWidth(Settings.getMinWidth());
-        //myStage.setMinHeight(Settings.getMinHeight());
         myStage.show();
     }
 
@@ -149,18 +148,20 @@ public class ChangePwdController {
         if(newPwd.isVisible()) pass = newPwd.getText();
         else pass = shownNewPwd.getText();
 
-
         if(pass.isEmpty()) {
             pwdStrength.setText("");
         }
         if(Tools.calcStrength(pass)==1) {
             pwdStrength.setText("Weak");
+            pwdStrength.setStyle("-fx-text-fill: red");
         }
         else if(Tools.calcStrength(pass)==2) {
             pwdStrength.setText("Medium");
+            pwdStrength.setStyle("-fx-text-fill: #ff9900");
         }
         if(Tools.calcStrength(pass)==3) {
             pwdStrength.setText("Strong");
+            pwdStrength.setStyle("-fx-text-fill: #07f307");
         }
     }
 }
