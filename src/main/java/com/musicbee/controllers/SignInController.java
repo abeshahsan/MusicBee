@@ -58,7 +58,7 @@ public class SignInController {
             return;
         }
 
-        ArrayList<Object> state = Database.getLastState();
+        ArrayList<Object> state = Database.loadPlaybackPosition();
 
         State.setLastSongID((Integer)state.get(0));
         State.setPlaybackPos((Double)state.get(1));

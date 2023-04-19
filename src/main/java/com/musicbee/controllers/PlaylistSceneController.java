@@ -274,6 +274,7 @@ public class PlaylistSceneController implements Initializable {
         MenuItem menuItem = (MenuItem) event.getSource();
         Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
+        Database.savePlaybackPosition();
         Database.logOutCurrentUser();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));

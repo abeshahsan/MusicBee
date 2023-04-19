@@ -1,5 +1,11 @@
 package com.musicbee.utility;
 
+import com.musicbee.entities.Song;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
+
 public class Tools {
     private static final int MAX_PASSWORD_LENGTH = 32;
     private static final long MIN_HASH = 4294967295L;
@@ -48,5 +54,17 @@ public class Tools {
         if(arr[0]>=1 && arr[1]>=1 && arr[2]>=1 && arr[3]>=1) return 2;
         //System.out.println("lol");
         return 1;
+    }
+
+    public static void getLengthOfSong(Song song) {
+        Media media = new Media( (new File(song.getPath())).toURI().toString() );
+        MediaPlayer player = new MediaPlayer( media );
+
+        player.setOnReady(()-> {
+            double totalTime = player.getTotalDuration().toMillis();
+            song.setLength(totalTime);
+//                System.out.println(totalTime);
+            player.pause();
+        });
     }
 }

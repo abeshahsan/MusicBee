@@ -37,14 +37,11 @@ import javafx.stage.Stage;
 
 public class HomeController implements Initializable {
     @FXML
-    private TableView<Song> table = new TableView<>();
-
+    private TableView<Song> table;
     @FXML
     private TableColumn<Song, String> Title;
-
     @FXML
     private TableColumn<Song, String> Artist;
-
     @FXML
     private TableColumn<Song, String> Album;
     @FXML
@@ -59,8 +56,8 @@ public class HomeController implements Initializable {
 
     @FXML
     private MenuButton menuButton;
-    ContextMenu contextMenu=new ContextMenu();
-    Menu child=new Menu("Add song to playlist");
+    ContextMenu contextMenu = new ContextMenu();
+    Menu child = new Menu("Add song to playlist");
 
     @FXML
     private VBox bottom;
@@ -116,6 +113,8 @@ public class HomeController implements Initializable {
         table.getColumns().add(0, indexColumn);
 
         table.setItems(tableList);
+
+        table.getFocusModel().focus(1);
     }
 
     private ControlPanel loadControlPanel() {
@@ -286,6 +285,7 @@ public class HomeController implements Initializable {
         MenuItem menuItem = (MenuItem) event.getSource();
         Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
+        Database.savePlaybackPosition();
         Database.logOutCurrentUser();
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/musicbee/musicbee/SignIn.fxml"));

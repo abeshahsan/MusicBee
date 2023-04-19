@@ -21,7 +21,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ControlPanel implements Initializable {
-
     @FXML
     private Button next;
     @FXML
@@ -234,7 +233,7 @@ public class ControlPanel implements Initializable {
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
             next.setGraphic(imageView);
-            playPause.getTooltip().setShowDelay(Duration.millis(100));
+            next.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             next.setText("Next");
         }
@@ -246,7 +245,7 @@ public class ControlPanel implements Initializable {
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
             prev.setGraphic(imageView);
-            playPause.getTooltip().setShowDelay(Duration.millis(100));
+            prev.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             prev.setText("Prev");
         }

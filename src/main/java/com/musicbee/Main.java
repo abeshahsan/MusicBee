@@ -1,23 +1,13 @@
 package com.musicbee;
 
-import com.musicbee.controllers.HomeController;
-import com.musicbee.entities.Song;
-import com.musicbee.entities.User;
 import com.musicbee.utility.Database;
-import com.musicbee.utility.State;
-import com.musicbee.utility.Tools;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class Main extends Application {
     @Override
@@ -43,7 +33,7 @@ public class Main extends Application {
 
             //before closing the application, save the last state of the user.
             if(Database.getCurrentUser() != null) { //The user actually closed the application without logging out.
-                Database.saveLastState();
+                Database.savePlaybackPosition();
             }
         } catch (Exception e) {
             e.printStackTrace();
