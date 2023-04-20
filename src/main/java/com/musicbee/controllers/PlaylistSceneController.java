@@ -1,25 +1,26 @@
 package com.musicbee.controllers;
 
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import com.musicbee.entities.Song;
-import com.musicbee.utility.Database;
-import com.musicbee.utility.FilePaths;
-import com.musicbee.utility.MediaPlayerControl;
-import com.musicbee.utility.State;
+import com.musicbee.utility.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,13 +28,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXHamburger;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.VBox;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
 
 public class PlaylistSceneController implements Initializable {
 
@@ -52,12 +46,12 @@ public class PlaylistSceneController implements Initializable {
     @FXML
     private TableColumn<Song, String> Album;
     @FXML
-    private TableColumn<Song,String> Length;
+    private TableColumn<Song, String> Length;
 
     @FXML
     private JFXHamburger myHamburger;
     @FXML
-    private JFXDrawer drawer;
+    private JFXDrawer    drawer;
 
     @FXML
     private TextField searchBar;
@@ -67,24 +61,24 @@ public class PlaylistSceneController implements Initializable {
     @FXML
     private MenuButton menuButton;
     @FXML
-    private VBox bottom;
+    private VBox       bottom;
 
-    private final ArrayList<Song> allSongs = new ArrayList<>();
+    private final ArrayList<Song> allSongs      = new ArrayList<>();
     private final ArrayList<Song> filteredSongs = new ArrayList<>();
-    private final ContextMenu contextMenu = new ContextMenu();
+    private final ContextMenu     contextMenu   = new ContextMenu();
 
-    ObservableList <Song> tableList = FXCollections.observableArrayList();
+    ObservableList<Song> tableList = FXCollections.observableArrayList();
     @FXML
     private Label name;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         name.setText(State.getCurrentPlaylistName());
-        MenuItem item1=new MenuItem("Remove song from playlist");
+        MenuItem item1 = new MenuItem("Remove song from playlist");
         item1.setId("1");
         contextMenu.getItems().add(item1);
         menuButton.setText(Database.getCurrentUser().getUsername());
-        if(Database.getCurrentUser().getImage() != null) {
+        if (Database.getCurrentUser().getImage() != null) {
             profileIcon.setImage(Database.getCurrentUser().getImage());
         }
 
@@ -98,26 +92,23 @@ public class PlaylistSceneController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
             VBox vBox = fxmlLoader.load();
-//            ControlPanel bottomController = fxmlLoader.getController();
             bottom.getChildren().clear();
             bottom.getChildren().addAll(vBox.getChildren());
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
 
         return fxmlLoader.getController();
     }
 
     private void setHamburger() {
-        HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
+        HamburgerBasicCloseTransition transition = new HamburgerBasicCloseTransition(myHamburger);
 
-        if(State.getBurgerState()==-1)
-        {
+        if (State.getBurgerState() == -1) {
             transition.setRate(-1);
             drawer.toggle();
-        }
-        else
-        {
+        } else {
             transition.setRate(1);
             drawer.toggle();
         }
@@ -126,27 +117,23 @@ public class PlaylistSceneController implements Initializable {
     }
 
     private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
-        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
-            transition.setRate(transition.getRate()*-1);
-            if(transition.getRate()==-1)
-            {
+        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
+            transition.setRate(transition.getRate() * -1);
+            if (transition.getRate() == -1) {
                 State.setBurgerState(-1);
-            }
-            else {
+            } else {
                 State.setBurgerState(1);
             }
             transition.play();
-            if(drawer.isOpened() || drawer.isOpening())
-            {
+            if (drawer.isOpened() || drawer.isOpening()) {
                 drawer.close();
-            }
-            else drawer.open();
+            } else drawer.open();
         });
     }
 
     private void loadSideBar() {
         try {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
+            VBox vbox = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -163,10 +150,10 @@ public class PlaylistSceneController implements Initializable {
             return row;
         });
 
-        Title.setCellValueFactory(new PropertyValueFactory<>("name"));
-        Artist.setCellValueFactory(new PropertyValueFactory<>("artistName"));
-        Album.setCellValueFactory(new PropertyValueFactory<>("albumName"));
-        Length.setCellValueFactory(new PropertyValueFactory<>("lengthInString"));
+        Title.setCellValueFactory(new PropertyValueFactory<>(Song.NAME_ATTRIBUTE));
+        Artist.setCellValueFactory(new PropertyValueFactory<>(Song.ARTIST_NAME_ATTRIBUTE));
+        Album.setCellValueFactory(new PropertyValueFactory<>(Song.ALBUM_NAME_ATTRIBUTE));
+        Length.setCellValueFactory(new PropertyValueFactory<>(Song.LENGTH_IN_STRING_ATTRIBUTE));
 
         TableColumn<Song, Integer> indexColumn = new TableColumn<>("#");
         indexColumn.setSortable(false);
@@ -182,10 +169,10 @@ public class PlaylistSceneController implements Initializable {
     @FXML
     public void clickItem(MouseEvent event) {
         contextMenu.hide();
-        TableRow<Song> row = (TableRow<Song>) event.getSource();
-        if(event.getButton() == MouseButton.PRIMARY) {
+        @SuppressWarnings("unchecked") TableRow<Song> row = (TableRow<Song>) event.getSource();
+        if (event.getButton() == MouseButton.PRIMARY) {
             try {
-                if(!row.isEmpty() && row.getItem()!=null) {
+                if (!row.isEmpty() && row.getItem() != null) {
                     int index = row.getIndex();
                     State.setCurrentSongIndex(index);
                     Song song = State.getSongsInTable().get(index);
@@ -194,7 +181,6 @@ public class PlaylistSceneController implements Initializable {
                     MediaPlayerControl.play();
 
                     controlPanel.setPause();
-//                    System.out.println(State.getVolume());
                     State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
                     State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
                     updateNames(State.getCurrentSongName(),
@@ -204,15 +190,15 @@ public class PlaylistSceneController implements Initializable {
                 }
                 controlPanel.setTimeSlider();
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println(e.getMessage());
+                System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
             }
-        }
-        else if(event.getButton()==MouseButton.SECONDARY){
+        } else if (event.getButton() == MouseButton.SECONDARY) {
             contextMenu.show(table, event.getScreenX(), event.getScreenY());
             System.out.println(contextMenu.getItems().get(0).getId());
-            contextMenu.setOnAction(e->{
+            contextMenu.setOnAction(e -> {
                 try {
-                    Database.deleteSongFromPlaylist(row.getItem().getID(),State.getCurrentPlaylistID());
+                    Database.deleteSongFromPlaylist(row.getItem().getID(), State.getCurrentPlaylistID());
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -220,6 +206,7 @@ public class PlaylistSceneController implements Initializable {
             });
         }
     }
+
     public void makeObservableList(ArrayList<Song> list) {
         allSongs.clear();
         filteredSongs.clear();
@@ -232,16 +219,15 @@ public class PlaylistSceneController implements Initializable {
 
     @FXML
     private void onTypedSearchBar() {
-        if(searchBar.getText().trim().isEmpty()) {
+        if (searchBar.getText().trim().isEmpty()) {
             tableList.clear();
             tableList.addAll(allSongs);
-        }
-        else {
+        } else {
             filteredSongs.clear();
-            for(Song song : allSongs) {
+            for (Song song : allSongs) {
                 String substr = searchBar.getText().trim().toLowerCase();
                 String name = song.getName().toLowerCase();
-                if(name.contains(substr)) {
+                if (name.contains(substr)) {
                     filteredSongs.add(song);
                 }
             }
@@ -254,38 +240,29 @@ public class PlaylistSceneController implements Initializable {
     @FXML
     public void onClickProfile(ActionEvent event) throws IOException {
         MenuItem menuItem = (MenuItem) event.getSource();
-        Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
+        Stage stage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.PROFILE));
-        Parent root = fxmlLoader.load();
-
-        Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.PROFILE, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
+
     public void onClickLogOut(ActionEvent event) throws IOException, SQLException {
         MediaPlayer player = MediaPlayerControl.getMediaPlayer();
 
-        if(player != null) {
-            MediaPlayerControl.dispose();
+        if (player != null) {
+            MediaPlayerControl.clear();
         }
-
-        MenuItem menuItem = (MenuItem) event.getSource();
-        Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
         Database.savePlaybackPosition();
         Database.logOutCurrentUser();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
-        Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
+        MenuItem menuItem = (MenuItem) event.getSource();
+        Stage stage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
-        myStage.show();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_IN, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
+
     private void updateNames(String songName, String artist) {
         controlPanel.getSongName().setText(songName);
         controlPanel.getArtistName().setText(artist);

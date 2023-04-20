@@ -35,18 +35,16 @@ public class ForgotPassEnterMail {
             return;
         }
 
-        String val = sendEmail(address);
-        System.out.println(val);
+        String val;
+        val = sendEmail(address);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ForgotPassVerifyOTP.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.FORGOT_PASS_VERIFY_OTP));
         Parent root = loader.load();
 
         ForgotPassVerifyOTP forgot = loader.getController();
         forgot.setVal(val);
         forgot.setAddress(address);
 
-
-        //root = FXMLLoader.load(getClass().getResource("Scene2.fxml"));	
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();

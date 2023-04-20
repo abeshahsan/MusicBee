@@ -32,7 +32,6 @@ public class Sidebar implements Initializable {
     @FXML
     private ImageView pfpSide;
 
-    private ImageView defaultImage;
     @FXML
     private Label usernameS;
     @FXML
@@ -52,7 +51,7 @@ public class Sidebar implements Initializable {
         tableList.addAll(playlists);
         list.setItems(tableList);
         list.setCellFactory((ListView<Playlist> lv) ->{
-                ListCell <Playlist> cell = new ListCell<Playlist>() {
+                ListCell <Playlist> cell = new ListCell<>() {
                     @Override
                     public void updateItem(Playlist playlist, boolean empty) {
                         super.updateItem(playlist, empty);
@@ -67,7 +66,7 @@ public class Sidebar implements Initializable {
 
                 return cell;
          });
-        defaultImage = new ImageView(pfpSide.getImage());
+        ImageView defaultImage = new ImageView(pfpSide.getImage());
 
         if(Database.getCurrentUser().getImage() != null) {
             pfpSide.setImage(Database.getCurrentUser().getImage());
@@ -76,8 +75,7 @@ public class Sidebar implements Initializable {
 
     }
     public void handle(MouseEvent event) {
-        //System.out.println("Pidamu");
-        ListCell<Playlist> lc=(ListCell<Playlist>)event.getSource();
+        @SuppressWarnings("unchecked") ListCell<Playlist> lc=(ListCell<Playlist>)event.getSource();
         if (lc.getText()==null)return;
         if(event.getButton()== MouseButton.PRIMARY) {
             Node calling = (Node) event.getSource();
@@ -89,7 +87,8 @@ public class Sidebar implements Initializable {
                 Scene scene = new Scene(loader.load());
                 myStage.setScene(scene);
             } catch (IOException e) {
-                System.out.println(e);
+                System.out.println(e.getMessage());
+                System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
                 throw new RuntimeException(e);
             }
             try {
@@ -108,7 +107,8 @@ public class Sidebar implements Initializable {
                 try {
                     Database.deletePlaylist(lc.getItem().getID());
                 } catch (SQLException ex) {
-                    System.out.println(ex);
+                    System.out.println(ex.getMessage());
+                    System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
                 }
                 this.deleteFromList(lc.getItem());
             }
@@ -118,8 +118,7 @@ public class Sidebar implements Initializable {
     @FXML
     protected void OnClickCreatePlaylist(ActionEvent event)
     {
-        if(!create.isVisible())create.setVisible(true);
-        else create.setVisible(false);
+        create.setVisible(!create.isVisible());
     }
     @FXML
     protected void OnEnteringPlaylistName() throws SQLException {
@@ -136,7 +135,8 @@ public class Sidebar implements Initializable {
             tableList.add(pL);
             list.setItems(tableList);
         }catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
     }
     public void deleteFromList(Playlist pL)
@@ -171,4 +171,4 @@ public class Sidebar implements Initializable {
             System.out.println(e.getMessage());
         }
     }
-};
+}

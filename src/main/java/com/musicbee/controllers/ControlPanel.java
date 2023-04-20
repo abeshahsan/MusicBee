@@ -6,9 +6,6 @@ import com.musicbee.utility.FilePaths;
 import com.musicbee.utility.MediaPlayerControl;
 import com.musicbee.utility.State;
 import com.musicbee.utility.Tools;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -76,25 +73,18 @@ public class ControlPanel implements Initializable {
 
     private void setVolumeSlider() {
         volumeSlider.setValue(State.getVolume() * 100);
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                State.setVolume(volumeSlider.getValue() * .01);
-                if(MediaPlayerControl.getMediaPlayer() != null) {
-                    MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
-                }
-                setVolumeIcon();
+        volumeSlider.valueProperty().addListener((observableValue, number, t1) -> {
+            State.setVolume(volumeSlider.getValue() * .01);
+            if(MediaPlayerControl.getMediaPlayer() != null) {
+                MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
             }
+            setVolumeIcon();
         });
     }
 
     private void setTimeSliderEventHandlers() {
-        timeSlider.setOnMouseDragged(event -> {
-            State.mouseDetected = true;
-        });
-        timeSlider.setOnMousePressed(event -> {
-            State.mouseDetected = true;
-        });
+        timeSlider.setOnMouseDragged(event -> State.mouseDetected = true);
+        timeSlider.setOnMousePressed(event -> State.mouseDetected = true);
         timeSlider.setOnMouseReleased(event -> {
             if(MediaPlayerControl.getMediaPlayer() == null) {
                 timeSlider.setValue(0);
@@ -108,12 +98,12 @@ public class ControlPanel implements Initializable {
     }
 
     @FXML
-    private void onClickNext(ActionEvent event) {
+    private void onClickNext() {
         playNext();
     }
 
     @FXML
-    private void onClickPlayPause(ActionEvent event) {
+    private void onClickPlayPause() {
         MediaPlayer mediaPlayer = MediaPlayerControl.getMediaPlayer();
         if(mediaPlayer != null) {
             if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
@@ -128,7 +118,7 @@ public class ControlPanel implements Initializable {
     }
 
     @FXML
-    private void onClickPrev(ActionEvent event) {
+    private void onClickPrev() {
         MediaPlayer player = MediaPlayerControl.getMediaPlayer();
         if(player != null && (State.getCurrentSongIndex() - 1 >= 0) ) {
             State.decrementCurrentSongIndex();

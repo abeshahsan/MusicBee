@@ -8,10 +8,9 @@ import java.util.Properties;
 import java.util.Random;
 
 public class OTP {
-
-    private static final String USERNAME = "musicbee042534@gmail.com";
-    private static final String PASSWORD = "Alhamdulillah";
-    private static final int OTP_LENGTH = 6;
+    private static final String USERNAME   = "musicbee042534@gmail.com";
+    private static final String PASSWORD   = "Alhamdulillah";
+    private static final int    OTP_LENGTH = 6;
 
     public static String sendEmail(String address) {
 
@@ -37,8 +36,8 @@ public class OTP {
 
         String OTP = new String(otp);
 
+        Message message = new MimeMessage(session);
         try {
-            Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(USERNAME));
             message.setRecipients(
                     Message.RecipientType.TO,
@@ -49,11 +48,13 @@ public class OTP {
                     ". Please use the OTP to register to Music Bee.");
 
             Transport.send(message);
-
             System.out.println("Email sent successfully.");
         } catch (MessagingException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            System.out.println("Could not send the email");
         }
+
+        System.out.println(OTP);
 
         return OTP;
     }

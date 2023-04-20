@@ -215,17 +215,12 @@ public class Database {
 
     /**
      * Logs-out the current user. Clears the {@code currentUser} object.
-     * @throws SQLException if there is any error in logging out the user
      */
-    public static void logOutCurrentUser() throws SQLException {
+    public static void logOutCurrentUser() {
         currentUser = null;
         ALL_PLAYLISTS.clear();
         CURRENT_PLAYLIST_SONGS.clear();
-        try {
-            State.clearState();
-        } catch (Exception ignore) {
-            System.out.println("Could not save playback state of the user");
-        }
+        State.clearState();
     }
 
     /**

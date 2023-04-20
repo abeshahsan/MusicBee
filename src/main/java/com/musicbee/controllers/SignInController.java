@@ -5,30 +5,48 @@ import com.musicbee.entities.User;
 import com.musicbee.utility.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class SignInController {
     @FXML
-    private TextField usernameField;
+    private TextField     usernameField;
     @FXML
-    private TextField shownPasswordField;
+    private TextField     shownPasswordField;
     @FXML
     private PasswordField passwordField;
     @FXML
-    private Label wrong;
+    private Label         wrong;
+
+    private static void resumePlayback() {
+        Song song = null;
+        for (Song s : Database.getAllSongs()) {
+            if (s.getID() == State.getLastSongID()) {
+                song = s;
+                break;
+            }
+        }
+        if (song != null) {
+            State.setCurrentSongName(song.getName());
+            State.setCurrentSongArtist(song.getArtistName());
+            MediaPlayerControl.prepareJukebox(song);
+            MediaPlayerControl.play();
+            MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
+            MediaPlayerControl.getMediaPlayer().setOnReady(() -> {
+                double totalTime = MediaPlayerControl.getMediaPlayer().getTotalDuration().toMillis();
+                State.setTotalDuration(totalTime);
+                MediaPlayerControl.getMediaPlayer().seek(Duration.millis(State.getPlaybackPos()));
+                MediaPlayerControl.getMediaPlayer().pause();
+            });
+        }
+    }
 
     @FXML
     protected void onClickSubmit(ActionEvent event) throws Exception {
@@ -57,138 +75,43 @@ public class SignInController {
 
         ArrayList<Object> state = Database.loadPlaybackPosition();
 
-        State.setLastSongID((Integer)state.get(0));
-        State.setPlaybackPos((Double)state.get(1));
+        State.setLastSongID((Integer) state.get(0));
+        State.setPlaybackPos((Double) state.get(1));
 
         resumePlayback();
-
-        Node callingBtn=(Node)event.getSource();
-        Stage myStage=(Stage)callingBtn.getScene().getWindow();
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.HOME));
-
-        ArrayList<Song> songs = Database.getAllSongs();
-
         Database.loadAllPlaylists();
 
-        Parent root = loader.load();
+        Node callingBtn = (Node) event.getSource();
+        Stage stage = (Stage) callingBtn.getScene().getWindow();
 
-        HomeController bl = loader.getController();
+
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.HOME, FilePaths.STYLESHEET, FilePaths.STYLESHEET_3);
+
+        HomeController bl = sceneSwitcher.getController();
+        ArrayList<Song> songs = Database.getAllSongs();
         bl.makeObservableList(songs);
 
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        String css2 = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET_3)).toExternalForm();
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add(css);
-        scene.getStylesheets().add(css2);
-        myStage.setScene(scene);
-        myStage.show();
-    }
-
-    private static void resumePlayback() {
-        Song song = null;
-        for(Song s : Database.getAllSongs()) {
-            if(s.getID() == State.getLastSongID()) {
-                song = s;
-                break;
-            }
-        }
-        if(song != null) {
-            State.setCurrentSongName(song.getName());
-            State.setCurrentSongArtist(song.getArtistName());
-            MediaPlayerControl.prepareJukebox(song);
-            MediaPlayerControl.play();
-            MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
-            MediaPlayerControl.getMediaPlayer().setOnReady(()-> {
-                double totalTime = MediaPlayerControl.getMediaPlayer().getTotalDuration().toMillis();
-                State.setTotalDuration(totalTime);
-                MediaPlayerControl.getMediaPlayer().seek(Duration.millis(State.getPlaybackPos()));
-                MediaPlayerControl.getMediaPlayer().pause();
-            });
-        }
+        sceneSwitcher.switchNow(stage);
     }
 
     @FXML
     private void togglePasswordChars(ActionEvent event) {
-        try {
-            ToggleButton toggleButton = (ToggleButton) event.getSource();
-            if (passwordField.isVisible()) {
-                passwordField.setVisible(false);
-                shownPasswordField.setVisible(true);
-                shownPasswordField.setText(passwordField.getText());
-                toggleButton.setText("Hide");
-            } else {
-                shownPasswordField.setVisible(false);
-                passwordField.setVisible(true);
-                passwordField.setText(shownPasswordField.getText());
-                toggleButton.setText("Show");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ChangePwdController.togglePasswordChars(event, passwordField, shownPasswordField);
     }
 
     @FXML
     void onForgotPass(ActionEvent event) throws IOException {
         Node callingBtn = (Node) event.getSource();
-        Stage myStage = (Stage) callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.FORGOT_PASS_ENTER_MAIL));
-        Scene scene= new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        Stage stage = (Stage) callingBtn.getScene().getWindow();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.FORGOT_PASS_ENTER_MAIL, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 
     @FXML
     void onSignUpFromLogin(ActionEvent event) throws IOException {
         Node callingBtn = (Node) event.getSource();
-        Stage myStage = (Stage) callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_UP));
-        Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        Stage stage = (Stage) callingBtn.getScene().getWindow();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_UP, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 }
-
-// final String val1="";
-
-// create a tile pane
-//    Node callingBtn = (Node) event.getSource();
-//    Stage myStage = (Stage) callingBtn.getScene().getWindow();
-//    TilePane r = new TilePane();
-//
-//    // create a text input dialog
-//    TextInputDialog td = new TextInputDialog("enter any text");
-//
-//    // setHeaderText
-//        td.setHeaderText("enter your name");
-//
-//    // create a button
-//    Button d = new Button("click");
-//
-//    // create a event handler
-//    EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
-//        public void handle(ActionEvent e)
-//        {
-//            // show the text input dialog
-//            td.show();
-//            TextField inputField = td.getEditor();
-//            String val =inputField.getText();
-//            System.out.println(val);
-//        }
-//    };
-//
-//    // set on action of event
-//        d.setOnAction(event1);
-//
-//    // add button and label
-//        r.getChildren().add(d);
-//
-//    // create a scene
-//    Scene sc = new Scene(r, 500, 300);
-//
-//    // set the scene
-//        myStage.setScene(sc);

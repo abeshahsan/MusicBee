@@ -1,31 +1,32 @@
 package com.musicbee.controllers;
 
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import com.musicbee.utility.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXHamburger;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.VBox;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 public class EditProfileController implements Initializable {
 
@@ -120,7 +121,8 @@ public class EditProfileController implements Initializable {
             VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
     }
 
@@ -131,46 +133,34 @@ public class EditProfileController implements Initializable {
             controlPanel.getChildren().clear();
             controlPanel.getChildren().addAll(vBox.getChildren());
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
     }
 
     @FXML
     private void onClickProfile(ActionEvent event) throws IOException {
         MenuItem menuItem = (MenuItem) event.getSource();
-        Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
+        Stage stage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.PROFILE));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.setMinWidth(Settings.getMinWidth());
-        myStage.setMinHeight(Settings.getMinHeight());
-        myStage.show();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.PROFILE, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-        MediaPlayer player = MediaPlayerControl.getMediaPlayer();
-
-        if(player != null) {
-            MediaPlayerControl.dispose();
+       if(MediaPlayerControl.getMediaPlayer() != null) {
+            MediaPlayerControl.clear();
         }
-
-        MenuItem menuItem = (MenuItem) event.getSource();
-        Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
         Database.savePlaybackPosition();
         Database.logOutCurrentUser();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
-        Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        MenuItem menuItem = (MenuItem) event.getSource();
+        Stage stage = (Stage) menuItem.getParentPopup().getOwnerWindow();
+
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_IN, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 
     @FXML
@@ -179,18 +169,13 @@ public class EditProfileController implements Initializable {
             updateDatabase();
 
             Node node = (Node) event.getSource();
-            Stage myStage = (Stage) node.getScene().getWindow();
+            Stage stage = (Stage) node.getScene().getWindow();
 
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.PROFILE));
-            Parent root = fxmlLoader.load();
-
-            Scene scene = new Scene(root);
-            String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-            scene.getStylesheets().add(css);
-            myStage.setScene(scene);
-            myStage.show();
+            SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.PROFILE, FilePaths.STYLESHEET);
+            sceneSwitcher.switchNow(stage);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
     }
 
@@ -216,7 +201,7 @@ public class EditProfileController implements Initializable {
         try {
             image = new Image(new FileInputStream(selectedFile));
         } catch (Exception e) {
-            System.out.println("Could not load the image");;
+            System.out.println("Could not load the image");
         }
         pfp.setImage(image);
     }
@@ -243,15 +228,9 @@ public class EditProfileController implements Initializable {
     @FXML
     private void onClickPwdChange(ActionEvent event) throws IOException {
         Node node = (Node) event.getSource();
-        Stage myStage = (Stage) node.getScene().getWindow();
+        Stage stage = (Stage) node.getScene().getWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CHANGE_PWD));
-        Parent root = fxmlLoader.load();
-
-        Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.CHANGE_PWD, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 }

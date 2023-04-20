@@ -3,17 +3,12 @@ package com.musicbee.controllers;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
-import com.musicbee.utility.Database;
-import com.musicbee.utility.FilePaths;
-import com.musicbee.utility.MediaPlayerControl;
-import com.musicbee.utility.State;
+import com.musicbee.utility.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -89,7 +84,8 @@ public class ProfileController implements Initializable {
             bottom.getChildren().clear();
             bottom.getChildren().addAll(vBox.getChildren());
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
     }
 
@@ -141,51 +137,39 @@ public class ProfileController implements Initializable {
     @FXML
     private void onClickProfile(ActionEvent event) throws IOException {
         MenuItem menuItem = (MenuItem) event.getSource();
-        Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
+        Stage stage = (Stage) menuItem.getParentPopup().getOwnerWindow();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.PROFILE));
-        Parent root = fxmlLoader.load();
-        Scene scene = new Scene(root);
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.PROFILE, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 
     @FXML
-    private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
+    private void onClickLogOut(ActionEvent event) throws IOException {
         if(MediaPlayerControl.getMediaPlayer() != null) {
-            MediaPlayerControl.dispose();
+            MediaPlayerControl.clear();
         }
 
-        MenuItem menuItem = (MenuItem) event.getSource();
-        Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
+        try {
+            Database.savePlaybackPosition();
+        } catch (SQLException e) {
+            System.out.println("Could not save the user's playback position.");
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+        }
 
-        Database.savePlaybackPosition();
         Database.logOutCurrentUser();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
-        Scene scene = new Scene(fxmlLoader.load());
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        MenuItem menuItem = (MenuItem) event.getSource();
+        Stage stage = (Stage) menuItem.getParentPopup().getOwnerWindow();
+
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_IN, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 
     @FXML
-    private void onCLickEdit(ActionEvent event) {
+    private void onCLickEdit(ActionEvent event) throws IOException {
         Node callingBtn=(Node)event.getSource();
-        Stage myStage=(Stage)callingBtn.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.EDIT_PROFILE));
-        Scene scene;
-        try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        Stage stage = (Stage)callingBtn.getScene().getWindow();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.EDIT_PROFILE, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 }

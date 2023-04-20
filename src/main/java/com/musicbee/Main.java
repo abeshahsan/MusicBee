@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -35,7 +36,12 @@ public class Main extends Application {
             //If user tries closed the application without logging out, then
             //before closing the application, save the last playback position of the user.
             if(Database.getCurrentUser() != null) {
-                Database.savePlaybackPosition();
+                try {
+                    Database.savePlaybackPosition();
+                } catch (SQLException e) {
+                    System.out.println("Could not save the user's playback position.");
+                    System.out.println(Main.class.getName() + ": " + Main.class.getEnclosingMethod());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

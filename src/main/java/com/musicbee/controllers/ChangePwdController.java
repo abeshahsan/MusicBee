@@ -3,14 +3,15 @@ package com.musicbee.controllers;
 import com.musicbee.entities.User;
 import com.musicbee.utility.Database;
 import com.musicbee.utility.FilePaths;
+import com.musicbee.utility.SceneSwitcher;
 import com.musicbee.utility.Tools;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -19,13 +20,15 @@ import java.util.Objects;
 public class ChangePwdController {
 
     @FXML
-    private Label pwdStrength;
+    Label warning;
     @FXML
-    private TextField shownNewPwd;
+    private Label         pwdStrength;
     @FXML
-    private TextField shownCurrPwd;
+    private TextField     shownNewPwd;
     @FXML
-    private TextField shownConfirmPwd;
+    private TextField     shownCurrPwd;
+    @FXML
+    private TextField     shownConfirmPwd;
     @FXML
     private PasswordField newPwd;
     @FXML
@@ -33,19 +36,35 @@ public class ChangePwdController {
     @FXML
     private PasswordField confirmPwd;
 
-    @FXML
-    Label warning;
+    public static void togglePasswordChars(ActionEvent event, PasswordField currPwd, TextField shownCurrPwd) {
+        try {
+            ToggleButton toggleButton = (ToggleButton) event.getSource();
+            if (currPwd.isVisible()) {
+                currPwd.setVisible(false);
+                shownCurrPwd.setVisible(true);
+                shownCurrPwd.setText(currPwd.getText());
+                toggleButton.setText("Hide");
+            } else {
+                shownCurrPwd.setVisible(false);
+                currPwd.setVisible(true);
+                currPwd.setText(shownCurrPwd.getText());
+                toggleButton.setText("Show");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
-    protected void onSaveBtnClicked()  {
+    protected void onSaveBtnClicked() {
 
         String currentPwdString, newPwdString, confirmPwdString;
 
-        if(currPwd.isVisible()) currentPwdString = currPwd.getText();
+        if (currPwd.isVisible()) currentPwdString = currPwd.getText();
         else currentPwdString = shownCurrPwd.getText();
-        if(newPwd.isVisible()) newPwdString = newPwd.getText();
+        if (newPwd.isVisible()) newPwdString = newPwd.getText();
         else newPwdString = shownNewPwd.getText();
-        if(confirmPwd.isVisible()) confirmPwdString = confirmPwd.getText();
+        if (confirmPwd.isVisible()) confirmPwdString = confirmPwd.getText();
         else confirmPwdString = shownConfirmPwd.getText();
 
         if (!Objects.equals(confirmPwdString, newPwdString)) {
@@ -60,106 +79,56 @@ public class ChangePwdController {
                 user.setPassword(Tools.hashPassword(newPwdString));
                 Database.updateCurrentUserInfo(user);
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println(e.getMessage());
+                System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
             }
             warning.setText("Password is updated.");
             warning.setStyle("-fx-text-fill: green");
         }
     }
+
     @FXML
     protected void onBackButton(ActionEvent event) throws IOException {
-        Node callButton=(Node)event.getSource();
-        Stage myStage= (Stage) callButton.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.EDIT_PROFILE));
-        Scene scene = new Scene(fxmlLoader.load());
+        Node callButton = (Node) event.getSource();
+        Stage stage = (Stage) callButton.getScene().getWindow();
 
-        String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
-        scene.getStylesheets().add(css);
-        myStage.setScene(scene);
-        myStage.show();
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.EDIT_PROFILE, FilePaths.STYLESHEET);
+        sceneSwitcher.switchNow(stage);
     }
 
     @FXML
     protected void toggleCurrentPasswordChars(ActionEvent event) {
-        try{
-            ToggleButton toggleButton = (ToggleButton) event.getSource();
-            if(currPwd.isVisible()) {
-                currPwd.setVisible(false);
-                shownCurrPwd.setVisible(true);
-                shownCurrPwd.setText(currPwd.getText());
-                toggleButton.setText("Hide");
-            }
-            else {
-                shownCurrPwd.setVisible(false);
-                currPwd.setVisible(true);
-                currPwd.setText(shownCurrPwd.getText());
-                toggleButton.setText("Show");
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        togglePasswordChars(event, currPwd, shownCurrPwd);
     }
+
     @FXML
     protected void toggleNewPasswordChars(ActionEvent event) {
-        try {
-            ToggleButton toggleButton = (ToggleButton) event.getSource();
-            if(newPwd.isVisible()) {
-                newPwd.setVisible(false);
-                shownNewPwd.setVisible(true);
-                shownNewPwd.setText(newPwd.getText());
-                toggleButton.setText("Hide");
-            }
-            else {
-                shownNewPwd.setVisible(false);
-                newPwd.setVisible(true);
-                newPwd.setText(shownNewPwd.getText());
-                toggleButton.setText("Show");
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        togglePasswordChars(event, newPwd, shownNewPwd);
     }
+
     @FXML
     protected void toggleConfirmPasswordChars(ActionEvent event) {
-        try {
-            ToggleButton toggleButton = (ToggleButton) event.getSource();
-            if(confirmPwd.isVisible()) {
-                confirmPwd.setVisible(false);
-                shownConfirmPwd.setVisible(true);
-                shownConfirmPwd.setText(confirmPwd.getText());
-                toggleButton.setText("Hide");
-            }
-            else {
-                shownConfirmPwd.setVisible(false);
-                confirmPwd.setVisible(true);
-                confirmPwd.setText(shownConfirmPwd.getText());
-                toggleButton.setText("Show");
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        togglePasswordChars(event, confirmPwd, shownConfirmPwd);
     }
+
     @FXML
-    private void typingPwd(KeyEvent keyEvent) {
-        //
-        // pwdStrength.setText("typing");
+    private void typingPwd() {
         String pass;
 
-        if(newPwd.isVisible()) pass = newPwd.getText();
+        if (newPwd.isVisible()) pass = newPwd.getText();
         else pass = shownNewPwd.getText();
 
-        if(pass.isEmpty()) {
+        if (pass.isEmpty()) {
             pwdStrength.setText("");
         }
-        if(Tools.calcStrength(pass)==1) {
+        if (Tools.calcStrength(pass) == 1) {
             pwdStrength.setText("Weak");
             pwdStrength.setStyle("-fx-text-fill: red");
-        }
-        else if(Tools.calcStrength(pass)==2) {
+        } else if (Tools.calcStrength(pass) == 2) {
             pwdStrength.setText("Medium");
             pwdStrength.setStyle("-fx-text-fill: #ff9900");
         }
-        if(Tools.calcStrength(pass)==3) {
+        if (Tools.calcStrength(pass) == 3) {
             pwdStrength.setText("Strong");
             pwdStrength.setStyle("-fx-text-fill: #07f307");
         }

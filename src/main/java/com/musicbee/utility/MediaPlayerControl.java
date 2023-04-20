@@ -45,7 +45,7 @@ public class MediaPlayerControl {
     public static Song getNowPlaying() {
         return nowPlaying;
     }
-    public static void dispose() {
+    public static void clear() {
         if(mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.dispose();

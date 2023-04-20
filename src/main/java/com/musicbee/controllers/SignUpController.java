@@ -110,8 +110,8 @@ public class SignUpController {
             System.out.println(e);
             return;
         }
-        String val = sendEmail(emailID.getText());
-        System.out.println(val);
+        String val = null;
+        val = sendEmail(emailID.getText());
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.NEW_USER_VERIFY_OTP));
         Parent root = loader.load();
         NewUserVerifyOTP forgot = loader.getController();
@@ -129,23 +129,7 @@ public class SignUpController {
     }
     @FXML
     protected void togglePasswordChars(ActionEvent event) {
-        try {
-            ToggleButton toggleButton = (ToggleButton) event.getSource();
-            if(password.isVisible()) {
-                password.setVisible(false);
-                shownPassword.setVisible(true);
-                shownPassword.setText(password.getText());
-                toggleButton.setText("Hide");
-            }
-            else {
-                shownPassword.setVisible(false);
-                password.setVisible(true);
-                password.setText(shownPassword.getText());
-                toggleButton.setText("Show");
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        ChangePwdController.togglePasswordChars(event, password, shownPassword);
     }
 
     @FXML

@@ -29,15 +29,15 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="newUserotp" layoutX="40.0" layoutY="120.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
+                  <TextField fx:id="newUserOTP" layoutX="40.0" layoutY="120.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </TextField>
                   <Button id="evResend" layoutX="202.0" layoutY="157.0" mnemonicParsing="false" onAction="#onResendNew" stylesheets="@Stylesheet.css" text="Resend" underline="true" />
                   <Button layoutX="88.0" layoutY="232.0" mnemonicParsing="false" onAction="#onSubmitOTP" prefHeight="25.0" prefWidth="134.0" text="Submit" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="87.0" />
-                  <Label fx:id="wrongOTPnew" layoutX="141.0" layoutY="194.0" />
-                  <Button id="evHome" layoutX="86.0" layoutY="267.0" mnemonicParsing="false" onAction="#onBacknewuser" prefHeight="25.0" prefWidth="140.0" stylesheets="@Stylesheet.css" text="Go back to Home Page" underline="true" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="81.0" />
+                  <Label fx:id="wrongOTP" layoutX="141.0" layoutY="194.0" />
+                  <Button id="evHome" layoutX="86.0" layoutY="267.0" mnemonicParsing="false" onAction="#onClickBack" prefHeight="25.0" prefWidth="140.0" stylesheets="@Stylesheet.css" text="Go back to Home Page" underline="true" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="81.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" />
