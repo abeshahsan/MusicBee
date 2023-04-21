@@ -44,7 +44,7 @@
     <center>
         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="344.0" BorderPane.alignment="CENTER">
             <children>
-            <ImageView fx:id="pfp" fitHeight="110.0" fitWidth="117.0" onMouseClicked="#choosePhoto" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="pfp" fitHeight="150.0" fitWidth="179.0" onMouseClicked="#choosePhoto" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/user.jpg" />
                </image></ImageView>

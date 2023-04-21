@@ -36,7 +36,7 @@ public class SignInController {
         if (song != null) {
             State.setCurrentSongName(song.getName());
             State.setCurrentSongArtist(song.getArtistName());
-            MediaPlayerControl.prepareJukebox(song);
+            MediaPlayerControl.prepare(song);
             MediaPlayerControl.play();
             MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
             MediaPlayerControl.getMediaPlayer().setOnReady(() -> {
@@ -96,7 +96,7 @@ public class SignInController {
 
     @FXML
     private void togglePasswordChars(ActionEvent event) {
-        ChangePwdController.togglePasswordChars(event, passwordField, shownPasswordField);
+        Tools.togglePasswordChars(event, passwordField, shownPasswordField);
     }
 
     @FXML

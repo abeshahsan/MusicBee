@@ -68,6 +68,9 @@ public class EditProfileController implements Initializable {
         defaultImage = pfp.getImage();
         pfpDeleted = false;
 
+        Tools.clipImageview(pfp, 140);
+        Tools.clipImageview(profileIcon, 25);
+
         initInfo();
         loadSideBar();
         setHamburger();

@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -35,25 +34,6 @@ public class ChangePwdController {
     private PasswordField currPwd;
     @FXML
     private PasswordField confirmPwd;
-
-    public static void togglePasswordChars(ActionEvent event, PasswordField currPwd, TextField shownCurrPwd) {
-        try {
-            ToggleButton toggleButton = (ToggleButton) event.getSource();
-            if (currPwd.isVisible()) {
-                currPwd.setVisible(false);
-                shownCurrPwd.setVisible(true);
-                shownCurrPwd.setText(currPwd.getText());
-                toggleButton.setText("Hide");
-            } else {
-                shownCurrPwd.setVisible(false);
-                currPwd.setVisible(true);
-                currPwd.setText(shownCurrPwd.getText());
-                toggleButton.setText("Show");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     protected void onSaveBtnClicked() {
@@ -98,17 +78,17 @@ public class ChangePwdController {
 
     @FXML
     protected void toggleCurrentPasswordChars(ActionEvent event) {
-        togglePasswordChars(event, currPwd, shownCurrPwd);
+        Tools.togglePasswordChars(event, currPwd, shownCurrPwd);
     }
 
     @FXML
     protected void toggleNewPasswordChars(ActionEvent event) {
-        togglePasswordChars(event, newPwd, shownNewPwd);
+        Tools.togglePasswordChars(event, newPwd, shownNewPwd);
     }
 
     @FXML
     protected void toggleConfirmPasswordChars(ActionEvent event) {
-        togglePasswordChars(event, confirmPwd, shownConfirmPwd);
+        Tools.togglePasswordChars(event, confirmPwd, shownConfirmPwd);
     }
 
     @FXML

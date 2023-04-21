@@ -26,8 +26,6 @@ public class ForgotPassEnterMail {
 
     @FXML
     void onSubEmail(ActionEvent event) throws Exception {
-        //if no such account is in database noAccount.setText("No account is registered under this email ID!");
-        //else
         String address = emailID.getText();
         User bou = Database.verifyEmail(address);
         if (bou == null) {

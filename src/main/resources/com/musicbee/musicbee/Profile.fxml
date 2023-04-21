@@ -43,7 +43,7 @@
    <center>
       <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="476.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fx:id="pfp" fitHeight="125.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="pfp" fitHeight="150.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/user.jpg" />
                </image>

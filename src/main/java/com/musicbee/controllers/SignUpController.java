@@ -129,7 +129,7 @@ public class SignUpController {
     }
     @FXML
     protected void togglePasswordChars(ActionEvent event) {
-        ChangePwdController.togglePasswordChars(event, password, shownPassword);
+        Tools.togglePasswordChars(event, password, shownPassword);
     }
 
     @FXML
@@ -171,17 +171,19 @@ public class SignUpController {
         if(password.isVisible()) pass = password.getText();
         else pass = shownPassword.getText();
 
-        if(pass.isEmpty()) {
+        if (pass.isEmpty()) {
             pwdStrength.setText("");
         }
-        if(Tools.calcStrength(pass)==1) {
+        if (Tools.calcStrength(pass) == 1) {
             pwdStrength.setText("Weak");
-        }
-        else if(Tools.calcStrength(pass)==2) {
+            pwdStrength.setStyle("-fx-text-fill: red");
+        } else if (Tools.calcStrength(pass) == 2) {
             pwdStrength.setText("Medium");
+            pwdStrength.setStyle("-fx-text-fill: #ff9900");
         }
-        if(Tools.calcStrength(pass)==3) {
+        if (Tools.calcStrength(pass) == 3) {
             pwdStrength.setText("Strong");
+            pwdStrength.setStyle("-fx-text-fill: #07f307");
         }
     }
 }

@@ -55,6 +55,8 @@ public class ControlPanel implements Initializable {
 
         songName.setText(State.getCurrentSongName());
         artistName.setText(State.getCurrentSongArtist());
+        totalDuration.setText(Tools.timeToString(State.getTotalDuration()));
+        elapsed.setText(Tools.timeToString(State.getPlaybackPos()));
 
         isMuted = false;
 
@@ -126,7 +128,7 @@ public class ControlPanel implements Initializable {
             player.stop();
             player.dispose();
             Song song = State.getSongsInTable().get(State.getCurrentSongIndex());
-            MediaPlayerControl.prepareJukebox(song);
+            MediaPlayerControl.prepare(song);
             MediaPlayerControl.play();
             setTimeSlider();
             MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
@@ -181,7 +183,7 @@ public class ControlPanel implements Initializable {
             State.incrementCurrentSongIndex();
             State.setLastSongID(State.getSongsInTable().get(State.getCurrentSongIndex()).getID());
             Song song = State.getSongsInTable().get(State.getCurrentSongIndex());
-            MediaPlayerControl.prepareJukebox(song);
+            MediaPlayerControl.prepare(song);
             MediaPlayerControl.play();
             State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
             State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());

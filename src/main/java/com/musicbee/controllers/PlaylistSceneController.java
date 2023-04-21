@@ -82,6 +82,8 @@ public class PlaylistSceneController implements Initializable {
             profileIcon.setImage(Database.getCurrentUser().getImage());
         }
 
+        Tools.clipImageview(profileIcon, 25);
+
         prepareTableview();
         loadSideBar();
         setHamburger();
@@ -177,7 +179,7 @@ public class PlaylistSceneController implements Initializable {
                     State.setCurrentSongIndex(index);
                     Song song = State.getSongsInTable().get(index);
 
-                    MediaPlayerControl.prepareJukebox(song);
+                    MediaPlayerControl.prepare(song);
                     MediaPlayerControl.play();
 
                     controlPanel.setPause();

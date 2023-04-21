@@ -1,17 +1,15 @@
 package com.musicbee.controllers.forgotpass;
 
-import com.musicbee.controllers.ChangePwdController;
 import com.musicbee.controllers.HomeController;
 import com.musicbee.entities.Song;
 import com.musicbee.entities.User;
 import com.musicbee.utility.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -21,7 +19,7 @@ import java.util.Objects;
 
 public class ForgotPassChangePwd {
     @FXML
-    Label warning;
+    private Label         warning;
     @FXML
     private Label         pwdStrength;
     @FXML
@@ -60,12 +58,12 @@ public class ForgotPassChangePwd {
 
     @FXML
     protected void toggleNewtPasswordChars(ActionEvent event) {
-        ChangePwdController.togglePasswordChars(event, newPwd, shownNewPwd);
+        Tools.togglePasswordChars(event, newPwd, shownNewPwd);
     }
 
     @FXML
     protected void toggleConfirmPasswordChars(ActionEvent event) {
-        ChangePwdController.togglePasswordChars(event, confirmPwd, shownConfirmPwd);
+        Tools.togglePasswordChars(event, confirmPwd, shownConfirmPwd);
     }
 
     private void goToHomePage(ActionEvent event, String newPassword) {
@@ -108,11 +106,14 @@ public class ForgotPassChangePwd {
         }
         if (Tools.calcStrength(pass) == 1) {
             pwdStrength.setText("Weak");
+            pwdStrength.setStyle("-fx-text-fill: red");
         } else if (Tools.calcStrength(pass) == 2) {
             pwdStrength.setText("Medium");
+            pwdStrength.setStyle("-fx-text-fill: #ff9900");
         }
         if (Tools.calcStrength(pass) == 3) {
             pwdStrength.setText("Strong");
+            pwdStrength.setStyle("-fx-text-fill: #07f307");
         }
     }
 
@@ -127,7 +128,7 @@ public class ForgotPassChangePwd {
         if (song != null) {
             State.setCurrentSongName(song.getName());
             State.setCurrentSongArtist(song.getArtistName());
-            MediaPlayerControl.prepareJukebox(song);
+            MediaPlayerControl.prepare(song);
             MediaPlayerControl.play();
             MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
             MediaPlayerControl.getMediaPlayer().setOnReady(() -> {

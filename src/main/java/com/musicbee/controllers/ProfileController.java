@@ -22,6 +22,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.function.ToLongBiFunction;
 
 public class ProfileController implements Initializable {
 
@@ -58,6 +59,9 @@ public class ProfileController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         menuButton.setText(Database.getCurrentUser().getUsername());
+
+        Tools.clipImageview(pfp, 140);
+        Tools.clipImageview(profileIcon, 25);
 
         initInfo();
         loadSideBar();

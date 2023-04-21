@@ -1,8 +1,14 @@
 package com.musicbee.utility;
 
 import com.musicbee.entities.Song;
+import javafx.event.ActionEvent;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.shape.Circle;
 
 import java.io.File;
 
@@ -66,5 +72,32 @@ public class Tools {
 //                System.out.println(totalTime);
             player.pause();
         });
+    }
+
+    public static void togglePasswordChars(ActionEvent event, PasswordField currPwd, TextField shownCurrPwd) {
+        try {
+            ToggleButton toggleButton = (ToggleButton) event.getSource();
+            if (currPwd.isVisible()) {
+                currPwd.setVisible(false);
+                shownCurrPwd.setVisible(true);
+                shownCurrPwd.setText(currPwd.getText());
+                toggleButton.setText("Hide");
+            } else {
+                shownCurrPwd.setVisible(false);
+                currPwd.setVisible(true);
+                currPwd.setText(shownCurrPwd.getText());
+                toggleButton.setText("Show");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void clipImageview(ImageView imageView, double diameter) {
+        imageView.setFitHeight(diameter);
+        imageView.setFitWidth(diameter);
+        imageView.setPreserveRatio(false);
+        Circle circle = new Circle(diameter / 2, diameter / 2, diameter / 2);
+        imageView.setClip(circle);
     }
 }

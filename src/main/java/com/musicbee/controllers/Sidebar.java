@@ -4,6 +4,7 @@ import com.musicbee.entities.Song;
 import com.musicbee.utility.Database;
 import com.musicbee.utility.FilePaths;
 import com.musicbee.utility.State;
+import com.musicbee.utility.Tools;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -73,6 +74,7 @@ public class Sidebar implements Initializable {
         }
         usernameS.setText(Database.getCurrentUser().getUsername());
 
+        Tools.clipImageview(pfpSide, 125);
     }
     public void handle(MouseEvent event) {
         @SuppressWarnings("unchecked") ListCell<Playlist> lc=(ListCell<Playlist>)event.getSource();

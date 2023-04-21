@@ -19,7 +19,7 @@ public class MediaPlayerControl {
     public static void play() {
         mediaPlayer.play();
     }
-    public static void prepareJukebox(Song song) {
+    public static void prepare(Song song) {
         nowPlaying = song;
 
         //Instantiating Media class
