@@ -197,6 +197,7 @@ public class EditProfileController implements Initializable {
     private void choosePhoto()  {
         if (!selectFile()) return; //could not select the file.
         convertPhoto();
+        pfpDeleted = false;
     }
 
     private void convertPhoto() {
