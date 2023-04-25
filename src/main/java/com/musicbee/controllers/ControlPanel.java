@@ -136,7 +136,7 @@ public class ControlPanel implements Initializable {
             State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
             updateNames(State.getCurrentSongName(),
                     State.getCurrentSongArtist());
-            setPlay();
+            setPause();
         }
     }
 
