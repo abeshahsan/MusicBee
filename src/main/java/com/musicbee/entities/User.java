@@ -82,7 +82,7 @@ public class User{
         System.out.println("Username: " + this.username);
         System.out.println("Name: " + this.getName());
         System.out.println("Email: " + this.getEmail());
-        if(this.joinDate != null) System.out.println("Joined since: " + this.joinDate.toString());
+        if(this.joinDate != null) System.out.println("Joined since: " + this.joinDate);
     }
 
     public void setImage(Image image) {

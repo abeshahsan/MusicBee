@@ -1,0 +1,140 @@
+.root {
+    -fx-background-image:url("images/darkBlue.png");
+//-fx-background-color:  #007aa5;
+//-fx-background-color:   #000058;
+    -fx-background-repeat:no-repeat;
+    -fx-background-size:stretch;
+}
+#vbHome{
+    -fx-background-color:  transparent;
+    -fx-text-alignment: left;
+    -fx-text-fill: white;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    /*-fx-border-color: white;*/
+    /*-fx-border-width: 0.5;*/
+
+}
+#vbCP{
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-text-alignment: left;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    /*-fx-border-color: white;*/
+    /*-fx-border-width: 0.5;*/
+}
+#vbTP{
+    -fx-background-color:#00004d;
+    -fx-text-fill: black;
+    /*-fx-border-radius: 0;*/
+    /*-fx-background-radius: 0;*/
+    /*-fx-border-color: white;*/
+    /*-fx-border-width: 0.5;*/
+}
+
+.button:hover {
+    -fx-background-color: white;
+    -fx-text-fill:  #000058;
+}
+.button:pressed {
+    -fx-background-color: lightblue;
+    -fx-text-fill: black;
+}
+
+.toggle-button {
+    -fx-background-color: #000058;    /*lightblue;*/
+    -fx-text-fill: white;
+}
+
+
+.label {
+    -fx-text-fill: white;
+}
+#cpHome{
+    -fx-background-color: transparent;
+    -fx-text-fill:white;
+
+}
+
+/*For the tableview*/
+
+.menu-button{
+    -fx-background-color: transparent;
+    -fx-text-fill:  white; /*#000058;*/
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}
+
+.menu-item{
+    -fx-background-color: lightskyblue;
+    -fx-background-text:  #000058;
+}
+.titled-pane:collapsed > .title > .arrow-button .arrow
+{
+    -fx-rotate: -90;
+}
+/*.titled-pane > .title > .arrow-button*/
+/*{*/
+/*    -fx-background-color: yellow;*/
+/*    -fx-background-insets: 0;*/
+/*    -fx-background-radius: 0;*/
+/*    -fx-padding: 0.0em 0.25em 0.0em 0.0em; !* 0 3 0 0 *!*/
+/*}*/
+.titled-pane > .title > .arrow-button .arrow
+{
+    -fx-background-color: white, white;
+    -fx-background-insets: 1 0 -1 0, 0;
+    -fx-padding: 0.25em 0.3125em 0.25em 0.3125em; /* 3 3.75 3 3.75 */
+    -fx-shape: "M 0 0 h 7 l -3.5 4 z";
+}
+.titled-pane:focused > .title > .arrow-button .arrow
+{
+    -fx-background-color: white;
+}
+.titled-pane:focused > .title
+{
+    -fx-color: white;
+}
+.titled-pane > .title
+{
+    -fx-background-color: white ,null, white;/* #264d73*/
+    -fx-background-insets: 0, 1, 2;
+    -fx-text-fill: white;
+    -fx-background-radius: 0 0 0 0, 0 0 0 0, 0 0 0 0;
+//-fx-pref-height: 50 px;
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em; /* 2 10 3 10 */
+}
+.titled-pane
+{
+//-fx-skin: "com.sun.javafx.scene.control.skin.TitledPaneSkin";
+    -fx-text-fill: white;
+//-fx-text-alignment: top center;
+}
+.titled-pane .title
+{
+    -fx-pref-height: 42;
+}
+.titled-pane > *.content
+{
+    -fx-background-color: null;
+    /*-fx-background-insets: 0, 0 1 1 1;*/
+    /*-fx-padding: 0.167em;*/
+}
+.list-cell {
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    /* 5 */
+}
+.list-cell:filled:hover {
+    -fx-background-color:white; /* 2 */
+    -fx-text-fill: #264d73; /* 5 */
+}
+/*.list-cell:odd { -fx-background-color: null; !* 1 *! }*/
+/*.list-cell:even { -fx-background-color: green; !* for information *! }*/
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    /* 3:, 4: */
+    -fx-background-color: linear-gradient(#2d5986 0%, #3973ac 25%, #538cc6 75%, #79a6d2 100%);
+    -fx-text-fill: white; /* 5 */
+}
+

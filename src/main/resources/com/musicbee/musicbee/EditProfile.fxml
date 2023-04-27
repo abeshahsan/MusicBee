@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="bpList" maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.EditProfileController">
+    <top>
+        <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="54.0" prefWidth="936.0" BorderPane.alignment="TOP_CENTER">
+            <children>
+                <JFXHamburger fx:id="myHamburger" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="66.0" stylesheets="@StyleSheet2.css" translateY="-5.0" HBox.hgrow="ALWAYS" />
+                <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" prefWidth="445.0" HBox.hgrow="ALWAYS" />
+                <ImageView fx:id="profileIcon" fitHeight="31.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                    <image>
+                        <Image url="@images/user.jpg" />
+                    </image>
+                </ImageView>
+                <MenuButton fx:id="menuButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="26.0" prefWidth="102.0" text="MenuButton">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onClickProfile" text="Profile" />
+                        <MenuItem mnemonicParsing="false" onAction="#onClickLogOut" text="Log out" />
+                    </items>
+                </MenuButton>
+            </children>
+        </HBox>
+    </top>
+    <left>
+        <JFXDrawer fx:id="drawer" defaultDrawerSize="191.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="13.0" resizableOnDrag="true" BorderPane.alignment="CENTER" />
+    </left>
+    <bottom>
+      <VBox fx:id="controlPanel" maxHeight="90.0" minHeight="90.0" prefHeight="90.0" BorderPane.alignment="CENTER" />
+    </bottom>
+    <center>
+        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="344.0" BorderPane.alignment="CENTER">
+            <children>
+            <ImageView fx:id="pfp" fitHeight="150.0" fitWidth="179.0" onMouseClicked="#choosePhoto" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/user.jpg" />
+               </image></ImageView>
+            <Button fx:id="deletePhoto" mnemonicParsing="false" onAction="#onClickDeletePhoto" prefHeight="12.0" prefWidth="67.0" text="Delete Photo">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="9.0" />
+               </font></Button>
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="378.0" spacing="20.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="32.0" prefWidth="87.0" style="-fx-text-fill: white;" text="First Name:" />
+                  <TextField fx:id="firstName" prefHeight="26.0" prefWidth="207.0" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="922.0" spacing="20.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="86.0" style="-fx-text-fill: white;" text="Last Name:" />
+                  <TextField fx:id="lastName" prefHeight="26.0" prefWidth="207.0" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="60.0" prefWidth="922.0" spacing="20.0">
+                    <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="86.0" style="-fx-text-fill: white;" text="Email:" />
+                  <TextField fx:id="email" prefHeight="26.0" prefWidth="207.0" />
+                    </children>
+                </HBox>
+            <Button mnemonicParsing="false" onAction="#onClickPwdChange" text="Change Password">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+                <Button mnemonicParsing="false" onAction="#onCLickSave" text="Save Changes">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin></Button>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

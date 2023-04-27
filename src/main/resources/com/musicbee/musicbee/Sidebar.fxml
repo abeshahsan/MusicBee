@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox id="Sidebar" alignment="CENTER" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="191.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.Sidebar">
+   <children>
+      <ImageView fx:id="pfpSide" fitHeight="150.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/user.jpg" />
+         </image></ImageView>
+      <Label fx:id="usernameS" alignment="CENTER" prefHeight="36.0" prefWidth="190.0" stylesheets="@stylesheet3.css" underline="true">
+         <font>
+            <Font name="System Bold Italic" size="16.0" />
+         </font>
+      </Label>
+      <JFXButton id="vbHome" onAction="#OnClickHome" prefHeight="42.0" prefWidth="193.0" stylesheets="@stylesheet3.css" text="Home">
+         <font>
+            <Font size="16.0" />
+         </font></JFXButton>
+      <JFXButton id="vbCP" onAction="#OnClickCreatePlaylist" prefHeight="42.0" prefWidth="191.0" stylesheets="@stylesheet3.css" text="Create Playlist">
+         <font>
+            <Font size="16.0" />
+         </font></JFXButton>
+      <TextField fx:id="create" onAction="#OnEnteringPlaylistName" prefHeight="35.0" prefWidth="191.0" visible="false" />
+      <TitledPane alignment="BASELINE_CENTER" animated="false" expanded="false" prefHeight="240.0" prefWidth="167.0" stylesheets="@stylesheet3.css" text="Playlists">
+         <content>
+            <ListView fx:id="list" prefHeight="200.0" prefWidth="200.0" stylesheets="@stylesheet3.css" />
+         </content>
+         <font>
+            <Font size="16.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></TitledPane>
+   </children>
+</VBox>
