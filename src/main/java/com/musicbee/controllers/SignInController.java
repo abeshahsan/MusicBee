@@ -25,25 +25,24 @@ public class SignInController {
     @FXML
     private Label         wrong;
 
-    private static void resumePlayback() {
+    private static void resumePlayback(int playbackSongID, double playbackPosition) {
         Song song = null;
         for (Song s : Database.getAllSongs()) {
-            if (s.getID() == State.getLastSongID()) {
+            if (s.getID() == playbackSongID) {
                 song = s;
                 break;
             }
         }
         if (song != null) {
-            State.setCurrentSongName(song.getName());
-            State.setCurrentSongArtist(song.getArtistName());
-            MediaPlayerControl.prepare(song);
-            MediaPlayerControl.play();
-            MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
-            MediaPlayerControl.getMediaPlayer().setOnReady(() -> {
-                double totalTime = MediaPlayerControl.getMediaPlayer().getTotalDuration().toMillis();
-                State.setTotalDuration(totalTime);
-                MediaPlayerControl.getMediaPlayer().seek(Duration.millis(State.getPlaybackPos()));
-                MediaPlayerControl.getMediaPlayer().pause();
+            Jukebox.setSong(song);
+            Jukebox.prepare();
+            Jukebox.play();
+            Jukebox.play();
+            Jukebox.getMediaPlayer().setOnReady(() -> {
+                double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
+                Jukebox.setTotalDuration(totalTime);
+                Jukebox.getMediaPlayer().seek(Duration.millis(playbackPosition));
+                Jukebox.getMediaPlayer().pause();
             });
         }
     }
@@ -73,17 +72,16 @@ public class SignInController {
             return;
         }
 
-        ArrayList<Object> state = Database.loadPlaybackPosition();
+        ArrayList<Object> playback = Database.loadPlaybackPosition();
 
-        State.setLastSongID((Integer) state.get(0));
-        State.setPlaybackPos((Double) state.get(1));
+        int playbackSongID = (Integer) playback.get(0);
+        double playbackPosition = (Double) playback.get(1);
 
-        resumePlayback();
+        resumePlayback(playbackSongID, playbackPosition);
         Database.loadAllPlaylists();
 
         Node callingBtn = (Node) event.getSource();
         Stage stage = (Stage) callingBtn.getScene().getWindow();
-
 
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.HOME, FilePaths.STYLESHEET, FilePaths.STYLESHEET_3);
 

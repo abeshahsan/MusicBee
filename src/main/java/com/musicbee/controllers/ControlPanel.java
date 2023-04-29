@@ -3,7 +3,7 @@ package com.musicbee.controllers;
 import com.jfoenix.controls.JFXSlider;
 import com.musicbee.entities.Song;
 import com.musicbee.utility.FilePaths;
-import com.musicbee.utility.MediaPlayerControl;
+import com.musicbee.utility.Jukebox;
 import com.musicbee.utility.State;
 import com.musicbee.utility.Tools;
 import javafx.fxml.FXML;
@@ -20,67 +20,66 @@ import java.util.ResourceBundle;
 
 public class ControlPanel implements Initializable {
     @FXML
-    private Button next;
+    private Button    nextButton;
     @FXML
-    private Button prev;
+    private Button    prevButton;
     @FXML
     private JFXSlider timeSlider;
     @FXML
     private JFXSlider volumeSlider;
     @FXML
-    private Button playPause;
+    private Button    playPauseButton;
     @FXML
-    private Label artistName;
+    private Label     artistNameLabel;
     @FXML
-    private Label songName;
+    private Label     songNameLabel;
     @FXML
-    private Label elapsed;
+    private Label     elapsed;
     @FXML
-    private Label   totalDuration;
+    private Label     totalDuration;
     @FXML
-    private Button  volumeIndicator;
-    private boolean isMuted;
-    private double volSliderValue;
+    private Button    volumeIndicator;
+    private boolean   isMuted;
+    private double    volSliderValue;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         setTimeSlider();
 
-        System.out.println(State.getVolume());
+        System.out.println(Jukebox.getVolume());
 
-        if(State.getTotalDuration() != 0) {
-            timeSlider.setValue(  (State.getPlaybackPos() / State.getTotalDuration()) * 100.0 );
+        if (Jukebox.getTotalDuration() != 0) {
+            timeSlider.setValue((Jukebox.getPlaybackPos() / Jukebox.getTotalDuration()) * timeSlider.getMax());
         }
 
-        songName.setText(State.getCurrentSongName());
-        artistName.setText(State.getCurrentSongArtist());
-        totalDuration.setText(Tools.timeToString(State.getTotalDuration()));
-        elapsed.setText(Tools.timeToString(State.getPlaybackPos()));
+        songNameLabel.setText(Jukebox.getNowPlaying().getName());
+        artistNameLabel.setText(Jukebox.getNowPlaying().getArtistName());
+        totalDuration.setText(Tools.timeToString(Jukebox.getTotalDuration()));
+        elapsed.setText(Tools.timeToString(Jukebox.getPlaybackPos()));
 
         isMuted = false;
 
         setVolumeSlider();
-        setVolumeIcon();
+        setVolumeIndicatorButton();
 
-        if(MediaPlayerControl.getMediaPlayer() != null
-                && MediaPlayerControl.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-            setPause();
-        }
-        else setPlay();
-        setPrev();
-        setNext();
+        if (Jukebox.getMediaPlayer() != null
+                && Jukebox.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
+            setPauseButton();
+        } else setPlayButton();
+        setPrevButton();
+        setNextButton();
         setTimeSliderEventHandlers();
     }
 
     private void setVolumeSlider() {
-        volumeSlider.setValue(State.getVolume() * 100);
+        volumeSlider.setValue(Jukebox.getVolume() * 100);
         volumeSlider.valueProperty().addListener((observableValue, number, t1) -> {
-            State.setVolume(volumeSlider.getValue() * .01);
-            if(MediaPlayerControl.getMediaPlayer() != null) {
-                MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
+            Jukebox.setVolume(volumeSlider.getValue() * .01);
+            if (Jukebox.getMediaPlayer() != null) {
+                Jukebox.getMediaPlayer().setVolume(Jukebox.getVolume());
             }
-            setVolumeIcon();
+            setVolumeIndicatorButton();
         });
     }
 
@@ -88,169 +87,148 @@ public class ControlPanel implements Initializable {
         timeSlider.setOnMouseDragged(event -> State.mouseDetected = true);
         timeSlider.setOnMousePressed(event -> State.mouseDetected = true);
         timeSlider.setOnMouseReleased(event -> {
-            if(MediaPlayerControl.getMediaPlayer() == null) {
+            if (Jukebox.getMediaPlayer() == null) {
                 timeSlider.setValue(0);
-            }
-            else {
-                double seekTime = (timeSlider.getValue() / 100) * State.getTotalDuration();
-                MediaPlayerControl.getMediaPlayer().seek(Duration.millis(seekTime));
+            } else {
+                double seekTime = (timeSlider.getValue() / 100) * Jukebox.getTotalDuration();
+                Jukebox.getMediaPlayer().seek(Duration.millis(seekTime));
             }
             State.mouseDetected = false;
         });
     }
 
     @FXML
-    private void onClickNext() {
-        playNext();
-    }
-
-    @FXML
-    private void onClickPlayPause() {
-        MediaPlayer mediaPlayer = MediaPlayerControl.getMediaPlayer();
-        if(mediaPlayer != null) {
-            if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-                mediaPlayer.pause();
-                setPlay();
-            }
-            else if(mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED){
-                mediaPlayer.play();
-               setPause();
-            }
+    private void onClickPrev() {
+        if (Jukebox.getMediaPlayer() != null && Jukebox.isPrev()) {
+            Jukebox.prev();
+            Song song = Jukebox.getNowPlaying();
+            Jukebox.prepare();
+            Jukebox.play();
+            update(song.getName(), song.getArtistName());
         }
     }
 
     @FXML
-    private void onClickPrev() {
-        MediaPlayer player = MediaPlayerControl.getMediaPlayer();
-        if(player != null && (State.getCurrentSongIndex() - 1 >= 0) ) {
-            State.decrementCurrentSongIndex();
-            State.setLastSongID(State.getSongsInTable().get(State.getCurrentSongIndex()).getID());
-            player.stop();
-            player.dispose();
-            Song song = State.getSongsInTable().get(State.getCurrentSongIndex());
-            MediaPlayerControl.prepare(song);
-            MediaPlayerControl.play();
-            setTimeSlider();
-            MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
-            State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
-            State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
-            updateNames(State.getCurrentSongName(),
-                    State.getCurrentSongArtist());
-            setPause();
+    private void onClickNext() {
+        if (Jukebox.getMediaPlayer() != null && Jukebox.isNext()) {
+            Jukebox.next();
+            Song song = Jukebox.getNowPlaying();
+            Jukebox.prepare();
+            Jukebox.play();
+            update(song.getName(), song.getArtistName());
+        }
+    }
+
+    @FXML
+    private void onClickPlayPause() {
+        MediaPlayer mediaPlayer = Jukebox.getMediaPlayer();
+        if (mediaPlayer != null) {
+            if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                mediaPlayer.pause();
+                setPlayButton();
+            } else if (mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED) {
+                mediaPlayer.play();
+                setPauseButton();
+            }
         }
     }
 
     public void setTimeSlider() {
         timeSlider.setValue(0);
-        if(MediaPlayerControl.getMediaPlayer() != null) {
-            MediaPlayerControl.getMediaPlayer().currentTimeProperty().addListener((observableValue, duration, t1) -> {
-                if(MediaPlayerControl.getMediaPlayer() == null) return;
-                double totalTime = MediaPlayerControl.getMediaPlayer().getTotalDuration().toMillis();
-                State.setTotalDuration(totalTime);
-                double currentTime = MediaPlayerControl.getMediaPlayer().getCurrentTime().toMillis();
-                State.setPlaybackPos(currentTime);
-                double timeSliderValue = (currentTime / totalTime) * 100;
-                if(!State.mouseDetected) timeSlider.setValue(timeSliderValue);
+        if (Jukebox.getMediaPlayer() != null) {
+            Jukebox.getMediaPlayer().currentTimeProperty().addListener((observableValue, duration, t1) -> {
+                if (Jukebox.getMediaPlayer() == null) return;
+                double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
+                Jukebox.setTotalDuration(totalTime);
+                double currentTime = Jukebox.getMediaPlayer().getCurrentTime().toMillis();
+                Jukebox.setPlaybackPos(currentTime);
+                double timeSliderValue = (currentTime / totalTime) * timeSlider.getMax();
+                if (!State.mouseDetected) timeSlider.setValue(timeSliderValue);
                 totalDuration.setText(Tools.timeToString(totalTime));
                 elapsed.setText(Tools.timeToString(currentTime));
             });
-            MediaPlayerControl.getMediaPlayer().setOnEndOfMedia(this::playNext);
+            Jukebox.getMediaPlayer().setOnEndOfMedia(this::onEndOfSong);
         }
     }
 
     private void updateNames(String name, String artist) {
-        songName.setText(name);
-        artistName.setText(artist);
+        songNameLabel.setText(name);
+        artistNameLabel.setText(artist);
     }
 
     public JFXSlider getTimeSlider() {
         return timeSlider;
     }
 
-    public Label getSongName() {
-        return songName;
+    public Label getSongNameLabel() {
+        return songNameLabel;
     }
 
-    public Label getArtistName() {
-        return artistName;
+    public Label getArtistNameLabel() {
+        return artistNameLabel;
     }
 
-    public Button getPlayPause() {
-        return playPause;
-    }
-    public void playNext() {
-        if(MediaPlayerControl.getMediaPlayer() != null && (State.getCurrentSongIndex() + 1 < State.getSongsInTable().size()) ) {
-            State.incrementCurrentSongIndex();
-            State.setLastSongID(State.getSongsInTable().get(State.getCurrentSongIndex()).getID());
-            Song song = State.getSongsInTable().get(State.getCurrentSongIndex());
-            MediaPlayerControl.prepare(song);
-            MediaPlayerControl.play();
-            State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
-            State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
-            updateNames(State.getCurrentSongName(),
-                    State.getCurrentSongArtist());
-            setTimeSlider();
-            MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
-            setPause();
-        }
+    public Button getPlayPauseButton() {
+        return playPauseButton;
     }
 
-    public void setPlay() {
+    public void setPlayButton() {
         try {
             File file = new File(FilePaths.PLAY_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
-            playPause.setGraphic(imageView);
-            playPause.getTooltip().setText("Play");
-            playPause.getTooltip().setShowDelay(Duration.millis(100));
+            playPauseButton.setGraphic(imageView);
+            playPauseButton.getTooltip().setText("Play");
+            playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
-            playPause.setText("Play");
+            playPauseButton.setText("Play");
         }
     }
 
-    public void setPause() {
+    public void setPauseButton() {
         try {
             File file = new File(FilePaths.PAUSE_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
-            playPause.setGraphic(imageView);
-            playPause.getTooltip().setText("Pause");
-            playPause.getTooltip().setShowDelay(Duration.millis(100));
+            playPauseButton.setGraphic(imageView);
+            playPauseButton.getTooltip().setText("Pause");
+            playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
-            playPause.setText("Pause");
+            playPauseButton.setText("Pause");
         }
     }
 
-    private void setNext() {
+    private void setNextButton() {
         try {
             File file = new File(FilePaths.NEXT_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
-            next.setGraphic(imageView);
-            next.getTooltip().setShowDelay(Duration.millis(100));
+            nextButton.setGraphic(imageView);
+            nextButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
-            next.setText("Next");
+            nextButton.setText("Next");
         }
     }
 
-    private void setPrev() {
+    private void setPrevButton() {
         try {
             File file = new File(FilePaths.PREV_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
             imageView.setFitWidth(15);
             imageView.setFitHeight(20);
-            prev.setGraphic(imageView);
-            prev.getTooltip().setShowDelay(Duration.millis(100));
+            prevButton.setGraphic(imageView);
+            prevButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
-            prev.setText("Prev");
+            prevButton.setText("Prev");
         }
     }
+
     @FXML
     private void toggleMute() {
-        if(isMuted) {
+        if (isMuted) {
             isMuted = false;
             volumeSlider.setValue(volSliderValue);
         } else {
@@ -260,15 +238,15 @@ public class ControlPanel implements Initializable {
         }
     }
 
-    private void setVolumeIcon() {
+    private void setVolumeIndicatorButton() {
         String volumeIndicatorIcon = "";
-        if(0 <= volumeSlider.getValue() && volumeSlider.getValue() < 1) {
-            volumeIndicatorIcon =  FilePaths.VOLUME_INDICATOR_MUTE;
-        } else if (1 <= volumeSlider.getValue() && volumeSlider.getValue() < volumeSlider.getMax() * 1 / 3){
+        if (0 <= volumeSlider.getValue() && volumeSlider.getValue() < 1) {
+            volumeIndicatorIcon = FilePaths.VOLUME_INDICATOR_MUTE;
+        } else if (1 <= volumeSlider.getValue() && volumeSlider.getValue() < volumeSlider.getMax() * 1 / 3) {
             volumeIndicatorIcon = FilePaths.VOLUME_INDICATOR_LOW;
-        } else if (volumeSlider.getMax() * 1 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() < volumeSlider.getMax() * 2 / 3){
+        } else if (volumeSlider.getMax() * 1 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() < volumeSlider.getMax() * 2 / 3) {
             volumeIndicatorIcon = FilePaths.VOLUME_INDICATOR_MEDIUM;
-        } else if (volumeSlider.getMax() * 2 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() <= volumeSlider.getMax()){
+        } else if (volumeSlider.getMax() * 2 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() <= volumeSlider.getMax()) {
             volumeIndicatorIcon = FilePaths.VOLUME_INDICATOR_HIGH;
         }
         File file = new File(volumeIndicatorIcon);
@@ -276,5 +254,22 @@ public class ControlPanel implements Initializable {
         imageView.setFitWidth(30);
         imageView.setFitHeight(35);
         volumeIndicator.setGraphic(imageView);
+    }
+
+    public void update(String name, String artist) {
+        songNameLabel.setText(name);
+        artistNameLabel.setText(artist);
+        setPauseButton();
+        setTimeSlider();
+    }
+
+    private void onEndOfSong() {
+        if (Jukebox.isNext()) {
+            onClickNext();
+        } else {
+            Jukebox.getMediaPlayer().seek(Duration.millis(0));
+            Jukebox.getMediaPlayer().pause();
+            setPlayButton();
+        }
     }
 }

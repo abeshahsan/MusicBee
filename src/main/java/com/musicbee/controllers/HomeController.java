@@ -33,9 +33,9 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
     private final ArrayList<Song> allSongs      = new ArrayList<>();
     private final ArrayList<Song> filteredSongs = new ArrayList<>();
-    ContextMenu contextMenu = new ContextMenu();
-    Menu        child       = new Menu("Add song to playlist");
-    ObservableList<Song> tableList = FXCollections.observableArrayList();
+    ContextMenu          contextMenu = new ContextMenu();
+    Menu                 child       = new Menu("Add song to playlist");
+    ObservableList<Song> tableList   = FXCollections.observableArrayList();
     @FXML
     private TableView<Song>           table;
     @FXML
@@ -51,14 +51,14 @@ public class HomeController implements Initializable {
     @FXML
     private JFXDrawer                 drawer;
     @FXML
-    private TextField searchBar;
+    private TextField                 searchBar;
     @FXML
-    private MenuButton menuButton;
+    private MenuButton                menuButton;
     @FXML
-    private VBox bottom;
+    private VBox                      bottom;
     @FXML
-    private ImageView profileIcon;
-    private ControlPanel controlPanel;
+    private ImageView                 profileIcon;
+    private ControlPanel              controlPanel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -165,31 +165,30 @@ public class HomeController implements Initializable {
         if (event.getButton() == MouseButton.PRIMARY) {
             try {
                 if (!row.isEmpty() && row.getItem() != null) {
-                    int index = row.getIndex();
-                    State.setCurrentSongIndex(index);
-                    Song song = State.getSongsInTable().get(index);
+                    Song song = tableList.get(row.getIndex());
 
-                    MediaPlayerControl.prepare(song);
-                    MediaPlayerControl.play();
+                    Jukebox.setCurrentSongIndex(row.getIndex());
+                    Jukebox.setNowPlaying(song);
 
-                    controlPanel.setPause();
-                    State.setCurrentSongName(State.getSongsInTable().get(State.getCurrentSongIndex()).getName());
-                    State.setCurrentSongArtist(State.getSongsInTable().get(State.getCurrentSongIndex()).getArtistName());
-                    updateNames(State.getCurrentSongName(),
-                            State.getCurrentSongArtist());
-                    MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
-                    State.setLastSongID(State.getSongsInTable().get(index).getID());
+                    Jukebox.setSong(song);
+                    Jukebox.prepare();
+                    Jukebox.play();
+
+                    State.setLastSongID(song.getID());
+                    Jukebox.setCurrentList(tableList);
+                    controlPanel.update(song.getName(), song.getArtistName());
                 }
 
-                controlPanel.setTimeSlider();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         } else if (event.getButton() == MouseButton.SECONDARY) {
             contextMenu.show(table, event.getScreenX(), event.getScreenY());
             child.getItems().forEach(menuItem -> menuItem.setOnAction(e -> {
                         try {
-                            Database.addSongToPlaylist(row.getItem().getID(), Integer.parseInt(menuItem.getId()));
+                            if (!row.isEmpty() && row.getItem() != null) {
+                                Database.addSongToPlaylist(row.getItem().getID(), Integer.parseInt(menuItem.getId()));
+                            }
                         } catch (SQLException ex) {
                             System.out.println(ex.getErrorCode());
                             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
@@ -215,7 +214,6 @@ public class HomeController implements Initializable {
         allSongs.addAll(list);
         filteredSongs.addAll(list);
         tableList.addAll(list);
-        State.setSongsInTable(list);
     }
 
     @FXML
@@ -234,7 +232,6 @@ public class HomeController implements Initializable {
             }
             tableList.clear();
             tableList.addAll(filteredSongs);
-            State.setSongsInTable(filteredSongs);
         }
     }
 
@@ -249,10 +246,10 @@ public class HomeController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-        MediaPlayer player = MediaPlayerControl.getMediaPlayer();
+        MediaPlayer player = Jukebox.getMediaPlayer();
 
         if (player != null) {
-            MediaPlayerControl.clear();
+            Jukebox.clear();
         }
 
         Database.savePlaybackPosition();
@@ -263,10 +260,5 @@ public class HomeController implements Initializable {
 
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_IN, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
-    }
-
-    private void updateNames(String name, String artist) {
-        controlPanel.getSongName().setText(name);
-        controlPanel.getArtistName().setText(artist);
     }
 }

@@ -220,7 +220,7 @@ public class Database {
         currentUser = null;
         ALL_PLAYLISTS.clear();
         CURRENT_PLAYLIST_SONGS.clear();
-        State.clearState();
+        Jukebox.clearState();
     }
 
     /**
@@ -350,8 +350,8 @@ public class Database {
     public static void savePlaybackPosition() throws SQLException {
 
         String username = getCurrentUser().getUsername();
-        int songID = State.getLastSongID();
-        double time = State.getPlaybackPos();
+        int songID = Jukebox.getNowPlaying().getID();
+        double time = Jukebox.getPlaybackPos();
 
         System.out.println(username + " " + songID + " " + time);
 
@@ -369,9 +369,9 @@ public class Database {
      * @throws SQLException If any error occurs while loading the playback position from the database
      */
     public static ArrayList<Object> loadPlaybackPosition() throws SQLException {
-        ArrayList<Object> state = new ArrayList<>();
-        state.add(-1);
-        state.add(0.0);
+        ArrayList<Object> playback = new ArrayList<>();
+        playback.add(-1);
+        playback.add(0.0);
 
         String sqlString = "select song_id, time from last_state where username = ?";
 
@@ -382,12 +382,12 @@ public class Database {
         if(resultSet.next()) {
             int songID = resultSet.getInt(1);
             if(!resultSet.wasNull()) {
-                state.set(0, songID);
+                playback.set(0, songID);
                 double time = resultSet.getDouble(2);
-                if(!resultSet.wasNull()) state.set(1, time);
+                if(!resultSet.wasNull()) playback.set(1, time);
             }
         }
-        return state;
+        return playback;
     }
 
     /**

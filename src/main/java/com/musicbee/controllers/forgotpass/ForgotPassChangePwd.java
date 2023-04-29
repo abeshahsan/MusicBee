@@ -77,7 +77,7 @@ public class ForgotPassChangePwd {
             ArrayList<Object> state = Database.loadPlaybackPosition();
 
             State.setLastSongID((Integer) state.get(0));
-            State.setPlaybackPos((Double) state.get(1));
+            Jukebox.setPlaybackPos((Double) state.get(1));
 
             resumePlayback();
             Database.loadAllPlaylists();
@@ -126,16 +126,14 @@ public class ForgotPassChangePwd {
             }
         }
         if (song != null) {
-            State.setCurrentSongName(song.getName());
-            State.setCurrentSongArtist(song.getArtistName());
-            MediaPlayerControl.prepare(song);
-            MediaPlayerControl.play();
-            MediaPlayerControl.getMediaPlayer().setVolume(State.getVolume());
-            MediaPlayerControl.getMediaPlayer().setOnReady(() -> {
-                double totalTime = MediaPlayerControl.getMediaPlayer().getTotalDuration().toMillis();
-                State.setTotalDuration(totalTime);
-                MediaPlayerControl.getMediaPlayer().seek(Duration.millis(State.getPlaybackPos()));
-                MediaPlayerControl.getMediaPlayer().pause();
+            Jukebox.setSong(song);
+            Jukebox.prepare();
+            Jukebox.play();
+            Jukebox.getMediaPlayer().setOnReady(() -> {
+                double totalTime = Jukebox.getMediaPlayer().getTotalDuration().toMillis();
+                Jukebox.setTotalDuration(totalTime);
+                Jukebox.getMediaPlayer().seek(Duration.millis(Jukebox.getPlaybackPos()));
+                Jukebox.getMediaPlayer().pause();
             });
         }
     }
