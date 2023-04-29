@@ -3,6 +3,8 @@ package com.musicbee.utility;
 public class State {
     private static int lastSongID;
 
+    private static boolean shuffleOn = false;
+
     private static int currentPlaylistID;
 
     public static boolean mouseDetected = false;
@@ -39,5 +41,13 @@ public class State {
 
     public static void setMouseDetected(boolean mouseDetected) {
         State.mouseDetected = mouseDetected;
+    }
+
+    public static boolean isShuffleOn() {
+        return shuffleOn;
+    }
+
+    public static void setShuffleOn(boolean shuffleOn) {
+        State.shuffleOn = shuffleOn;
     }
 }

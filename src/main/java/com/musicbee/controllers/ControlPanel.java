@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 
 public class ControlPanel implements Initializable {
     @FXML
+    private Button    shuffleIndicator;
+    @FXML
     private Button    nextButton;
     @FXML
     private Button    prevButton;
@@ -70,6 +72,7 @@ public class ControlPanel implements Initializable {
         setPrevButton();
         setNextButton();
         setTimeSliderEventHandlers();
+        toggleShuffle();
     }
 
     private void setVolumeSlider() {
@@ -271,5 +274,19 @@ public class ControlPanel implements Initializable {
             Jukebox.getMediaPlayer().pause();
             setPlayButton();
         }
+    }
+
+    @FXML
+    private void toggleShuffle() {
+        if(State.isShuffleOn()) {
+            State.setShuffleOn(false);
+            shuffleIndicator.setStyle("-fx-background-color: lightskyblue");
+            shuffleIndicator.getTooltip().setText("Shuffle Playlist");
+        } else {
+            State.setShuffleOn(true);
+            shuffleIndicator.setStyle("-fx-background-color: blue");
+            shuffleIndicator.getTooltip().setText("Undo Shuffle Playlist");
+        }
+        Jukebox.setShuffle(State.isShuffleOn());
     }
 }

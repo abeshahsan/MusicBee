@@ -7,17 +7,19 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Jukebox {
-    private static final ArrayList<Song> currentList   = new ArrayList<>();
-
-    private static       double          playbackPos;
-    private static       double          totalDuration = 0;
-    private static       double          volume        = .2;
-    private static       int             currentSongIndex;
-    private static       Media           media         = null;
-    private static       MediaPlayer     mediaPlayer   = null;
-    private static       Song            nowPlaying;
+    public static final  ArrayList<Integer> shuffler      = new ArrayList<>();
+    private static final ArrayList<Song>    currentList   = new ArrayList<>();
+    private static       double             playbackPos;
+    private static       double             totalDuration = 0;
+    private static       double             volume        = .2;
+    private static       int                currentSongIndex;
+    private static       int                shufflerIndex = 0;
+    private static       Media              media         = null;
+    private static       MediaPlayer        mediaPlayer   = null;
+    private static       Song               nowPlaying;
 
 
     public static void play() {
@@ -97,6 +99,30 @@ public class Jukebox {
     public static void setCurrentList(ObservableList<Song> list) {
         currentList.clear();
         currentList.addAll(list);
+        shuffler.clear();
+        for (int i = 0; i < currentList.size(); i++) {
+            shuffler.add(i);
+        }
+        shufflerIndex = 0;
+    }
+
+    private static void shuffle() {
+        Collections.shuffle(shuffler);
+    }
+
+    private static void undoShuffle() {
+        for (int i = 0; i < shuffler.size(); i++) {
+            shuffler.set(i, i);
+        }
+        shufflerIndex = currentSongIndex;
+    }
+
+    public static void setShuffle(boolean shuffle) {
+        if (shuffle) {
+            Jukebox.shuffle();
+        } else {
+            Jukebox.undoShuffle();
+        }
     }
 
     public static int getCurrentSongIndex() {
@@ -114,19 +140,22 @@ public class Jukebox {
     }
 
     public static boolean isNext() {
-        return currentSongIndex + 1 < currentList.size();
+        return shufflerIndex + 1 < currentList.size();
     }
+
     public static boolean isPrev() {
-        return currentSongIndex - 1 >= 0;
+        return shufflerIndex - 1 >= 0;
     }
 
     public static void next() {
-        currentSongIndex++;
+        shufflerIndex++;
+        currentSongIndex = shuffler.get(shufflerIndex);
         nowPlaying = currentList.get(currentSongIndex);
     }
 
     public static void prev() {
-        currentSongIndex--;
+        shufflerIndex--;
+        currentSongIndex = shuffler.get(shufflerIndex);
         nowPlaying = currentList.get(currentSongIndex);
     }
 }
