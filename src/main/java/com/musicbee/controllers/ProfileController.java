@@ -22,7 +22,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.function.ToLongBiFunction;
 
 public class ProfileController implements Initializable {
 
@@ -149,8 +148,8 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException {
-        if(MediaPlayerControl.getMediaPlayer() != null) {
-            MediaPlayerControl.clear();
+        if(Jukebox.getMediaPlayer() != null) {
+            Jukebox.clear();
         }
 
         try {

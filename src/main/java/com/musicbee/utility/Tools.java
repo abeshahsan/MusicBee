@@ -11,12 +11,16 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Circle;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Tools {
     private static final int MAX_PASSWORD_LENGTH = 32;
     private static final long MIN_HASH = 4294967295L;
     private static final char EXTRA_CHARS = 1;
+
+
     public static long hashPassword(String password) {
+        Shuffler shuffler = new Shuffler(5);
         StringBuilder passwordBuilder = new StringBuilder(password);
         passwordBuilder.append(String.valueOf(EXTRA_CHARS).repeat(Math.max(0, MAX_PASSWORD_LENGTH - passwordBuilder.length())));
         password = passwordBuilder.toString();
@@ -99,5 +103,30 @@ public class Tools {
         imageView.setPreserveRatio(false);
         Circle circle = new Circle(diameter / 2, diameter / 2, diameter / 2);
         imageView.setClip(circle);
+    }
+
+    static class Shuffler {
+        private final int     length;
+
+
+        private boolean shuffle;
+
+        public int next() {
+            index = (index + 1) % length;
+            return integers.get(index);
+        }
+
+        ArrayList<Integer> integers;
+        int                index;
+        public Shuffler(final int length) {
+            this.length = length;
+            integers = new ArrayList<>();
+            for (int i = 1; i <= length; i++) {
+                integers.add(i);
+            }
+        }
+        public void setShuffle(boolean shuffle) {
+            this.shuffle = shuffle;
+        }
     }
 }

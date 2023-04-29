@@ -152,8 +152,8 @@ public class EditProfileController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-       if(MediaPlayerControl.getMediaPlayer() != null) {
-            MediaPlayerControl.clear();
+       if(Jukebox.getMediaPlayer() != null) {
+            Jukebox.clear();
         }
 
         Database.savePlaybackPosition();

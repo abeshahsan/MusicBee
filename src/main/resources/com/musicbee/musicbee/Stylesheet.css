@@ -414,13 +414,13 @@
     -fx-text-fill: white;
 }
 
-#songName {
+#songNameLabel {
     -fx-font-size: 14;
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
 
-#artistName {
+#artistNameLabel {
     -fx-font-size: 10;
     -fx-text-fill: white;
 }
