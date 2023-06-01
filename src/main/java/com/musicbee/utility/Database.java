@@ -220,7 +220,7 @@ public class Database {
         currentUser = null;
         ALL_PLAYLISTS.clear();
         CURRENT_PLAYLIST_SONGS.clear();
-        Jukebox.clearState();
+        Jukebox.clear();
     }
 
     /**

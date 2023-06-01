@@ -149,7 +149,7 @@ public class ProfileController implements Initializable {
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException {
         if(Jukebox.getMediaPlayer() != null) {
-            Jukebox.clear();
+            Jukebox.clearMediaPlayer();
         }
 
         try {

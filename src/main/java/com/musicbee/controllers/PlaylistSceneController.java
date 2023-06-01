@@ -178,7 +178,7 @@ public class PlaylistSceneController implements Initializable {
                     Song song = tableList.get(row.getIndex());
 
                     Jukebox.setCurrentSongIndex(row.getIndex());
-                    Jukebox.setNowPlaying(song);
+                    Jukebox.setSong(song);
 
                     Jukebox.setSong(song);
                     Jukebox.prepare();
@@ -250,7 +250,7 @@ public class PlaylistSceneController implements Initializable {
         MediaPlayer player = Jukebox.getMediaPlayer();
 
         if (player != null) {
-            Jukebox.clear();
+            Jukebox.clearMediaPlayer();
         }
 
         Database.savePlaybackPosition();

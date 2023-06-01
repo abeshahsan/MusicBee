@@ -44,6 +44,12 @@ public class ControlPanel implements Initializable {
     private boolean   isMuted;
     private double    volSliderValue;
 
+    private static final String SHUFFLE_PLAYLIST = "Shuffle Playlist";
+    private static final String UNDO_SHUFFLE_PLAYLIST = "Undo Shuffle Playlist";
+
+    private static final int SHUFFLE_PLAYLIST_ICON_HEIGHT = 22;
+    private static final int SHUFFLE_PLAYLIST_ICON_WIDTH = 22;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -72,7 +78,8 @@ public class ControlPanel implements Initializable {
         setPrevButton();
         setNextButton();
         setTimeSliderEventHandlers();
-        toggleShuffle();
+        setShuffleIndicator(false, SHUFFLE_PLAYLIST,
+                setImageView(FilePaths.SHUFFLE_OFF, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
     }
 
     private void setVolumeSlider() {
@@ -252,11 +259,7 @@ public class ControlPanel implements Initializable {
         } else if (volumeSlider.getMax() * 2 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() <= volumeSlider.getMax()) {
             volumeIndicatorIcon = FilePaths.VOLUME_INDICATOR_HIGH;
         }
-        File file = new File(volumeIndicatorIcon);
-        ImageView imageView = new ImageView(file.getAbsolutePath());
-        imageView.setFitWidth(30);
-        imageView.setFitHeight(35);
-        volumeIndicator.setGraphic(imageView);
+        volumeIndicator.setGraphic(setImageView(volumeIndicatorIcon, 35, 30));
     }
 
     public void update(String name, String artist) {
@@ -279,14 +282,27 @@ public class ControlPanel implements Initializable {
     @FXML
     private void toggleShuffle() {
         if(State.isShuffleOn()) {
-            State.setShuffleOn(false);
-            shuffleIndicator.setStyle("-fx-background-color: lightskyblue");
-            shuffleIndicator.getTooltip().setText("Shuffle Playlist");
+            setShuffleIndicator(false, SHUFFLE_PLAYLIST,
+                    setImageView(FilePaths.SHUFFLE_OFF, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
         } else {
-            State.setShuffleOn(true);
-            shuffleIndicator.setStyle("-fx-background-color: blue");
-            shuffleIndicator.getTooltip().setText("Undo Shuffle Playlist");
+            setShuffleIndicator(true, UNDO_SHUFFLE_PLAYLIST,
+                    setImageView(FilePaths.SHUFFLE_ON, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
         }
         Jukebox.setShuffle(State.isShuffleOn());
+    }
+
+    private void setShuffleIndicator(boolean mode, String tooltipString, ImageView imageView) {
+        State.setShuffleOn(mode);
+        shuffleIndicator.setGraphic(imageView);
+        shuffleIndicator.getTooltip().setText(tooltipString);
+        shuffleIndicator.getTooltip().setShowDelay(Duration.millis(100));
+//        shuffleIndicator.setStyle("-fx-background-color: transparent");
+    }
+    private ImageView setImageView(String filepath, int height, int width) {
+        ImageView imageView = new ImageView(new File(filepath).getAbsolutePath());
+        imageView.setPreserveRatio(false);
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
+        return imageView;
     }
 }

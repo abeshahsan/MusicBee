@@ -34,6 +34,8 @@ public class FilePaths {
     public static final String VOLUME_INDICATOR_MUTE   = "src/main/resources/com/musicbee/musicbee/images/volume-mute.png";
     public static final String VOLUME_INDICATOR_MEDIUM = "src/main/resources/com/musicbee/musicbee/images/volume-medium.png";
     public static final String VOLUME_INDICATOR_HIGH   = "src/main/resources/com/musicbee/musicbee/images/volume-high.png";
+    public static final String SHUFFLE_ON   = "src/main/resources/com/musicbee/musicbee/images/ShuffleOn.png";
+    public static final String SHUFFLE_OFF   = "src/main/resources/com/musicbee/musicbee/images/ShuffleOff.png";
 
 
     public static final String STYLESHEET   = "/com/musicbee/musicbee/Stylesheet.css";
