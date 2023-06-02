@@ -19,33 +19,33 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-import static com.musicbee.utility.OTP.sendEmail;
 import static com.musicbee.utility.Database.checkForEmail;
 import static com.musicbee.utility.Database.checkForUserName;
+import static com.musicbee.utility.OTP.sendEmail;
 
 public class SignUpController {
 
+    public  User          user;
     @FXML
-    private Label pwdStrength;
+    private Label         pwdStrength;
     @FXML
-    private TextField username;
+    private TextField     username;
     @FXML
-    private TextField shownPassword;
+    private TextField     shownPassword;
     @FXML
     private PasswordField password;
     @FXML
-    private TextField firstName;
+    private TextField     firstName;
     @FXML
-    private TextField lastName;
+    private TextField     lastName;
     @FXML
-    private TextField emailID;
-    public User user;
+    private TextField     emailID;
     @FXML
-    private TextField ShownConfirmPwd;
+    private TextField     ShownConfirmPwd;
     @FXML
     private PasswordField ConfirmPwd;
     @FXML
-    private Label warning;
+    private Label         warning;
 
     @FXML
     protected void OnClickSubmit(ActionEvent event) throws IOException {
@@ -70,9 +70,7 @@ public class SignUpController {
                 warning.setText("You must enter username.");
                 warning.setStyle("-fx-text-fill: red;");
                 return;
-            }
-            else if(checkForUserName(username.getText()))
-            {
+            } else if (checkForUserName(username.getText())) {
                 warning.setText("Username is taken!");
                 warning.setStyle("-fx-text-fill: red;");
                 return;
@@ -87,14 +85,12 @@ public class SignUpController {
                 warning.setText("You must enter your email.");
                 warning.setStyle("-fx-text-fill: red;");
                 return;
-            }
-            else if(checkForEmail(emailID.getText(), this.username.getText()))
-            {
+            } else if (checkForEmail(emailID.getText(), this.username.getText())) {
                 warning.setText("This account already exists! Want to login?");
                 warning.setStyle("-fx-text-fill: red;");
                 return;
             }
-            if(!pass.equals(conPass)) {
+            if (!pass.equals(conPass)) {
                 warning.setText("Passwords don't match!");
                 warning.setStyle("-fx-text-fill: red;");
                 return;
@@ -107,10 +103,10 @@ public class SignUpController {
         } catch (Exception e) {
             warning.setText("Some error occurred while sign-up.");
             warning.setStyle("-fx-text-fill: red;");
-            System.out.println(e);
+            e.printStackTrace();
             return;
         }
-        String val = null;
+        String val;
         val = sendEmail(emailID.getText());
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.NEW_USER_VERIFY_OTP));
         Parent root = loader.load();
@@ -127,6 +123,7 @@ public class SignUpController {
         stage.show();
 
     }
+
     @FXML
     protected void togglePasswordChars(ActionEvent event) {
         Tools.togglePasswordChars(event, password, shownPassword);
@@ -136,26 +133,26 @@ public class SignUpController {
     protected void toggleConfirmPasswordChars(ActionEvent event) {
         try {
             ToggleButton toggleButton = (ToggleButton) event.getSource();
-            if(ConfirmPwd.isVisible()) {
+            if (ConfirmPwd.isVisible()) {
                 ConfirmPwd.setVisible(false);
                 ShownConfirmPwd.setVisible(true);
                 ShownConfirmPwd.setText(ConfirmPwd.getText());
                 toggleButton.setText("Hide");
-            }
-            else {
+            } else {
                 ShownConfirmPwd.setVisible(false);
                 ConfirmPwd.setVisible(true);
                 ConfirmPwd.setText(ShownConfirmPwd.getText());
                 toggleButton.setText("Show");
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     void onLoginFromSignup(ActionEvent event) throws IOException {
-        Node callingBtn=(Node)event.getSource();
-        Stage myStage=(Stage)callingBtn.getScene().getWindow();
+        Node callingBtn = (Node) event.getSource();
+        Stage myStage = (Stage) callingBtn.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.SIGN_IN));
         Scene scene = new Scene(fxmlLoader.load());
         String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
@@ -164,11 +161,12 @@ public class SignUpController {
         myStage.show();
 
     }
+
     @FXML
     private void typingPwd(KeyEvent keyEvent) {
         String pass;
 
-        if(password.isVisible()) pass = password.getText();
+        if (password.isVisible()) pass = password.getText();
         else pass = shownPassword.getText();
 
         if (pass.isEmpty()) {

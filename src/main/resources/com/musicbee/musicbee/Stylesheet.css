@@ -87,7 +87,7 @@
     -fx-background-position: center;
     -fx-background-size: 100% 100%;
 }
-#upsign{
+#upSign{
     -fx-background-image: url("images/musicIcon.jpg");
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
@@ -147,7 +147,7 @@
     -fx-background-color: transparent;
 //   -fx-text-fill: white;
 }
-#signuP{
+#signUp{
     -fx-background-color: transparent;
 //   -fx-text-fill: white;
 }
@@ -160,11 +160,11 @@
     /* -fx-text-fill: white;*/
 }
 
-#namepass{
+#namePass{
     -fx-background-color: transparent;
 //-fx-text-fill: white;
 }
-#notmember{
+#notMember{
     -fx-background-color: transparent;
 //-fx-text-fill: white;
 }
@@ -425,7 +425,7 @@
     -fx-text-fill: white;
 }
 
-#changwPwd {
+#changePwd {
     -fx-background-image:url("images/DarkProfile.png");
 //-fx-background-color:  #007aa5;
 //-fx-background-color:   #000058;

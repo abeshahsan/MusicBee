@@ -18,11 +18,12 @@ import java.util.ResourceBundle;
 public class MenuButtonController implements Initializable {
 
     @FXML
-    private ImageView  profileIcon;
+    private ImageView profileIcon;
     @FXML
-    private MenuItem identity;
+    private MenuItem  identity;
     @FXML
-    private Tooltip tooltip;
+    private Tooltip   tooltip;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (Database.getCurrentUser().getImage() != null) {
@@ -30,8 +31,8 @@ public class MenuButtonController implements Initializable {
         }
 
         Tools.clipImageview(profileIcon, 35);
-        String s =  Database.getCurrentUser().getName() + "\n" +
-                    Database.getCurrentUser().getEmail();
+        String s = Database.getCurrentUser().getName() + "\n" +
+                Database.getCurrentUser().getEmail();
         identity.setText(s);
         tooltip.setText(s);
     }
@@ -44,6 +45,7 @@ public class MenuButtonController implements Initializable {
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.PROFILE, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(myStage);
     }
+
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
         MediaPlayer player = Jukebox.getMediaPlayer();

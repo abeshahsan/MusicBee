@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.forgotpass.ForgotPassEnterMail">
+<BorderPane maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.forgot_pass.ForgotPassEnterMail">
    <right>
       <VBox prefHeight="500.0" prefWidth="308.0" BorderPane.alignment="CENTER">
          <children>

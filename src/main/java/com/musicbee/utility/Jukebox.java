@@ -77,6 +77,7 @@ public class Jukebox {
      * Holds the information of the currently playing song.
      */
     private static Song nowPlaying;
+    static boolean shuffleOn = false;
 
 
     /**
@@ -305,5 +306,13 @@ public class Jukebox {
             shuffler.set(i, i);
         }
         shufflerIndex = currentSongIndex;
+    }
+
+    public static boolean isShuffleOn() {
+        return shuffleOn;
+    }
+
+    public static void setShuffleOn(boolean shuffleOn) {
+        Jukebox.shuffleOn = shuffleOn;
     }
 }

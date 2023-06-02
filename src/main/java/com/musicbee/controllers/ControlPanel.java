@@ -19,6 +19,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ControlPanel implements Initializable {
+    private static final String SHUFFLE_PLAYLIST      = "Shuffle Playlist";
+    private static final String UNDO_SHUFFLE_PLAYLIST = "Undo Shuffle Playlist";
+    private static final int SHUFFLE_PLAYLIST_ICON_HEIGHT = 22;
+    private static final int SHUFFLE_PLAYLIST_ICON_WIDTH  = 22;
     @FXML
     private Button    shuffleIndicator;
     @FXML
@@ -43,12 +47,6 @@ public class ControlPanel implements Initializable {
     private Button    volumeIndicator;
     private boolean   isMuted;
     private double    volSliderValue;
-
-    private static final String SHUFFLE_PLAYLIST = "Shuffle Playlist";
-    private static final String UNDO_SHUFFLE_PLAYLIST = "Undo Shuffle Playlist";
-
-    private static final int SHUFFLE_PLAYLIST_ICON_HEIGHT = 22;
-    private static final int SHUFFLE_PLAYLIST_ICON_WIDTH = 22;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -281,23 +279,24 @@ public class ControlPanel implements Initializable {
 
     @FXML
     private void toggleShuffle() {
-        if(State.isShuffleOn()) {
+        if (Jukebox.isShuffleOn()) {
             setShuffleIndicator(false, SHUFFLE_PLAYLIST,
                     setImageView(FilePaths.SHUFFLE_OFF, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
         } else {
             setShuffleIndicator(true, UNDO_SHUFFLE_PLAYLIST,
                     setImageView(FilePaths.SHUFFLE_ON, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
         }
-        Jukebox.setShuffle(State.isShuffleOn());
+        Jukebox.setShuffle(Jukebox.isShuffleOn());
     }
 
     private void setShuffleIndicator(boolean mode, String tooltipString, ImageView imageView) {
-        State.setShuffleOn(mode);
+        Jukebox.setShuffleOn(mode);
         shuffleIndicator.setGraphic(imageView);
         shuffleIndicator.getTooltip().setText(tooltipString);
         shuffleIndicator.getTooltip().setShowDelay(Duration.millis(100));
 //        shuffleIndicator.setStyle("-fx-background-color: transparent");
     }
+
     private ImageView setImageView(String filepath, int height, int width) {
         ImageView imageView = new ImageView(new File(filepath).getAbsolutePath());
         imageView.setPreserveRatio(false);

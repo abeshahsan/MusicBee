@@ -36,7 +36,7 @@ public class PlaylistSceneController implements Initializable {
     private final ContextMenu     contextMenu   = new ContextMenu();
     ObservableList<Song> tableList = FXCollections.observableArrayList();
     @FXML
-    private BorderPane                borderPane;
+    private BorderPane borderPane;
 
     @FXML
     private TableView<Song>           table = new TableView<>();
@@ -244,6 +244,7 @@ public class PlaylistSceneController implements Initializable {
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_IN, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
     }
+
     private void loadMenuButton() {
         try {
             MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));

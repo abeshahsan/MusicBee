@@ -16,6 +16,6 @@ module com.example.musicbee {
     opens com.musicbee.controllers to javafx.fxml;
     exports com.musicbee;
     opens com.musicbee to javafx.fxml;
-    exports com.musicbee.controllers.forgotpass;
-    opens com.musicbee.controllers.forgotpass to javafx.fxml;
+    exports com.musicbee.controllers.forgot_pass;
+    opens com.musicbee.controllers.forgot_pass to javafx.fxml;
 }

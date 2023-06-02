@@ -44,14 +44,14 @@ public class EditProfileController implements Initializable {
     private TextField  email;
     @FXML
     private ImageView  pfp;
-    private Image     defaultImage;
+    private Image      defaultImage;
 
     @FXML
-    private MenuButton menuButton;
+    private MenuButton   menuButton;
     @FXML
     private JFXHamburger myHamburger;
     @FXML
-    private Button deletePhoto;
+    private Button       deletePhoto;
 
     private File selectedFile;
 
@@ -227,6 +227,7 @@ public class EditProfileController implements Initializable {
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.CHANGE_PWD, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
     }
+
     private void loadMenuButton() {
         try {
             MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));

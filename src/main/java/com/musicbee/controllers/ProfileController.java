@@ -29,7 +29,7 @@ public class ProfileController implements Initializable {
     @FXML
     private BorderPane borderPane;
     @FXML
-    private Label name;
+    private Label      name;
 
     @FXML
     private Label dateJoined;
@@ -72,7 +72,7 @@ public class ProfileController implements Initializable {
         email.setText(Database.getCurrentUser().getEmail());
         dateJoined.setText(Database.getCurrentUser().getJoinDate().toString());
 
-        if(Database.getCurrentUser().getImage() != null ) {
+        if (Database.getCurrentUser().getImage() != null) {
             pfp.setImage(Database.getCurrentUser().getImage());
         }
     }
@@ -89,14 +89,11 @@ public class ProfileController implements Initializable {
     }
 
     private void setHamburger() {
-        HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
-        if(State.getBurgerState()==-1)
-        {
+        HamburgerBasicCloseTransition transition = new HamburgerBasicCloseTransition(myHamburger);
+        if (State.getBurgerState() == -1) {
             transition.setRate(-1);
             drawer.close();
-        }
-        else
-        {
+        } else {
             transition.setRate(1);
             drawer.open();
         }
@@ -105,28 +102,23 @@ public class ProfileController implements Initializable {
     }
 
     private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
-        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
-            transition.setRate(transition.getRate()*-1);
-            if(transition.getRate()==-1)
-            {
+        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
+            transition.setRate(transition.getRate() * -1);
+            if (transition.getRate() == -1) {
                 State.setBurgerState(-1);
-            }
-            else {
+            } else {
                 State.setBurgerState(1);
             }
             transition.play();
-            if(drawer.isOpened() || drawer.isOpening())
-            {
+            if (drawer.isOpened() || drawer.isOpening()) {
                 drawer.close();
-            }
-            else drawer.open();
+            } else drawer.open();
         });
     }
 
     private void loadSideBar() {
-        try
-        {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
+        try {
+            VBox vbox = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -144,7 +136,7 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException {
-        if(Jukebox.getMediaPlayer() != null) {
+        if (Jukebox.getMediaPlayer() != null) {
             Jukebox.clearMediaPlayer();
         }
 
@@ -166,11 +158,12 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void onCLickEdit(ActionEvent event) throws IOException {
-        Node callingBtn=(Node)event.getSource();
-        Stage stage = (Stage)callingBtn.getScene().getWindow();
+        Node callingBtn = (Node) event.getSource();
+        Stage stage = (Stage) callingBtn.getScene().getWindow();
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.EDIT_PROFILE, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
     }
+
     private void loadMenuButton() {
         try {
             MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));
