@@ -5,23 +5,24 @@ import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBasicCloseTransition;
 import com.musicbee.entities.Playlist;
 import com.musicbee.entities.Song;
-import com.musicbee.utility.*;
+import com.musicbee.utility.Database;
+import com.musicbee.utility.FilePaths;
+import com.musicbee.utility.Jukebox;
+import com.musicbee.utility.State;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.MediaPlayer;
-import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,6 +37,8 @@ public class HomeController implements Initializable {
     ContextMenu          contextMenu = new ContextMenu();
     Menu                 child       = new Menu("Add song to playlist");
     ObservableList<Song> tableList   = FXCollections.observableArrayList();
+    @FXML
+    BorderPane borderPane;
     @FXML
     private TableView<Song>           table;
     @FXML
@@ -55,9 +58,6 @@ public class HomeController implements Initializable {
     @FXML
     private MenuButton                menuButton;
     @FXML
-    private VBox                      bottom;
-    @FXML
-    private ImageView                 profileIcon;
     private ControlPanel              controlPanel;
 
     @Override
@@ -66,13 +66,7 @@ public class HomeController implements Initializable {
         contextMenu.getItems().add(child);
         loadContextMenuPlaylists();
 
-        menuButton.setText(Database.getCurrentUser().getUsername());
-        if (Database.getCurrentUser().getImage() != null) {
-            profileIcon.setImage(Database.getCurrentUser().getImage());
-        }
-
-        Tools.clipImageview(profileIcon, 25);
-
+        loadMenuButton();
         prepareTableview();
         loadSideBar();
         setHamburger();
@@ -103,16 +97,13 @@ public class HomeController implements Initializable {
         table.getColumns().add(0, indexColumn);
 
         table.setItems(tableList);
-
-        table.getFocusModel().focus(1);
     }
 
     private ControlPanel loadControlPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
             VBox vBox = fxmlLoader.load();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
+            borderPane.setBottom(vBox);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
@@ -235,30 +226,17 @@ public class HomeController implements Initializable {
         }
     }
 
-    @FXML
-    private void onClickProfile(ActionEvent event) throws IOException {
-        MenuItem menuItem = (MenuItem) event.getSource();
-        Stage myStage = (Stage) menuItem.getParentPopup().getOwnerWindow();
-
-        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.PROFILE, FilePaths.STYLESHEET);
-        sceneSwitcher.switchNow(myStage);
-    }
-
-    @FXML
-    private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-        MediaPlayer player = Jukebox.getMediaPlayer();
-
-        if (player != null) {
-            Jukebox.clearMediaPlayer();
+    private void loadMenuButton() {
+        try {
+            MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));
+            menuButton.getItems().clear();
+            menuButton.getItems().addAll(menuButton1.getItems());
+            menuButton.setGraphic(menuButton1.getGraphic());
+            menuButton.setTooltip(menuButton1.getTooltip());
+            menuButton.setTooltip(menuButton1.getTooltip());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
-
-        Database.savePlaybackPosition();
-        Database.logOutCurrentUser();
-
-        MenuItem menuItem = (MenuItem) event.getSource();
-        Stage stage = (Stage) menuItem.getParentPopup().getOwnerWindow();
-
-        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_IN, FilePaths.STYLESHEET);
-        sceneSwitcher.switchNow(stage);
     }
 }

@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -30,47 +31,38 @@ import java.util.ResourceBundle;
 
 public class EditProfileController implements Initializable {
 
+    boolean pfpDeleted = false;
     @FXML
-    private TextField firstName;
+    private BorderPane borderPane;
     @FXML
-    private TextField lastName;
+    private TextField  firstName;
     @FXML
-    private JFXDrawer drawer;
+    private TextField  lastName;
     @FXML
-    private TextField email;
+    private JFXDrawer  drawer;
     @FXML
-    private ImageView pfp;
-
-    private Image defaultImage;
+    private TextField  email;
     @FXML
-    private ImageView profileIcon;
+    private ImageView  pfp;
+    private Image     defaultImage;
 
     @FXML
     private MenuButton menuButton;
-
     @FXML
     private JFXHamburger myHamburger;
-
     @FXML
     private Button deletePhoto;
-
-    boolean pfpDeleted = false;
-
-    @FXML
-    private VBox controlPanel;
 
     private File selectedFile;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        menuButton.setText(Database.getCurrentUser().getUsername());
         defaultImage = pfp.getImage();
         pfpDeleted = false;
 
         Tools.clipImageview(pfp, 140);
-        Tools.clipImageview(profileIcon, 25);
 
+        loadMenuButton();
         initInfo();
         loadSideBar();
         setHamburger();
@@ -78,8 +70,8 @@ public class EditProfileController implements Initializable {
     }
 
     private void setHamburger() {
-        HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
-        if(State.getBurgerState()==-1) {
+        HamburgerBasicCloseTransition transition = new HamburgerBasicCloseTransition(myHamburger);
+        if (State.getBurgerState() == -1) {
             transition.setRate(-1);
             drawer.close();
         } else {
@@ -91,15 +83,15 @@ public class EditProfileController implements Initializable {
     }
 
     private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
-        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
-            transition.setRate(transition.getRate()*-1);
-            if(transition.getRate()==-1) {
+        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
+            transition.setRate(transition.getRate() * -1);
+            if (transition.getRate() == -1) {
                 State.setBurgerState(-1);
             } else {
                 State.setBurgerState(1);
             }
             transition.play();
-            if(drawer.isOpened() || drawer.isOpening()) {
+            if (drawer.isOpened() || drawer.isOpening()) {
                 drawer.close();
             } else {
                 drawer.open();
@@ -112,16 +104,14 @@ public class EditProfileController implements Initializable {
         lastName.setText(Database.getCurrentUser().getLastName());
         email.setText(Database.getCurrentUser().getEmail());
 
-        if(Database.getCurrentUser().getImage() != null ) {
+        if (Database.getCurrentUser().getImage() != null) {
             pfp.setImage(Database.getCurrentUser().getImage());
-            profileIcon.setImage(Database.getCurrentUser().getImage());
         }
     }
 
     private void loadSideBar() {
-        try
-        {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
+        try {
+            VBox vbox = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -133,8 +123,7 @@ public class EditProfileController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
             VBox vBox = fxmlLoader.load();
-            controlPanel.getChildren().clear();
-            controlPanel.getChildren().addAll(vBox.getChildren());
+            borderPane.setBottom(vBox);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
@@ -152,7 +141,7 @@ public class EditProfileController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException, SQLException {
-       if(Jukebox.getMediaPlayer() != null) {
+        if (Jukebox.getMediaPlayer() != null) {
             Jukebox.clearMediaPlayer();
         }
 
@@ -187,14 +176,14 @@ public class EditProfileController implements Initializable {
         Database.getCurrentUser().setLastName(lastName.getText());
         Database.getCurrentUser().setEmail(email.getText());
         Database.updateCurrentUserInfo(Database.getCurrentUser());
-        if(selectedFile != null) Database.updateUserPhoto(selectedFile);
-        if(pfpDeleted) {
+        if (selectedFile != null) Database.updateUserPhoto(selectedFile);
+        if (pfpDeleted) {
             Database.deleteUserPhoto();
         }
     }
 
     @FXML
-    private void choosePhoto()  {
+    private void choosePhoto() {
         if (!selectFile()) return; //could not select the file.
         convertPhoto();
         pfpDeleted = false;
@@ -216,7 +205,7 @@ public class EditProfileController implements Initializable {
 
         File tmpSelectedFile = fileChooser.showOpenDialog(stage);
 
-        if(tmpSelectedFile != null) {
+        if (tmpSelectedFile != null) {
             selectedFile = tmpSelectedFile;
         }
 
@@ -229,6 +218,7 @@ public class EditProfileController implements Initializable {
         selectedFile = null;
         pfp.setImage(defaultImage);
     }
+
     @FXML
     private void onClickPwdChange(ActionEvent event) throws IOException {
         Node node = (Node) event.getSource();
@@ -236,5 +226,17 @@ public class EditProfileController implements Initializable {
 
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.CHANGE_PWD, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
+    }
+    private void loadMenuButton() {
+        try {
+            MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));
+            menuButton.getItems().clear();
+            menuButton.getItems().addAll(menuButton1.getItems());
+            menuButton.setGraphic(menuButton1.getGraphic());
+            menuButton.setTooltip(menuButton1.getTooltip());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+        }
     }
 }

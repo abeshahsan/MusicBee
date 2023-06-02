@@ -3,7 +3,7 @@ package com.musicbee.utility;
 /**
  * This class contains all the resource files' location used by this application.
  * <p>
- *     Files include:
+ * Files include:
  *     <ul>
  *         <li>fxml files</li>
  *         <li>css stylesheets</li>
@@ -25,6 +25,7 @@ public class FilePaths {
     public static final String FORGOT_PASS_ENTER_MAIL = "/com/musicbee/musicbee/ForgotPassEnterMail.fxml";
     public static final String FORGOT_PASS_VERIFY_OTP = "/com/musicbee/musicbee/ForgotPassVerifyOTP.fxml";
     public static final String NEW_USER_VERIFY_OTP    = "/com/musicbee/musicbee/NewUserVerifyOTP.fxml";
+    public static final String MENU_BUTTON            = "/com/musicbee/musicbee/MenuButton.fxml";
 
     public static final String PLAY_ICON               = "src/main/resources/com/musicbee/musicbee/images/play.png";
     public static final String PAUSE_ICON              = "src/main/resources/com/musicbee/musicbee/images/pause.png";
@@ -34,8 +35,8 @@ public class FilePaths {
     public static final String VOLUME_INDICATOR_MUTE   = "src/main/resources/com/musicbee/musicbee/images/volume-mute.png";
     public static final String VOLUME_INDICATOR_MEDIUM = "src/main/resources/com/musicbee/musicbee/images/volume-medium.png";
     public static final String VOLUME_INDICATOR_HIGH   = "src/main/resources/com/musicbee/musicbee/images/volume-high.png";
-    public static final String SHUFFLE_ON   = "src/main/resources/com/musicbee/musicbee/images/ShuffleOn.png";
-    public static final String SHUFFLE_OFF   = "src/main/resources/com/musicbee/musicbee/images/ShuffleOff.png";
+    public static final String SHUFFLE_ON              = "src/main/resources/com/musicbee/musicbee/images/ShuffleOn.png";
+    public static final String SHUFFLE_OFF             = "src/main/resources/com/musicbee/musicbee/images/ShuffleOff.png";
 
 
     public static final String STYLESHEET   = "/com/musicbee/musicbee/Stylesheet.css";

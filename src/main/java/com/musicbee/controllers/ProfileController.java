@@ -14,6 +14,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -25,6 +26,8 @@ import java.util.ResourceBundle;
 
 public class ProfileController implements Initializable {
 
+    @FXML
+    private BorderPane borderPane;
     @FXML
     private Label name;
 
@@ -39,8 +42,6 @@ public class ProfileController implements Initializable {
 
     @FXML
     private ImageView pfp;
-    @FXML
-    private ImageView profileIcon;
 
     @FXML
     private MenuButton menuButton;
@@ -51,17 +52,14 @@ public class ProfileController implements Initializable {
     @FXML
     private Label username;
 
-    @FXML
-    private VBox bottom;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         menuButton.setText(Database.getCurrentUser().getUsername());
 
         Tools.clipImageview(pfp, 140);
-        Tools.clipImageview(profileIcon, 25);
 
+        loadMenuButton();
         initInfo();
         loadSideBar();
         setHamburger();
@@ -76,7 +74,6 @@ public class ProfileController implements Initializable {
 
         if(Database.getCurrentUser().getImage() != null ) {
             pfp.setImage(Database.getCurrentUser().getImage());
-            profileIcon.setImage(Database.getCurrentUser().getImage());
         }
     }
 
@@ -84,8 +81,7 @@ public class ProfileController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
             VBox vBox = fxmlLoader.load();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
+            borderPane.setBottom(vBox);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
@@ -174,5 +170,17 @@ public class ProfileController implements Initializable {
         Stage stage = (Stage)callingBtn.getScene().getWindow();
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.EDIT_PROFILE, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
+    }
+    private void loadMenuButton() {
+        try {
+            MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));
+            menuButton.getItems().clear();
+            menuButton.getItems().addAll(menuButton1.getItems());
+            menuButton.setGraphic(menuButton1.getGraphic());
+            menuButton.setTooltip(menuButton1.getTooltip());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+        }
     }
 }

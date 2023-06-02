@@ -437,3 +437,38 @@
     -fx-background-radius: 0;
     -fx-background-color: black;
 }
+
+.menu-button .arrow {
+    -fx-background-color: transparent;
+}
+
+#EditProfileDeletePhoto {
+    -fx-background-color: #f31515;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+#EditProfileDeletePhoto:hover{
+    -fx-background-color: #b70202;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+* {
+    MenuButtonIdentityColor: rgb(168, 227, 231)
+}
+
+#MenuButtonIdentity{
+    -fx-background-color: MenuButtonIdentityColor;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+}
+#MenuButtonIdentity:focused{
+    -fx-background-color: MenuButtonIdentityColor
+}
+#MenuButtonIdentity:focused .label{
+    -fx-text-fill: black;
+}

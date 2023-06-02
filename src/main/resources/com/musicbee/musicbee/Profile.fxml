@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
@@ -17,99 +18,86 @@
 <BorderPane id="bpList" fx:id="borderPane" maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.ProfileController">
    <top>
       <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="54.0" prefWidth="936.0" BorderPane.alignment="TOP_CENTER">
-         <children>
-            <JFXHamburger fx:id="myHamburger" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="66.0" stylesheets="@StyleSheet2.css" translateY="-5.0" HBox.hgrow="ALWAYS" />
-            <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" prefWidth="445.0" HBox.hgrow="ALWAYS" />
-            <ImageView fx:id="profileIcon" fitHeight="31.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-               <image>
-                  <Image url="@images/user.jpg" />
-               </image>
-            </ImageView>
-            <MenuButton fx:id="menuButton" mnemonicParsing="false" onAction="#onClickLogOut" text="MenuButton">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#onClickProfile" text="Profile" />
-                  <MenuItem mnemonicParsing="false" onAction="#onClickLogOut" text="Log out" />
-               </items>
-            </MenuButton>
-         </children>
+         <JFXHamburger fx:id="myHamburger" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="66.0" stylesheets="@StyleSheet2.css" translateY="-5.0" HBox.hgrow="ALWAYS" />
+         <HBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" prefWidth="445.0" HBox.hgrow="ALWAYS" />
+         <MenuButton fx:id="menuButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="6.0" prefWidth="6.0">
+            <items>
+               <MenuItem mnemonicParsing="false" onAction="#onClickProfile" text="Profile" />
+               <MenuItem mnemonicParsing="false" onAction="#onClickLogOut" text="Log out" />
+            </items>
+            <HBox.margin>
+               <Insets right="30.0" />
+            </HBox.margin>
+         </MenuButton>
       </HBox>
    </top>
    <left>
-      <JFXDrawer fx:id="drawer" defaultDrawerSize="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="566.0" prefWidth="13.0" resizableOnDrag="true" BorderPane.alignment="CENTER" />
+      <JFXDrawer fx:id="drawer" defaultDrawerSize="191.0" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="653.0" prefWidth="14.0" resizableOnDrag="true" BorderPane.alignment="CENTER" />
    </left>
-   <bottom>
-      <VBox fx:id="bottom" maxHeight="90.0" minHeight="90.0" prefHeight="90.0" BorderPane.alignment="CENTER" />
-   </bottom>
    <center>
       <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="476.0" spacing="10.0" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fx:id="pfp" fitHeight="150.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/user.jpg" />
-               </image>
-            </ImageView>
-            <Pane maxWidth="400.0" minWidth="400.0" prefHeight="27.0" prefWidth="400.0">
-               <children>
-                  <Label style="-fx-text-fill: white;" stylesheets="@Stylesheet.css" text="Username:">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="username" layoutX="134.0" style="-fx-text-fill: white;" text="Label">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane maxWidth="400.0" minWidth="400.0" prefWidth="400.0">
-               <children>
-                  <Label style="-fx-text-fill: white;" text="Name:">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="name" layoutX="134.0" layoutY="2.0" style="-fx-text-fill: white;" text="Label">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane maxWidth="400.0" minWidth="400.0" prefWidth="400.0">
-               <children>
-                  <Label style="-fx-text-fill: white;" text="Email:">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="email" layoutX="134.0" layoutY="5.0" style="-fx-text-fill: white;" text="Label">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane maxWidth="400.0" minWidth="400.0" prefWidth="400.0">
-               <children>
-                  <Label style="-fx-text-fill: white;" text="Date Joined:">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="dateJoined" layoutX="135.0" layoutY="3.0" style="-fx-text-fill: white;" text="Label">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Button mnemonicParsing="false" onAction="#onCLickEdit" prefHeight="25.0" prefWidth="142.0" text="Edit Profile" translateY="30.0">
+         <ImageView fx:id="pfp" fitHeight="150.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@images/user.jpg" />
+            <VBox.margin>
+               <Insets top="-50.0" />
+            </VBox.margin>
+         </ImageView>
+         <Pane maxWidth="400.0" minWidth="400.0" prefHeight="27.0" prefWidth="400.0">
+            <Label style="-fx-text-fill: white;" stylesheets="@Stylesheet.css" text="Username:">
                <font>
-                  <Font size="16.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
-            </Button>
-         </children>
+            </Label>
+            <Label fx:id="username" layoutX="134.0" style="-fx-text-fill: white;" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <VBox.margin>
+               <Insets top="50.0" />
+            </VBox.margin>
+         </Pane>
+         <Pane maxWidth="400.0" minWidth="400.0" prefWidth="400.0">
+            <Label style="-fx-text-fill: white;" text="Name:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="name" layoutX="134.0" layoutY="2.0" style="-fx-text-fill: white;" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </Pane>
+         <Pane maxWidth="400.0" minWidth="400.0" prefWidth="400.0">
+            <Label style="-fx-text-fill: white;" text="Email:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="email" layoutX="134.0" layoutY="5.0" style="-fx-text-fill: white;" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </Pane>
+         <Pane maxWidth="400.0" minWidth="400.0" prefWidth="400.0">
+            <Label style="-fx-text-fill: white;" text="Date Joined:">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="dateJoined" layoutX="135.0" layoutY="3.0" style="-fx-text-fill: white;" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </Pane>
+         <Button mnemonicParsing="false" onAction="#onCLickEdit" prefHeight="25.0" prefWidth="142.0" text="Edit Profile" translateY="30.0">
+            <font>
+               <Font size="16.0" />
+            </font>
+         </Button>
       </VBox>
    </center>
 </BorderPane>
