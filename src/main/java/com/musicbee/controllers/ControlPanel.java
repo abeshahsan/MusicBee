@@ -23,6 +23,10 @@ public class ControlPanel implements Initializable {
     private static final String UNDO_SHUFFLE_PLAYLIST = "Undo Shuffle Playlist";
     private static final int SHUFFLE_PLAYLIST_ICON_HEIGHT = 22;
     private static final int SHUFFLE_PLAYLIST_ICON_WIDTH  = 22;
+
+    private static final int NEXT_ICON_SIZE = 25;
+    private static final int PREV_ICON_SIZE = 25;
+    private static final int PLAY_ICON_SIZE = 25;
     @FXML
     private Button    shuffleIndicator;
     @FXML
@@ -184,8 +188,9 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.PLAY_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(PLAY_ICON_SIZE);
+            imageView.setFitHeight(PLAY_ICON_SIZE);
             playPauseButton.setGraphic(imageView);
             playPauseButton.getTooltip().setText("Play");
             playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
@@ -198,8 +203,9 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.PAUSE_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(PLAY_ICON_SIZE);
+            imageView.setFitHeight(PLAY_ICON_SIZE);
             playPauseButton.setGraphic(imageView);
             playPauseButton.getTooltip().setText("Pause");
             playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
@@ -212,8 +218,9 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.NEXT_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(NEXT_ICON_SIZE);
+            imageView.setFitHeight(NEXT_ICON_SIZE);
             nextButton.setGraphic(imageView);
             nextButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
@@ -225,8 +232,9 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.PREV_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(PREV_ICON_SIZE);
+            imageView.setFitHeight(PREV_ICON_SIZE);
             prevButton.setGraphic(imageView);
             prevButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
@@ -257,7 +265,7 @@ public class ControlPanel implements Initializable {
         } else if (volumeSlider.getMax() * 2 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() <= volumeSlider.getMax()) {
             volumeIndicatorIcon = FilePaths.VOLUME_INDICATOR_HIGH;
         }
-        volumeIndicator.setGraphic(setImageView(volumeIndicatorIcon, 35, 30));
+        volumeIndicator.setGraphic(setImageView(volumeIndicatorIcon, 20, 20));
     }
 
     public void update(String name, String artist) {

@@ -1,0 +1,20 @@
+
+#ControlPanel{
+    -fx-background-color: transparent;
+}
+#ControlPanelPlay{
+    /*-fx-background-color: #575555;*/
+    -fx-background-color: #38295a;
+}
+
+#Slider .colored-track{
+    -fx-background-color: #09e1ff;
+}
+#Slider .thumb{
+    -fx-background-color: #09e1ff;
+    -fx-background-radius: 8;
+}
+#Slider .animated-thumb{
+    -fx-background-color: #055d81;
+    -fx-text-fill: black;
+}

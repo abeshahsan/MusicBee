@@ -27,16 +27,16 @@ public class FilePaths {
     public static final String NEW_USER_VERIFY_OTP    = "/com/musicbee/musicbee/NewUserVerifyOTP.fxml";
     public static final String MENU_BUTTON            = "/com/musicbee/musicbee/MenuButton.fxml";
 
-    public static final String PLAY_ICON               = "src/main/resources/com/musicbee/musicbee/images/play.png";
-    public static final String PAUSE_ICON              = "src/main/resources/com/musicbee/musicbee/images/pause.png";
-    public static final String NEXT_ICON               = "src/main/resources/com/musicbee/musicbee/images/play-next.png";
-    public static final String PREV_ICON               = "src/main/resources/com/musicbee/musicbee/images/play-previous.png";
-    public static final String VOLUME_INDICATOR_LOW    = "src/main/resources/com/musicbee/musicbee/images/volume-low.png";
-    public static final String VOLUME_INDICATOR_MUTE   = "src/main/resources/com/musicbee/musicbee/images/volume-mute.png";
-    public static final String VOLUME_INDICATOR_MEDIUM = "src/main/resources/com/musicbee/musicbee/images/volume-medium.png";
-    public static final String VOLUME_INDICATOR_HIGH   = "src/main/resources/com/musicbee/musicbee/images/volume-high.png";
-    public static final String SHUFFLE_ON              = "src/main/resources/com/musicbee/musicbee/images/ShuffleOn.png";
-    public static final String SHUFFLE_OFF             = "src/main/resources/com/musicbee/musicbee/images/ShuffleOff.png";
+    public static final String PLAY_ICON               = "src/main/resources/com/musicbee/musicbee/images/play-cyan.png";
+    public static final String PAUSE_ICON              = "src/main/resources/com/musicbee/musicbee/images/pause-cyan.png";
+    public static final String NEXT_ICON               = "src/main/resources/com/musicbee/musicbee/images/next-cyan.png";
+    public static final String PREV_ICON               = "src/main/resources/com/musicbee/musicbee/images/prev-cyan.png";
+    public static final String VOLUME_INDICATOR_LOW    = "src/main/resources/com/musicbee/musicbee/images/volume-low-cyan.png";
+    public static final String VOLUME_INDICATOR_MUTE   = "src/main/resources/com/musicbee/musicbee/images/volume-mute-cyan.png";
+    public static final String VOLUME_INDICATOR_MEDIUM = "src/main/resources/com/musicbee/musicbee/images/volume-medium-cyan.png";
+    public static final String VOLUME_INDICATOR_HIGH   = "src/main/resources/com/musicbee/musicbee/images/volume-high-cyan.png";
+    public static final String SHUFFLE_ON              = "src/main/resources/com/musicbee/musicbee/images/shuffle-on-cyan.png";
+    public static final String SHUFFLE_OFF             = "src/main/resources/com/musicbee/musicbee/images/shuffle-off-cyan.png";
 
 
     public static final String STYLESHEET   = "/com/musicbee/musicbee/Stylesheet.css";

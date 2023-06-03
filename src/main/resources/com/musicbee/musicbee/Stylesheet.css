@@ -1,3 +1,6 @@
+
+@import url("ControlPanel.css");
+
 .root {
     /*-fx-background-image:url("Darkprofile.png");*/
 //-fx-background-color:  #007aa5;
@@ -220,6 +223,9 @@
     -fx-background-color:#2d5986;
     /*-fx-text-fill:red;-- doesnt work*/
 }
+.menu-item{
+    -fx-cursor: hand;
+}
 
 .menu-item:focused .label {
     -fx-text-fill: whitesmoke;
@@ -230,6 +236,10 @@
 }
 
 /*** Top-level menu itself (not selected / hovered) ***/
+.menu-button {
+    -fx-background-color: transparent;
+}
+
 .menu-button {
     -fx-background-color: transparent;
 }
@@ -319,6 +329,7 @@
     -fx-text-fill:  white; /*#000058;*/
     -fx-border-radius: 20;
     -fx-background-radius: 20;
+    -fx-cursor: hand;
 }
 
 .menu-item{
@@ -458,7 +469,7 @@
 }
 
 * {
-    MenuButtonIdentityColor: rgb(168, 227, 231)
+    MenuButtonIdentityColor: #0380b2
 }
 
 #MenuButtonIdentity{
