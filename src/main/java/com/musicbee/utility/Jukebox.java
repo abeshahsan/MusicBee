@@ -7,6 +7,7 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -77,6 +78,10 @@ public class Jukebox {
      * Holds the information of the currently playing song.
      */
     private static Song nowPlaying;
+
+    /**
+     * {@code true} if the shuffle mode is on.
+     */
     static boolean shuffleOn = false;
 
 
@@ -207,23 +212,31 @@ public class Jukebox {
      *
      * @param list - The input playlist
      */
-    public static void setCurrentList(ObservableList<Song> list) {
+    public static void setCurrentList(ObservableList<Song> list, int selectedSongIndex) {
         currentList.clear();
         currentList.addAll(list);
         shuffler.clear();
         for (int i = 0; i < currentList.size(); i++) {
             shuffler.add(i);
         }
+        setShuffle();
         shufflerIndex = 0;
+
+        // Find the index of the current song from the shuffler arrayList.
+        for (int i = 0; i < currentList.size(); i++) {
+            if(shuffler.get(i) == selectedSongIndex) {
+                Collections.swap(shuffler, 0, i);
+                break;
+            }
+        }
     }
 
     /**
-     * Sets the shuffle-mode of the playlist. If the input is true, it will shuffle the playlist.
-     *
-     * @param shuffle The shuffle command
+     * Shuffles of sorts the playlist based the shuffle-mode. If it's on, then it will shuffle, otherwise
+     * it keep the playlist as it is being displayed on the interface.
      */
-    public static void setShuffle(boolean shuffle) {
-        if (shuffle) {
+    public static void setShuffle() {
+        if (shuffleOn) {
             Jukebox.shuffle();
         } else {
             Jukebox.undoShuffle();

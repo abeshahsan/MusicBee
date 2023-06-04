@@ -167,9 +167,10 @@ public class PlaylistSceneController implements Initializable {
                     Jukebox.play();
 
                     State.setLastSongID(song.getID());
-                    Jukebox.setCurrentList(tableList);
+                    Jukebox.setCurrentList(tableList, row.getIndex());
 
                     controlPanel.update(song.getName(), song.getArtistName());
+                    table.getSelectionModel().clearSelection();
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());

@@ -294,7 +294,7 @@ public class ControlPanel implements Initializable {
             setShuffleIndicator(true, UNDO_SHUFFLE_PLAYLIST,
                     setImageView(FilePaths.SHUFFLE_ON, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
         }
-        Jukebox.setShuffle(Jukebox.isShuffleOn());
+        Jukebox.setShuffle();
     }
 
     private void setShuffleIndicator(boolean mode, String tooltipString, ImageView imageView) {
