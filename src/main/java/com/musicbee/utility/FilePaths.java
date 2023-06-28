@@ -39,6 +39,5 @@ public class FilePaths {
     public static final String SHUFFLE_OFF             = "src/main/resources/com/musicbee/musicbee/images/shuffle-off-cyan.png";
 
 
-    public static final String STYLESHEET   = "/com/musicbee/musicbee/Stylesheet.css";
-    public static final String STYLESHEET_3 = "/com/musicbee/musicbee/Stylesheet3.css";
+    public static final String STYLESHEET   = "/com/musicbee/musicbee/Stylesheets/Stylesheet.css";
 }

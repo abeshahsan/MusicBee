@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
@@ -101,8 +102,8 @@ public class HomeController implements Initializable {
     private ControlPanel loadControlPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
-            VBox vBox = fxmlLoader.load();
-            borderPane.setBottom(vBox);
+            Parent bottom = fxmlLoader.load();
+            borderPane.setBottom(bottom);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
@@ -167,7 +168,6 @@ public class HomeController implements Initializable {
                     State.setLastSongID(song.getID());
                     Jukebox.setCurrentList(tableList, row.getIndex());
                     controlPanel.update(song.getName(), song.getArtistName());
-                    table.getSelectionModel().clearSelection();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

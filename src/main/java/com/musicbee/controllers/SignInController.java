@@ -83,7 +83,7 @@ public class SignInController {
         Node callingBtn = (Node) event.getSource();
         Stage stage = (Stage) callingBtn.getScene().getWindow();
 
-        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.HOME, FilePaths.STYLESHEET, FilePaths.STYLESHEET_3);
+        SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.HOME, FilePaths.STYLESHEET);
 
         HomeController bl = sceneSwitcher.getController();
         ArrayList<Song> songs = Database.getAllSongs();

@@ -116,6 +116,7 @@ public class Sidebar implements Initializable {
                     }
             );
         }
+        lc.getListView().getSelectionModel().clearSelection();
     }
 
     @FXML

@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<MenuButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" ellipsisString="" maxHeight="-Infinity"
-            maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="11.0"
-            prefWidth="11.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.musicbee.controllers.MenuButtonController">
+
+<MenuButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" ellipsisString="" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="146.0" prefWidth="169.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.MenuButtonController">
     <items>
-        <MenuItem id="MenuButtonIdentity" fx:id="identity" mnemonicParsing="false"/>
-        <MenuItem mnemonicParsing="false" onAction="#onClickProfile" text="Profile"/>
-        <MenuItem mnemonicParsing="false" onAction="#onClickLogOut" text="Logout"/>
+        <MenuItem id="MenuButtonIdentity" fx:id="identity" mnemonicParsing="false" />
+        <MenuItem mnemonicParsing="false" onAction="#onClickProfile" text="Profile" />
+        <MenuItem mnemonicParsing="false" onAction="#onClickLogOut" text="Logout" />
     </items>
     <graphic>
-        <ImageView fx:id="profileIcon" fitHeight="22.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@images/user.jpg"/>
+        <ImageView fx:id="profileIcon" fitHeight="22.0" fitWidth="197.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@images/user.jpg" />
         </ImageView>
     </graphic>
     <tooltip>
-        <Tooltip id="MenuButtonTooltip" fx:id="tooltip"/>
+        <Tooltip id="MenuButtonTooltip" fx:id="tooltip" />
     </tooltip>
 </MenuButton>

@@ -8,6 +8,7 @@ import com.musicbee.utility.State;
 import com.musicbee.utility.Tools;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -194,6 +195,10 @@ public class ControlPanel implements Initializable {
             playPauseButton.setGraphic(imageView);
             playPauseButton.getTooltip().setText("Play");
             playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
+            Point2D p = playPauseButton.localToScene(0.0, 0.0);
+            playPauseButton.getTooltip().show(playPauseButton,
+                    p.getX() + playPauseButton.getScene().getX() + playPauseButton.getScene().getWindow().getX(),
+                    p.getY() + playPauseButton.getScene().getY() + playPauseButton.getScene().getWindow().getY());
         } catch (Exception ignore) {
             playPauseButton.setText("Play");
         }

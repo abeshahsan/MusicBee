@@ -1,5 +1,8 @@
 
 #ControlPanel{
+    -fx-background-color: #1B1D3B
+}
+#ControlPanelInvisible{
     -fx-background-color: transparent;
 }
 #ControlPanelPlay{
@@ -17,4 +20,15 @@
 #Slider .animated-thumb{
     -fx-background-color: #055d81;
     -fx-text-fill: black;
+}
+
+#songNameLabel {
+    -fx-font-size: 14;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+#artistNameLabel {
+    -fx-font-size: 10;
+    -fx-text-fill: white;
 }
