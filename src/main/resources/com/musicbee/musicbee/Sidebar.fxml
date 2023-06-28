@@ -11,35 +11,45 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="Sidebar" alignment="CENTER" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="191.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.Sidebar">
-   <children>
-      <ImageView fx:id="pfpSide" fitHeight="150.0" fitWidth="179.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@images/user.jpg" />
-         </image></ImageView>
-      <Label fx:id="usernameS" alignment="CENTER" prefHeight="36.0" prefWidth="190.0" stylesheets="@stylesheet3.css" underline="true">
-         <font>
+<VBox id="Sidebar" alignment="CENTER" focusTraversable="true" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="542.0" prefWidth="191.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.Sidebar">
+    <ImageView fx:id="pfpSide" fitHeight="151.0" fitWidth="152.0" pickOnBounds="true" preserveRatio="true">
+        <VBox.margin>
+            <Insets top="15.0" />
+        </VBox.margin>
+        <Image url="@images/user.jpg" />
+    </ImageView>
+    <Label id="SideBarUsername" fx:id="usernameS" alignment="CENTER" prefHeight="36.0" prefWidth="190.0" underline="true">
+        <font>
             <Font name="System Bold Italic" size="16.0" />
-         </font>
-      </Label>
-      <JFXButton id="vbHome" onAction="#OnClickHome" prefHeight="42.0" prefWidth="193.0" stylesheets="@stylesheet3.css" text="Home">
-         <font>
+        </font>
+    </Label>
+    <JFXButton id="SideBarButtons" onAction="#OnClickHome" prefHeight="42.0" prefWidth="193.0" text="Home">
+        <font>
             <Font size="16.0" />
-         </font></JFXButton>
-      <JFXButton id="vbCP" onAction="#OnClickCreatePlaylist" prefHeight="42.0" prefWidth="191.0" stylesheets="@stylesheet3.css" text="Create Playlist">
-         <font>
+        </font>
+        <VBox.margin>
+            <Insets top="15.0" />
+        </VBox.margin>
+    </JFXButton>
+    <JFXButton id="SideBarButtons" onAction="#OnClickCreatePlaylist" prefHeight="42.0" prefWidth="191.0" text="Create Playlist">
+        <font>
             <Font size="16.0" />
-         </font></JFXButton>
-      <TextField fx:id="create" onAction="#OnEnteringPlaylistName" prefHeight="35.0" prefWidth="191.0" visible="false" />
-      <TitledPane alignment="BASELINE_CENTER" animated="false" expanded="false" prefHeight="240.0" prefWidth="167.0" stylesheets="@stylesheet3.css" text="Playlists">
-         <content>
-            <ListView fx:id="list" prefHeight="200.0" prefWidth="200.0" stylesheets="@stylesheet3.css" />
-         </content>
-         <font>
+        </font>
+        <VBox.margin>
+            <Insets top="15.0" />
+        </VBox.margin>
+    </JFXButton>
+    <TextField fx:id="create" onAction="#OnEnteringPlaylistName" prefHeight="35.0" prefWidth="191.0" visible="false" />
+    <TitledPane alignment="BASELINE_CENTER" animated="false" expanded="false" prefHeight="240.0" prefWidth="167.0" text="Playlists">
+        <font>
             <Font size="16.0" />
-         </font>
-         <opaqueInsets>
+        </font>
+        <opaqueInsets>
             <Insets />
-         </opaqueInsets></TitledPane>
-   </children>
+        </opaqueInsets>
+        <VBox.margin>
+            <Insets top="15.0" />
+        </VBox.margin>
+        <ListView fx:id="list" prefHeight="200.0" prefWidth="200.0" stylesheets="@Stylesheets/Sidebar.css" />
+    </TitledPane>
 </VBox>

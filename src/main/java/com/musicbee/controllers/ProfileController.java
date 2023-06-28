@@ -14,6 +14,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -26,7 +27,9 @@ import java.util.ResourceBundle;
 public class ProfileController implements Initializable {
 
     @FXML
-    private Label name;
+    private BorderPane borderPane;
+    @FXML
+    private Label      name;
 
     @FXML
     private Label dateJoined;
@@ -39,8 +42,6 @@ public class ProfileController implements Initializable {
 
     @FXML
     private ImageView pfp;
-    @FXML
-    private ImageView profileIcon;
 
     @FXML
     private MenuButton menuButton;
@@ -51,17 +52,14 @@ public class ProfileController implements Initializable {
     @FXML
     private Label username;
 
-    @FXML
-    private VBox bottom;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         menuButton.setText(Database.getCurrentUser().getUsername());
 
         Tools.clipImageview(pfp, 140);
-        Tools.clipImageview(profileIcon, 25);
 
+        loadMenuButton();
         initInfo();
         loadSideBar();
         setHamburger();
@@ -74,9 +72,8 @@ public class ProfileController implements Initializable {
         email.setText(Database.getCurrentUser().getEmail());
         dateJoined.setText(Database.getCurrentUser().getJoinDate().toString());
 
-        if(Database.getCurrentUser().getImage() != null ) {
+        if (Database.getCurrentUser().getImage() != null) {
             pfp.setImage(Database.getCurrentUser().getImage());
-            profileIcon.setImage(Database.getCurrentUser().getImage());
         }
     }
 
@@ -84,8 +81,7 @@ public class ProfileController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
             VBox vBox = fxmlLoader.load();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
+            borderPane.setBottom(vBox);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
@@ -93,14 +89,11 @@ public class ProfileController implements Initializable {
     }
 
     private void setHamburger() {
-        HamburgerBasicCloseTransition transition= new HamburgerBasicCloseTransition(myHamburger);
-        if(State.getBurgerState()==-1)
-        {
+        HamburgerBasicCloseTransition transition = new HamburgerBasicCloseTransition(myHamburger);
+        if (State.getBurgerState() == -1) {
             transition.setRate(-1);
             drawer.close();
-        }
-        else
-        {
+        } else {
             transition.setRate(1);
             drawer.open();
         }
@@ -109,28 +102,23 @@ public class ProfileController implements Initializable {
     }
 
     private void addHamburgerEventHandler(HamburgerBasicCloseTransition transition) {
-        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
-            transition.setRate(transition.getRate()*-1);
-            if(transition.getRate()==-1)
-            {
+        myHamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
+            transition.setRate(transition.getRate() * -1);
+            if (transition.getRate() == -1) {
                 State.setBurgerState(-1);
-            }
-            else {
+            } else {
                 State.setBurgerState(1);
             }
             transition.play();
-            if(drawer.isOpened() || drawer.isOpening())
-            {
+            if (drawer.isOpened() || drawer.isOpening()) {
                 drawer.close();
-            }
-            else drawer.open();
+            } else drawer.open();
         });
     }
 
     private void loadSideBar() {
-        try
-        {
-            VBox vbox= FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
+        try {
+            VBox vbox = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -148,8 +136,8 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void onClickLogOut(ActionEvent event) throws IOException {
-        if(Jukebox.getMediaPlayer() != null) {
-            Jukebox.clear();
+        if (Jukebox.getMediaPlayer() != null) {
+            Jukebox.clearMediaPlayer();
         }
 
         try {
@@ -170,9 +158,22 @@ public class ProfileController implements Initializable {
 
     @FXML
     private void onCLickEdit(ActionEvent event) throws IOException {
-        Node callingBtn=(Node)event.getSource();
-        Stage stage = (Stage)callingBtn.getScene().getWindow();
+        Node callingBtn = (Node) event.getSource();
+        Stage stage = (Stage) callingBtn.getScene().getWindow();
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.EDIT_PROFILE, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
+    }
+
+    private void loadMenuButton() {
+        try {
+            MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));
+            menuButton.getItems().clear();
+            menuButton.getItems().addAll(menuButton1.getItems());
+            menuButton.setGraphic(menuButton1.getGraphic());
+            menuButton.setTooltip(menuButton1.getTooltip());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+        }
     }
 }

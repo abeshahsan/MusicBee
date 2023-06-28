@@ -13,11 +13,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -31,45 +32,34 @@ import java.util.ResourceBundle;
 
 public class PlaylistSceneController implements Initializable {
 
+    private final ArrayList<Song> allSongs      = new ArrayList<>();
+    private final ArrayList<Song> filteredSongs = new ArrayList<>();
+    private final ContextMenu     contextMenu   = new ContextMenu();
+    ObservableList<Song> tableList = FXCollections.observableArrayList();
     @FXML
-    private ImageView profileIcon;
+    private BorderPane borderPane;
 
     @FXML
-    private TableView<Song> table = new TableView<>();
-
+    private TableView<Song>           table = new TableView<>();
     @FXML
     private TableColumn<Song, String> Title;
-
     @FXML
     private TableColumn<Song, String> Artist;
-
     @FXML
     private TableColumn<Song, String> Album;
     @FXML
     private TableColumn<Song, String> Length;
-
     @FXML
-    private JFXHamburger myHamburger;
+    private JFXHamburger              myHamburger;
     @FXML
-    private JFXDrawer    drawer;
-
+    private JFXDrawer                 drawer;
     @FXML
-    private TextField searchBar;
-
-    private ControlPanel controlPanel;
-
+    private TextField                 searchBar;
+    private ControlPanel              controlPanel;
     @FXML
-    private MenuButton menuButton;
+    private MenuButton                menuButton;
     @FXML
-    private VBox       bottom;
-
-    private final ArrayList<Song> allSongs      = new ArrayList<>();
-    private final ArrayList<Song> filteredSongs = new ArrayList<>();
-    private final ContextMenu     contextMenu   = new ContextMenu();
-
-    ObservableList<Song> tableList = FXCollections.observableArrayList();
-    @FXML
-    private Label name;
+    private Label                     name;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -77,13 +67,8 @@ public class PlaylistSceneController implements Initializable {
         MenuItem item1 = new MenuItem("Remove song from playlist");
         item1.setId("1");
         contextMenu.getItems().add(item1);
-        menuButton.setText(Database.getCurrentUser().getUsername());
-        if (Database.getCurrentUser().getImage() != null) {
-            profileIcon.setImage(Database.getCurrentUser().getImage());
-        }
 
-        Tools.clipImageview(profileIcon, 25);
-
+        loadMenuButton();
         prepareTableview();
         loadSideBar();
         setHamburger();
@@ -93,14 +78,12 @@ public class PlaylistSceneController implements Initializable {
     private ControlPanel loadControlPanel() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(FilePaths.CONTROL_PANEL));
         try {
-            VBox vBox = fxmlLoader.load();
-            bottom.getChildren().clear();
-            bottom.getChildren().addAll(vBox.getChildren());
+            Parent bottom = fxmlLoader.load();
+            borderPane.setBottom(bottom);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
-
         return fxmlLoader.getController();
     }
 
@@ -178,14 +161,14 @@ public class PlaylistSceneController implements Initializable {
                     Song song = tableList.get(row.getIndex());
 
                     Jukebox.setCurrentSongIndex(row.getIndex());
-                    Jukebox.setNowPlaying(song);
+                    Jukebox.setSong(song);
 
                     Jukebox.setSong(song);
                     Jukebox.prepare();
                     Jukebox.play();
 
                     State.setLastSongID(song.getID());
-                    Jukebox.setCurrentList(tableList);
+                    Jukebox.setCurrentList(tableList, row.getIndex());
 
                     controlPanel.update(song.getName(), song.getArtistName());
                 }
@@ -250,7 +233,7 @@ public class PlaylistSceneController implements Initializable {
         MediaPlayer player = Jukebox.getMediaPlayer();
 
         if (player != null) {
-            Jukebox.clear();
+            Jukebox.clearMediaPlayer();
         }
 
         Database.savePlaybackPosition();
@@ -261,5 +244,18 @@ public class PlaylistSceneController implements Initializable {
 
         SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.SIGN_IN, FilePaths.STYLESHEET);
         sceneSwitcher.switchNow(stage);
+    }
+
+    private void loadMenuButton() {
+        try {
+            MenuButton menuButton1 = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.MENU_BUTTON)));
+            menuButton.getItems().clear();
+            menuButton.getItems().addAll(menuButton1.getItems());
+            menuButton.setGraphic(menuButton1.getGraphic());
+            menuButton.setTooltip(menuButton1.getTooltip());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+        }
     }
 }

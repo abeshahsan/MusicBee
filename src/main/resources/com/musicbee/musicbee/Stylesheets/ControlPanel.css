@@ -1,0 +1,34 @@
+
+#ControlPanel{
+    -fx-background-color: #1B1D3B
+}
+#ControlPanelInvisible{
+    -fx-background-color: transparent;
+}
+#ControlPanelPlay{
+    /*-fx-background-color: #575555;*/
+    -fx-background-color: #38295a;
+}
+
+#Slider .colored-track{
+    -fx-background-color: #09e1ff;
+}
+#Slider .thumb{
+    -fx-background-color: #09e1ff;
+    -fx-background-radius: 8;
+}
+#Slider .animated-thumb{
+    -fx-background-color: #055d81;
+    -fx-text-fill: black;
+}
+
+#songNameLabel {
+    -fx-font-size: 14;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+#artistNameLabel {
+    -fx-font-size: 10;
+    -fx-text-fill: white;
+}

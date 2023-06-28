@@ -8,6 +8,7 @@ import com.musicbee.utility.State;
 import com.musicbee.utility.Tools;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -19,6 +20,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ControlPanel implements Initializable {
+    private static final String SHUFFLE_PLAYLIST      = "Shuffle Playlist";
+    private static final String UNDO_SHUFFLE_PLAYLIST = "Undo Shuffle Playlist";
+    private static final int SHUFFLE_PLAYLIST_ICON_HEIGHT = 22;
+    private static final int SHUFFLE_PLAYLIST_ICON_WIDTH  = 22;
+
+    private static final int NEXT_ICON_SIZE = 25;
+    private static final int PREV_ICON_SIZE = 25;
+    private static final int PLAY_ICON_SIZE = 25;
     @FXML
     private Button    shuffleIndicator;
     @FXML
@@ -72,7 +81,8 @@ public class ControlPanel implements Initializable {
         setPrevButton();
         setNextButton();
         setTimeSliderEventHandlers();
-        toggleShuffle();
+        setShuffleIndicator(false, SHUFFLE_PLAYLIST,
+                setImageView(FilePaths.SHUFFLE_OFF, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
     }
 
     private void setVolumeSlider() {
@@ -179,11 +189,16 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.PLAY_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(PLAY_ICON_SIZE);
+            imageView.setFitHeight(PLAY_ICON_SIZE);
             playPauseButton.setGraphic(imageView);
             playPauseButton.getTooltip().setText("Play");
             playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
+            Point2D p = playPauseButton.localToScene(0.0, 0.0);
+            playPauseButton.getTooltip().show(playPauseButton,
+                    p.getX() + playPauseButton.getScene().getX() + playPauseButton.getScene().getWindow().getX(),
+                    p.getY() + playPauseButton.getScene().getY() + playPauseButton.getScene().getWindow().getY());
         } catch (Exception ignore) {
             playPauseButton.setText("Play");
         }
@@ -193,8 +208,9 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.PAUSE_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(PLAY_ICON_SIZE);
+            imageView.setFitHeight(PLAY_ICON_SIZE);
             playPauseButton.setGraphic(imageView);
             playPauseButton.getTooltip().setText("Pause");
             playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
@@ -207,8 +223,9 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.NEXT_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(NEXT_ICON_SIZE);
+            imageView.setFitHeight(NEXT_ICON_SIZE);
             nextButton.setGraphic(imageView);
             nextButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
@@ -220,8 +237,9 @@ public class ControlPanel implements Initializable {
         try {
             File file = new File(FilePaths.PREV_ICON);
             ImageView imageView = new ImageView(file.getAbsolutePath());
-            imageView.setFitWidth(15);
-            imageView.setFitHeight(20);
+            imageView.setPreserveRatio(false);
+            imageView.setFitWidth(PREV_ICON_SIZE);
+            imageView.setFitHeight(PREV_ICON_SIZE);
             prevButton.setGraphic(imageView);
             prevButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
@@ -252,11 +270,7 @@ public class ControlPanel implements Initializable {
         } else if (volumeSlider.getMax() * 2 / 3 <= volumeSlider.getValue() && volumeSlider.getValue() <= volumeSlider.getMax()) {
             volumeIndicatorIcon = FilePaths.VOLUME_INDICATOR_HIGH;
         }
-        File file = new File(volumeIndicatorIcon);
-        ImageView imageView = new ImageView(file.getAbsolutePath());
-        imageView.setFitWidth(30);
-        imageView.setFitHeight(35);
-        volumeIndicator.setGraphic(imageView);
+        volumeIndicator.setGraphic(setImageView(volumeIndicatorIcon, 20, 20));
     }
 
     public void update(String name, String artist) {
@@ -278,15 +292,29 @@ public class ControlPanel implements Initializable {
 
     @FXML
     private void toggleShuffle() {
-        if(State.isShuffleOn()) {
-            State.setShuffleOn(false);
-            shuffleIndicator.setStyle("-fx-background-color: lightskyblue");
-            shuffleIndicator.getTooltip().setText("Shuffle Playlist");
+        if (Jukebox.isShuffleOn()) {
+            setShuffleIndicator(false, SHUFFLE_PLAYLIST,
+                    setImageView(FilePaths.SHUFFLE_OFF, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
         } else {
-            State.setShuffleOn(true);
-            shuffleIndicator.setStyle("-fx-background-color: blue");
-            shuffleIndicator.getTooltip().setText("Undo Shuffle Playlist");
+            setShuffleIndicator(true, UNDO_SHUFFLE_PLAYLIST,
+                    setImageView(FilePaths.SHUFFLE_ON, SHUFFLE_PLAYLIST_ICON_HEIGHT, SHUFFLE_PLAYLIST_ICON_WIDTH));
         }
-        Jukebox.setShuffle(State.isShuffleOn());
+        Jukebox.setShuffle();
+    }
+
+    private void setShuffleIndicator(boolean mode, String tooltipString, ImageView imageView) {
+        Jukebox.setShuffleOn(mode);
+        shuffleIndicator.setGraphic(imageView);
+        shuffleIndicator.getTooltip().setText(tooltipString);
+        shuffleIndicator.getTooltip().setShowDelay(Duration.millis(100));
+//        shuffleIndicator.setStyle("-fx-background-color: transparent");
+    }
+
+    private ImageView setImageView(String filepath, int height, int width) {
+        ImageView imageView = new ImageView(new File(filepath).getAbsolutePath());
+        imageView.setPreserveRatio(false);
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
+        return imageView;
     }
 }

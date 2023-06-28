@@ -1,0 +1,110 @@
+
+@import url("ControlPanel.css");
+@import url("TableViews.css");
+@import url("MenuButton.css");
+@import url("TitledPane.css");
+@import url("Sidebar.css");
+@import url("HamBurger.css");
+
+.root {
+//-fx-background-color:  #007aa5;
+//-fx-background-color:   #000058;
+    -fx-background-repeat:no-repeat;
+    -fx-background-size:stretch;
+}
+
+.button:hover {
+    -fx-background-color:  white;
+    -fx-text-fill:  #000058;
+}
+.button:pressed {
+    -fx-background-color: lightblue;
+    -fx-text-fill: black;
+}
+
+.toggle-button {
+    -fx-background-color: #000058;    /*lightblue;*/
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.label {
+    -fx-text-fill: black;
+}
+
+.tooltip {
+    -fx-background-radius: 0;
+    -fx-background-color: black;
+}
+
+.border-pane > .viewport {
+    -fx-background-image:url("../images/DarkProfile.png");
+    -fx-background-repeat:no-repeat;
+    -fx-background-size:stretch;
+}
+
+#BorderPane{
+    -fx-background-image: url("../images/DarkProfile.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+}
+
+#MusicBeePhoto{
+    -fx-background-image: url("../images/musicIcon.jpg");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+}
+
+#SignInForgotPassButton{
+    -fx-background-color: transparent;
+}
+
+#OTP_ResendButton{
+    -fx-background-color: transparent;
+}
+
+#GoBackHomeButton{
+    -fx-background-color: transparent;
+}
+
+#SignUpButton{
+    -fx-background-color: transparent;
+}
+#SignUpLogInButton{
+    -fx-background-color: transparent;
+}
+#welcome {
+    -fx-background-color: transparent;
+}
+
+#namePass{
+    -fx-background-color: transparent;
+}
+#notMember{
+    -fx-background-color: transparent;
+}
+
+.button {
+    -fx-background-color: #e6e6ff;
+    -fx-text-fill: black;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+
+#EditProfileDeletePhoto {
+    -fx-background-color: #f31515;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+#EditProfileDeletePhoto:hover{
+    -fx-background-color: #b70202;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}

@@ -10,65 +10,73 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="btmPho" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="123.0" prefWidth="850.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.ControlPanel">
-   <children>
-      <HBox id="bHb1" alignment="CENTER" prefHeight="68.0" prefWidth="850.0" stylesheets="@Stylesheet.css">
-         <children>
-            <AnchorPane prefHeight="70.0" prefWidth="846.0">
-               <children>
-                  <HBox layoutX="234.0" layoutY="20.0" prefHeight="18.0" prefWidth="418.0">
-                     <children>
-                        <Label fx:id="elapsed" style="-fx-text-fill: white; -fx-font-weight: bold;" text="00:00" />
-                        <JFXSlider fx:id="timeSlider" prefHeight="14.0" prefWidth="350.0" stylesheets="@Stylesheet.css" />
-                        <Label fx:id="totalDuration" style="-fx-text-fill: white; -fx-font-weight: bold;" text="00:00" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" layoutX="714.0" layoutY="20.0" spacing="2.0">
-                     <children>
-                        <Button fx:id="volumeIndicator" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleMute" prefHeight="20.0" prefWidth="20.0" text="b" />
-                        <JFXSlider fx:id="volumeSlider" blockIncrement="1.0" prefHeight="14.0" prefWidth="103.0" />
-                     </children>
-                  </HBox>
-                  <Label id="cpSong" fx:id="songNameLabel" layoutX="14.0" layoutY="20.0" prefHeight="18.0" prefWidth="165.0" style="-fx-text-fill: white;" text="Label" wrapText="true">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font></Label>
-                  <Label id="cpArtist" fx:id="artistNameLabel" layoutX="14.0" layoutY="36.0" prefHeight="18.0" prefWidth="165.0" style="-fx-text-fill: white;" text="Label" wrapText="true" />
-                  <Button fx:id="shuffleIndicator" contentDisplay="GRAPHIC_ONLY" layoutX="185.0" layoutY="19.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleShuffle" prefHeight="20.0" prefWidth="31.0" text="b">
-                     <tooltip>
-                        <Tooltip text="Empty Tooltip" />
-                     </tooltip></Button>
-               </children>
-            </AnchorPane>
-         </children>
-      </HBox>
-      <HBox id="bHb2" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="101.0" prefWidth="850.0" spacing="30.0" stylesheets="@Stylesheet.css">
-         <children>
-            <Button fx:id="prevButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onClickPrev" prefHeight="40.0" prefWidth="40.0">
-               <tooltip>
-                  <Tooltip text="Previous" />
-               </tooltip>
-               <HBox.margin>
-                  <Insets top="-40.0" />
-               </HBox.margin>
+<VBox id="ControlPanel" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="134.0" prefWidth="936.0" stylesheets="@Stylesheets/ControlPanel.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.ControlPanel">
+    <HBox alignment="CENTER" prefHeight="68.0" prefWidth="850.0" stylesheets="@Stylesheets/Stylesheet.css">
+        <AnchorPane prefHeight="71.0" prefWidth="846.0">
+            <HBox layoutX="234.0" layoutY="20.0" prefHeight="18.0" prefWidth="418.0">
+                <Label fx:id="elapsed" style="-fx-text-fill: white; -fx-font-weight: bold;" text="00:00">
+                    <HBox.margin>
+                        <Insets top="5.0" />
+                    </HBox.margin></Label>
+                <JFXSlider id="Slider" fx:id="timeSlider" prefHeight="14.0" prefWidth="350.0" stylesheets="@Stylesheets/Stylesheet.css">
+                    <HBox.margin>
+                        <Insets top="5.0" />
+                    </HBox.margin></JFXSlider>
+                <Label fx:id="totalDuration" style="-fx-text-fill: white; -fx-font-weight: bold;" text="00:00">
+                    <HBox.margin>
+                        <Insets top="5.0" />
+                    </HBox.margin></Label>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="714.0" layoutY="20.0" spacing="10.0">
+                <Button id="ControlPanelInvisible" fx:id="volumeIndicator" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleMute" prefHeight="6.0" prefWidth="6.0">
+                    <HBox.margin>
+                        <Insets top="5.0" />
+                    </HBox.margin></Button>
+                <JFXSlider id="Slider" fx:id="volumeSlider" blockIncrement="1.0" prefHeight="14.0" prefWidth="103.0">
+                    <HBox.margin>
+                        <Insets top="5.0" />
+                    </HBox.margin></JFXSlider>
+            </HBox>
+            <Label id="cpSong" fx:id="songNameLabel" layoutX="2.0" layoutY="24.0" prefHeight="18.0" prefWidth="165.0" style="-fx-text-fill: white;" text="Label" wrapText="true">
+                <font>
+                    <Font name="System Bold" size="18.0" />
+                </font>
+            </Label>
+            <Label id="cpArtist" fx:id="artistNameLabel" layoutX="2.0" layoutY="42.0" prefHeight="18.0" prefWidth="165.0" style="-fx-text-fill: white;" text="Label" wrapText="true">
+                <font>
+                    <Font size="15.0" />
+                </font></Label>
+            <Button id="ControlPanelInvisible" fx:id="shuffleIndicator" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" ellipsisString="" layoutX="180.0" layoutY="30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#toggleShuffle" prefHeight="6.0" prefWidth="6.0">
+                <tooltip>
+                    <Tooltip text="Empty Tooltip" />
+                </tooltip>
             </Button>
-            <Button fx:id="playPauseButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onClickPlayPause" prefHeight="40.0" prefWidth="40.0" stylesheets="@Stylesheet.css">
-               <tooltip>
-                  <Tooltip anchorX="100.0" contentDisplay="CENTER" text="Play/Pause" textAlignment="CENTER" x="100.0" />
-               </tooltip>
-               <HBox.margin>
-                  <Insets top="-40.0" />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="nextButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onClickNext" prefHeight="40.0" prefWidth="40.0">
-               <tooltip>
-                  <Tooltip text="Next" />
-               </tooltip>
-               <HBox.margin>
-                  <Insets top="-40.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-   </children>
+        </AnchorPane>
+    </HBox>
+    <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="101.0" prefWidth="850.0" spacing="40.0" stylesheets="@Stylesheets/Stylesheet.css">
+        <Button id="ControlPanelPlay" fx:id="prevButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickPrev" prefHeight="40.0" prefWidth="40.0">
+            <tooltip>
+                <Tooltip text="Previous" />
+            </tooltip>
+            <HBox.margin>
+                <Insets top="-40.0" />
+            </HBox.margin>
+        </Button>
+        <Button id="ControlPanelPlay" fx:id="playPauseButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#onClickPlayPause" prefHeight="40.0" prefWidth="40.0" stylesheets="@Stylesheets/Stylesheet.css">
+            <tooltip>
+                <Tooltip anchorX="100.0" contentDisplay="CENTER" text="Play/Pause" textAlignment="CENTER" x="100.0" />
+            </tooltip>
+            <HBox.margin>
+                <Insets top="-40.0" />
+            </HBox.margin>
+        </Button>
+        <Button id="ControlPanelPlay" fx:id="nextButton" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onClickNext" prefHeight="40.0" prefWidth="40.0">
+            <tooltip>
+                <Tooltip text="Next" />
+            </tooltip>
+            <HBox.margin>
+                <Insets top="-40.0" />
+            </HBox.margin>
+        </Button>
+    </HBox>
 </VBox>

@@ -21,8 +21,6 @@ public class Main extends Application {
         String css = Objects.requireNonNull(getClass().getResource(FilePaths.STYLESHEET)).toExternalForm();
         scene.getStylesheets().add(css);
         stage.setScene(scene);
-        stage.setMinWidth(400);
-        stage.setMinHeight(300);
         stage.show();
     }
 

@@ -1,4 +1,5 @@
 package com.musicbee.controllers;
+
 import com.musicbee.entities.Playlist;
 import com.musicbee.entities.Song;
 import com.musicbee.utility.Database;
@@ -31,55 +32,55 @@ import java.util.ResourceBundle;
 public class Sidebar implements Initializable {
 
     @FXML
-    private ImageView pfpSide;
-
-    @FXML
-    private Label usernameS;
-    @FXML
     ListView<Playlist> list = new ListView<>();
-    ArrayList<Playlist> playlists=new ArrayList<>();
-    ObservableList<Playlist> tableList = FXCollections.observableArrayList();
-    ContextMenu contextMenu=new ContextMenu();
+    ArrayList<Playlist>      playlists   = new ArrayList<>();
+    ObservableList<Playlist> tableList   = FXCollections.observableArrayList();
+    ContextMenu              contextMenu = new ContextMenu();
     @FXML
-    TextField create=new TextField();
+    TextField create = new TextField();
+    @FXML
+    private ImageView pfpSide;
+    @FXML
+    private Label     usernameS;
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        MenuItem item1=new MenuItem("Delete");
+        MenuItem item1 = new MenuItem("Delete");
         contextMenu.getItems().add(item1);
         EventHandler<MouseEvent> onClick = this::handle;
         create.setVisible(false);
-        playlists= Database.getAllPlaylists();
+        playlists = Database.getAllPlaylists();
         tableList.addAll(playlists);
         list.setItems(tableList);
-        list.setCellFactory((ListView<Playlist> lv) ->{
-                ListCell <Playlist> cell = new ListCell<>() {
-                    @Override
-                    public void updateItem(Playlist playlist, boolean empty) {
-                        super.updateItem(playlist, empty);
-                        if (empty) {
-                            setText(null);
-                        } else {
-                            setText(playlist.getName());
-                        }
+        list.setCellFactory((ListView<Playlist> lv) -> {
+            ListCell<Playlist> cell = new ListCell<>() {
+                @Override
+                public void updateItem(Playlist playlist, boolean empty) {
+                    super.updateItem(playlist, empty);
+                    if (empty) {
+                        setText(null);
+                    } else {
+                        setText(playlist.getName());
                     }
-                };
-                 cell.setOnMouseClicked(onClick);
+                }
+            };
+            cell.setOnMouseClicked(onClick);
 
-                return cell;
-         });
+            return cell;
+        });
         ImageView defaultImage = new ImageView(pfpSide.getImage());
 
-        if(Database.getCurrentUser().getImage() != null) {
+        if (Database.getCurrentUser().getImage() != null) {
             pfpSide.setImage(Database.getCurrentUser().getImage());
         }
         usernameS.setText(Database.getCurrentUser().getUsername());
 
         Tools.clipImageview(pfpSide, 125);
     }
+
     public void handle(MouseEvent event) {
-        @SuppressWarnings("unchecked") ListCell<Playlist> lc=(ListCell<Playlist>)event.getSource();
-        if (lc.getText()==null)return;
-        if(event.getButton()== MouseButton.PRIMARY) {
+        @SuppressWarnings("unchecked") ListCell<Playlist> lc = (ListCell<Playlist>) event.getSource();
+        if (lc.getText() == null) return;
+        if (event.getButton() == MouseButton.PRIMARY) {
             Node calling = (Node) event.getSource();
             FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.PLAYLIST_SCENE));
             State.setCurrentPlaylistID(lc.getItem().getID());
@@ -102,55 +103,56 @@ public class Sidebar implements Initializable {
                 throw new RuntimeException(e);
             }
             myStage.show();
-        }
-        else if(event.getButton()==MouseButton.SECONDARY){
+        } else if (event.getButton() == MouseButton.SECONDARY) {
             contextMenu.show(list, event.getScreenX(), event.getScreenY());
-            contextMenu.setOnAction(e->{
-                try {
-                    Database.deletePlaylist(lc.getItem().getID());
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                    System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
-                }
-                this.deleteFromList(lc.getItem());
-            }
+            contextMenu.setOnAction(e -> {
+                        try {
+                            Database.deletePlaylist(lc.getItem().getID());
+                        } catch (SQLException ex) {
+                            System.out.println(ex.getMessage());
+                            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+                        }
+                        this.deleteFromList(lc.getItem());
+                    }
             );
         }
+        lc.getListView().getSelectionModel().clearSelection();
     }
+
     @FXML
-    protected void OnClickCreatePlaylist(ActionEvent event)
-    {
+    protected void OnClickCreatePlaylist(ActionEvent event) {
         create.setVisible(!create.isVisible());
     }
+
     @FXML
     protected void OnEnteringPlaylistName() throws SQLException {
         create.setVisible(false);
-        String pLName=create.getText();
-        if(!pLName.isEmpty()) {
+        String pLName = create.getText();
+        if (!pLName.isEmpty()) {
             Playlist pL = Database.createPlaylist(pLName);
             this.addToList(pL);
         }
     }
-    public void addToList(Playlist pL)
-    {
+
+    public void addToList(Playlist pL) {
         try {
             tableList.add(pL);
             list.setItems(tableList);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
         }
     }
-    public void deleteFromList(Playlist pL)
-    {
+
+    public void deleteFromList(Playlist pL) {
         tableList.clear();
         tableList.addAll(Database.getAllPlaylists());
         list.setItems(tableList);
     }
 
     public void OnClickHome(ActionEvent event) {
-        Node callingBtn=(Node)event.getSource();
-        Stage myStage=(Stage)callingBtn.getScene().getWindow();
+        Node callingBtn = (Node) event.getSource();
+        Stage myStage = (Stage) callingBtn.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FilePaths.HOME));
 
@@ -168,7 +170,7 @@ public class Sidebar implements Initializable {
             scene.getStylesheets().add(css);
             myStage.setScene(scene);
             myStage.show();
-        }catch (Exception e) {
+        } catch (Exception e) {
             //e.printStackTrace();
             System.out.println(e.getMessage());
         }

@@ -10,50 +10,46 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.forgotpass.ForgotPassVerifyOTP">
-   <right>
-      <VBox prefHeight="500.0" prefWidth="308.0" BorderPane.alignment="CENTER">
-         <children>
+<BorderPane maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheets/Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.forgot_pass.ForgotPassVerifyOTP">
+    <right>
+        <VBox prefHeight="500.0" prefWidth="308.0" BorderPane.alignment="CENTER">
             <AnchorPane prefHeight="135.0" prefWidth="308.0">
-               <children>
-                  <Label layoutX="66.0" layoutY="104.0" text="Retrieve Password">
-                     <font>
+                <Label layoutX="66.0" layoutY="104.0" text="Retrieve Password">
+                    <font>
                         <Font name="System Bold Italic" size="24.0" />
-                     </font>
-                  </Label>
-               </children>
+                    </font>
+                </Label>
             </AnchorPane>
             <AnchorPane prefHeight="359.0" prefWidth="308.0">
-               <children>
-                  <Label layoutX="57.0" layoutY="61.0" text="Enter the OTP:">
-                     <font>
+                <Label layoutX="57.0" layoutY="61.0" text="Enter the OTP:">
+                    <font>
                         <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="wrongOTP" layoutX="140.0" layoutY="189.0" />
-                  <TextField fx:id="otp" layoutX="71.0" layoutY="109.0" onAction="#onClickSubmit" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
-                     <font>
+                    </font>
+                </Label>
+                <Label fx:id="wrongOTP" layoutX="140.0" layoutY="189.0" />
+                <TextField fx:id="otp" layoutX="71.0" layoutY="109.0" onAction="#onClickSubmit" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
+                    <font>
                         <Font size="14.0" />
-                     </font>
-                     <cursor>
+                    </font>
+                    <cursor>
                         <Cursor fx:constant="TEXT" />
-                     </cursor>
-                  </TextField>
-                  <Button id="ofpResend" layoutX="205.0" layoutY="146.0" mnemonicParsing="false" onAction="#onclickResend" stylesheets="@Stylesheet.css" text="Resend" underline="true">
-                     <cursor>
+                    </cursor>
+                </TextField>
+                <Button id="OTP_ResendButton" layoutX="205.0" layoutY="146.0" mnemonicParsing="false" onAction="#onclickResend" stylesheets="@Stylesheets/Stylesheet.css" text="Resend" underline="true">
+                    <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></Button>
-                  <Button layoutX="119.0" layoutY="227.0" mnemonicParsing="false" onAction="#onClickSubmit" text="Submit" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="87.0" />
-                  <Button id="ofpBack" layoutX="84.0" layoutY="262.0" mnemonicParsing="false" onAction="#onBack100" prefHeight="25.0" prefWidth="140.0" stylesheets="@Stylesheet.css" text="Go Back to Home Page" underline="true" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
-                     <cursor>
+                    </cursor>
+                </Button>
+                <Button layoutX="119.0" layoutY="227.0" mnemonicParsing="false" onAction="#onClickSubmit" text="Submit" AnchorPane.leftAnchor="87.0" AnchorPane.rightAnchor="87.0" />
+                <Button id="GoBackHomeButton" layoutX="84.0" layoutY="262.0" mnemonicParsing="false" onAction="#onBack100" prefHeight="25.0" prefWidth="140.0" stylesheets="@Stylesheets/Stylesheet.css" text="Go Back to Home Page" underline="true" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="84.0">
+                    <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></Button>
-               </children>
+                    </cursor>
+                </Button>
             </AnchorPane>
-         </children>
-      </VBox>
-   </right>
-   <center>
-      <Pane id="ofp" prefHeight="200.0" prefWidth="200.0" stylesheets="@Stylesheet.css" BorderPane.alignment="CENTER" />
-   </center>
+        </VBox>
+    </right>
+    <center>
+        <Pane id="MusicBeePhoto" prefHeight="200.0" prefWidth="200.0" stylesheets="@Stylesheets/Stylesheet.css" BorderPane.alignment="CENTER" />
+    </center>
 </BorderPane>

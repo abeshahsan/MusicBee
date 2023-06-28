@@ -2,8 +2,9 @@ package com.musicbee.controllers;
 
 import com.musicbee.entities.Song;
 import com.musicbee.entities.User;
-import com.musicbee.utility.*;
 import com.musicbee.utility.Database;
+import com.musicbee.utility.FilePaths;
+import com.musicbee.utility.SceneSwitcher;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,12 +18,12 @@ import java.util.ArrayList;
 import static com.musicbee.utility.OTP.sendEmail;
 
 public class NewUserVerifyOTP {
+    public  String    address, otpVal;
     @FXML
     private TextField newUserOTP;
     @FXML
     private Label     wrongOTP;
     private User      hello;
-    public  String    address, otpVal;
 
     public void setVal(String add) {
         otpVal = add;

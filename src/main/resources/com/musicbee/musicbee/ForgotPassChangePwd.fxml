@@ -11,78 +11,70 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.forgotpass.ForgotPassChangePwd">
-   <right>
-      <VBox prefHeight="500.0" prefWidth="308.0" BorderPane.alignment="CENTER">
-         <children>
+<BorderPane maxHeight="710.0" maxWidth="936.0" minHeight="710.0" minWidth="936.0" prefHeight="710.0" prefWidth="936.0" stylesheets="@Stylesheets/Stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.musicbee.controllers.forgot_pass.ForgotPassChangePwd">
+    <right>
+        <VBox prefHeight="500.0" prefWidth="308.0" BorderPane.alignment="CENTER">
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Label layoutX="70.0" layoutY="122.0" text="Create New Password">
-                     <font>
+                <Label layoutX="70.0" layoutY="122.0" text="Create New Password">
+                    <font>
                         <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
+                    </font>
+                </Label>
             </AnchorPane>
             <AnchorPane prefHeight="351.0" prefWidth="308.0">
-               <children>
-                  <Label layoutX="57.0" layoutY="56.0" text="Enter New Password:">
-                     <font>
+                <Label layoutX="57.0" layoutY="56.0" text="Enter New Password:">
+                    <font>
                         <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="57.0" layoutY="168.0" text="Confirm Password:" AnchorPane.bottomAnchor="107.20000000000002">
-                     <font>
+                    </font>
+                </Label>
+                <Label layoutX="57.0" layoutY="168.0" text="Confirm Password:" AnchorPane.bottomAnchor="107.20000000000002">
+                    <font>
                         <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="shownNewPwd" layoutX="51.0" layoutY="98.0" onAction="#onSaveBtnClicked" onKeyTyped="#typingPwd" visible="false" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
-                     <font>
+                    </font>
+                </Label>
+                <TextField fx:id="shownNewPwd" layoutX="51.0" layoutY="98.0" onAction="#onSaveBtnClicked" onKeyTyped="#typingPwd" visible="false" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
+                    <font>
                         <Font size="14.0" />
-                     </font>
-                  </TextField>
-                  <PasswordField fx:id="newPwd" layoutX="51.0" layoutY="98.0" onAction="#onSaveBtnClicked" onKeyTyped="#typingPwd" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
-                     <font>
+                    </font>
+                </TextField>
+                <PasswordField fx:id="newPwd" layoutX="51.0" layoutY="98.0" onAction="#onSaveBtnClicked" onKeyTyped="#typingPwd" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
+                    <font>
                         <Font size="14.0" />
-                     </font>
-                  </PasswordField>
-                  <ToggleButton layoutX="204.0" layoutY="98.0" mnemonicParsing="false" onAction="#toggleNewtPasswordChars" text="Show">
-                     <font>
+                    </font>
+                </PasswordField>
+                <ToggleButton layoutX="204.0" layoutY="98.0" mnemonicParsing="false" onAction="#toggleNewtPasswordChars" text="Show">
+                    <font>
                         <Font size="14.0" />
-                     </font>
-                  </ToggleButton>
-                  <TextField fx:id="shownConfirmPwd" layoutX="51.0" layoutY="204.0" onAction="#onSaveBtnClicked" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
-                     <font>
+                    </font>
+                </ToggleButton>
+                <TextField fx:id="shownConfirmPwd" layoutX="51.0" layoutY="204.0" onAction="#onSaveBtnClicked" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
+                    <font>
                         <Font size="14.0" />
-                     </font>
-                  </TextField>
-                  <PasswordField fx:id="confirmPwd" layoutX="51.0" layoutY="205.0" onAction="#onSaveBtnClicked" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
-                     <font>
+                    </font>
+                </TextField>
+                <PasswordField fx:id="confirmPwd" layoutX="51.0" layoutY="205.0" onAction="#onSaveBtnClicked" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="51.0">
+                    <font>
                         <Font size="14.0" />
-                     </font>
-                  </PasswordField>
-                  <ToggleButton layoutX="204.0" layoutY="204.0" mnemonicParsing="false" onAction="#toggleConfirmPasswordChars" text="Show">
-                     <font>
+                    </font>
+                </PasswordField>
+                <ToggleButton layoutX="204.0" layoutY="204.0" mnemonicParsing="false" onAction="#toggleConfirmPasswordChars" text="Show">
+                    <font>
                         <Font size="14.0" />
-                     </font>
-                  </ToggleButton>
-                  <Label fx:id="warning" layoutX="140.0" layoutY="244.0" />
-                  <Label id="pwdStr" fx:id="pwdStrength" layoutX="50.0" layoutY="124.0" prefHeight="24.0" prefWidth="206.0" stylesheets="@Stylesheet.css" />
-               </children>
+                    </font>
+                </ToggleButton>
+                <Label fx:id="warning" layoutX="140.0" layoutY="244.0" />
+                <Label id="pwdStr" fx:id="pwdStrength" layoutX="50.0" layoutY="124.0" prefHeight="24.0" prefWidth="206.0" stylesheets="@Stylesheets/Stylesheet.css" />
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Button layoutX="91.0" mnemonicParsing="false" onAction="#onSaveBtnClicked" prefHeight="36.0" prefWidth="126.0" text="Save">
-                     <font>
+                <Button layoutX="91.0" mnemonicParsing="false" onAction="#onSaveBtnClicked" prefHeight="36.0" prefWidth="126.0" text="Save">
+                    <font>
                         <Font size="16.0" />
-                     </font>
-                  </Button>
-               </children>
+                    </font>
+                </Button>
             </AnchorPane>
-         </children>
-      </VBox>
-   </right>
-   <center>
-      <Pane id="passForgot" prefHeight="200.0" prefWidth="200.0" stylesheets="@Stylesheet.css" BorderPane.alignment="CENTER" />
-   </center>
+        </VBox>
+    </right>
+    <center>
+        <Pane id="MusicBeePhoto" prefHeight="200.0" prefWidth="200.0" stylesheets="@Stylesheets/Stylesheet.css" BorderPane.alignment="CENTER" />
+    </center>
 </BorderPane>
