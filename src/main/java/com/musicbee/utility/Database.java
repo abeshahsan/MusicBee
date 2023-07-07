@@ -361,20 +361,25 @@ public class Database {
      * @throws SQLException If any error occurs while saving the playback position to the database.
      */
     public static void savePlaybackPosition() throws SQLException {
+        Integer songID = null;
+        Double time = null;
 
         String username = getCurrentUser().getUsername();
-        int songID = Jukebox.getNowPlaying().getID();
-        double time = Jukebox.getPlaybackPos();
-
-        System.out.println(username + " " + songID + " " + time);
 
         String sqlString = "update last_state set song_id = ?, time = ? where username = ?";
-
         PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
-        preparedStatement.setInt(1, songID);
-        preparedStatement.setDouble(2, time);
+
+        if (Jukebox.getNowPlaying() != null) {
+            songID = Jukebox.getNowPlaying().getID();
+            time = Jukebox.getPlaybackPos();
+        }
+
+        preparedStatement.setObject(1, songID);
+        preparedStatement.setObject(2, time);
         preparedStatement.setString(3, username);
         preparedStatement.executeUpdate();
+
+        System.out.println(username + " " + songID + " " + time);
     }
 
     /**
