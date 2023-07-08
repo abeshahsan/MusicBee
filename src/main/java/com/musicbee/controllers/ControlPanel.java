@@ -64,8 +64,11 @@ public class ControlPanel implements Initializable {
             timeSlider.setValue((Jukebox.getPlaybackPos() / Jukebox.getTotalDuration()) * timeSlider.getMax());
         }
 
-        songNameLabel.setText(Jukebox.getNowPlaying().getName());
-        artistNameLabel.setText(Jukebox.getNowPlaying().getArtistName());
+        if(Jukebox.getNowPlaying() != null) {
+            songNameLabel.setText(Jukebox.getNowPlaying().getName());
+            artistNameLabel.setText(Jukebox.getNowPlaying().getArtistName());
+        }
+
         totalDuration.setText(Tools.timeToString(Jukebox.getTotalDuration()));
         elapsed.setText(Tools.timeToString(Jukebox.getPlaybackPos()));
 
