@@ -197,11 +197,6 @@ public class ControlPanel implements Initializable {
             imageView.setFitHeight(PLAY_ICON_SIZE);
             playPauseButton.setGraphic(imageView);
             playPauseButton.getTooltip().setText("Play");
-            playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
-            Point2D p = playPauseButton.localToScene(0.0, 0.0);
-            playPauseButton.getTooltip().show(playPauseButton,
-                    p.getX() + playPauseButton.getScene().getX() + playPauseButton.getScene().getWindow().getX(),
-                    p.getY() + playPauseButton.getScene().getY() + playPauseButton.getScene().getWindow().getY());
         } catch (Exception ignore) {
             playPauseButton.setText("Play");
         }
@@ -216,7 +211,6 @@ public class ControlPanel implements Initializable {
             imageView.setFitHeight(PLAY_ICON_SIZE);
             playPauseButton.setGraphic(imageView);
             playPauseButton.getTooltip().setText("Pause");
-            playPauseButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             playPauseButton.setText("Pause");
         }
@@ -230,7 +224,6 @@ public class ControlPanel implements Initializable {
             imageView.setFitWidth(NEXT_ICON_SIZE);
             imageView.setFitHeight(NEXT_ICON_SIZE);
             nextButton.setGraphic(imageView);
-            nextButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             nextButton.setText("Next");
         }
@@ -244,7 +237,6 @@ public class ControlPanel implements Initializable {
             imageView.setFitWidth(PREV_ICON_SIZE);
             imageView.setFitHeight(PREV_ICON_SIZE);
             prevButton.setGraphic(imageView);
-            prevButton.getTooltip().setShowDelay(Duration.millis(100));
         } catch (Exception ignore) {
             prevButton.setText("Prev");
         }
@@ -309,7 +301,6 @@ public class ControlPanel implements Initializable {
         Jukebox.setShuffleOn(mode);
         shuffleIndicator.setGraphic(imageView);
         shuffleIndicator.getTooltip().setText(tooltipString);
-        shuffleIndicator.getTooltip().setShowDelay(Duration.millis(100));
 //        shuffleIndicator.setStyle("-fx-background-color: transparent");
     }
 

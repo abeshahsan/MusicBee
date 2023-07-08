@@ -81,8 +81,7 @@ public class PlaylistSceneController implements Initializable {
             Parent bottom = fxmlLoader.load();
             borderPane.setBottom(bottom);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
         return fxmlLoader.getController();
     }
@@ -173,8 +172,7 @@ public class PlaylistSceneController implements Initializable {
                     controlPanel.update(song.getName(), song.getArtistName());
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+                e.printStackTrace();
             }
         } else if (event.getButton() == MouseButton.SECONDARY) {
             contextMenu.show(table, event.getScreenX(), event.getScreenY());
@@ -254,8 +252,7 @@ public class PlaylistSceneController implements Initializable {
             menuButton.setGraphic(menuButton1.getGraphic());
             menuButton.setTooltip(menuButton1.getTooltip());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 }

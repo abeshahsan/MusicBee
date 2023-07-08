@@ -114,8 +114,7 @@ public class EditProfileController implements Initializable {
             VBox vbox = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 
@@ -125,8 +124,7 @@ public class EditProfileController implements Initializable {
             VBox vBox = fxmlLoader.load();
             borderPane.setBottom(vBox);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 
@@ -166,8 +164,7 @@ public class EditProfileController implements Initializable {
             SceneSwitcher sceneSwitcher = new SceneSwitcher(FilePaths.PROFILE, FilePaths.STYLESHEET);
             sceneSwitcher.switchNow(stage);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 
@@ -236,8 +233,7 @@ public class EditProfileController implements Initializable {
             menuButton.setGraphic(menuButton1.getGraphic());
             menuButton.setTooltip(menuButton1.getTooltip());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 }
