@@ -90,7 +90,7 @@ public class ForgotPassChangePwd {
             bl.makeObservableList(songs);
             sceneSwitcher.switchNow(stage);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

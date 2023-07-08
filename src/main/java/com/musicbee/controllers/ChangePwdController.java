@@ -59,8 +59,7 @@ public class ChangePwdController {
                 user.setPassword(Tools.hashPassword(newPwdString));
                 Database.updateCurrentUserInfo(user);
             } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+                e.printStackTrace();
             }
             warning.setText("Password is updated.");
             warning.setStyle("-fx-text-fill: green");

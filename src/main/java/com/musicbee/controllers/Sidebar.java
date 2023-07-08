@@ -90,9 +90,7 @@ public class Sidebar implements Initializable {
                 Scene scene = new Scene(loader.load());
                 myStage.setScene(scene);
             } catch (IOException e) {
-                System.out.println(e.getMessage());
-                System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
             try {
                 //Parent root = loader.load();
@@ -139,8 +137,7 @@ public class Sidebar implements Initializable {
             tableList.add(pL);
             list.setItems(tableList);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 
@@ -171,8 +168,7 @@ public class Sidebar implements Initializable {
             myStage.setScene(scene);
             myStage.show();
         } catch (Exception e) {
-            //e.printStackTrace();
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }

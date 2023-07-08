@@ -50,7 +50,7 @@ public class OTP {
             Transport.send(message);
             System.out.println("Email sent successfully.");
         } catch (MessagingException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             System.out.println("Could not send the email");
         }
 

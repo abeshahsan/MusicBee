@@ -105,8 +105,7 @@ public class HomeController implements Initializable {
             Parent bottom = fxmlLoader.load();
             borderPane.setBottom(bottom);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
 
         return fxmlLoader.getController();
@@ -144,8 +143,7 @@ public class HomeController implements Initializable {
             VBox vbox = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(FilePaths.SIDE_BAR)));
             drawer.setSidePane(vbox);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 
@@ -234,8 +232,7 @@ public class HomeController implements Initializable {
             menuButton.setTooltip(menuButton1.getTooltip());
             menuButton.setTooltip(menuButton1.getTooltip());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 }

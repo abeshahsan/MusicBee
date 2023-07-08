@@ -83,8 +83,7 @@ public class ProfileController implements Initializable {
             VBox vBox = fxmlLoader.load();
             borderPane.setBottom(vBox);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 
@@ -172,8 +171,7 @@ public class ProfileController implements Initializable {
             menuButton.setGraphic(menuButton1.getGraphic());
             menuButton.setTooltip(menuButton1.getTooltip());
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println(getClass().getName() + ": " + getClass().getEnclosingMethod());
+            e.printStackTrace();
         }
     }
 }
