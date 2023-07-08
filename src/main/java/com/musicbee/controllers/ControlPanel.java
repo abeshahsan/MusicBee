@@ -8,7 +8,6 @@ import com.musicbee.utility.State;
 import com.musicbee.utility.Tools;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
